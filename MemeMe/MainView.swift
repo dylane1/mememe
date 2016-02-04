@@ -33,7 +33,8 @@ class MainView: UIView {
         }
     }
     
-    
+    private var topText     = ""
+    private var bottomText  = ""
     
     @IBOutlet weak var topField: UITextField!
     @IBOutlet weak var bottomField: UITextField!
@@ -52,7 +53,7 @@ class MainView: UIView {
         cameraButtonAction  = cameraButtonClosure
         
         configureToolbarItems()
-        
+        configureTextFields()
     }
 
     
@@ -97,6 +98,30 @@ class MainView: UIView {
         toolbarItemArray.append(flexSpace)
         
         toolbar.setItems(toolbarItemArray, animated: false)
+    }
+    
+    private func configureTextFields() {
+        topField.borderStyle        = .None
+        topField.backgroundColor    = UIColor.clearColor()
+        
+        
+        bottomField.borderStyle     = .None
+        bottomField.backgroundColor = UIColor.clearColor()
+        
+        
+        let textFieldAttributes = [
+            NSForegroundColorAttributeName: Constants.ColorScheme.white,
+            NSFontAttributeName:            Constants.Fonts.textFields
+        ]
+        
+        topField.defaultTextAttributes  = textFieldAttributes
+        topField.attributedPlaceholder  = NSAttributedString(string: LocalizedStrings.PlaceholderText.MainView.top, attributes: textFieldAttributes)
+        topField.textAlignment          = .Center //Must be set after the string is set in order to work...
+        
+        bottomField.defaultTextAttributes   = textFieldAttributes
+        bottomField.attributedPlaceholder   = NSAttributedString(string: LocalizedStrings.PlaceholderText.MainView.bottom, attributes: textFieldAttributes)
+        bottomField.textAlignment           = .Center
+
     }
 }
 

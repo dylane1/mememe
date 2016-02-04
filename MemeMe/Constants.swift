@@ -14,7 +14,12 @@ struct Constants {
 //    }
     
     struct ColorScheme {
-        static let blue = UIColor.blueColor()
+        static let blue     = UIColor.blueColor()
+        static let white    = UIColor.whiteColor()
+    }
+    
+    struct Fonts {
+        static let textFields = UIFont.systemFontOfSize(32, weight: UIFontWeightBold)
     }
 }
 
