@@ -10,6 +10,10 @@ import UIKit
 import MobileCoreServices
 
 final class MainViewController: UIViewController {
+    typealias ToolbarButtonClosure = () -> Void
+    private var cameraButtonClosure: ToolbarButtonClosure?
+    private var albumButtonClosure: ToolbarButtonClosure!
+    
     private var mainView: MainView!
     private var mainViewModel: MainViewModel!
     
@@ -25,11 +29,15 @@ final class MainViewController: UIViewController {
         mainView = view as! MainView
         mainViewModel = MainViewModel()
         
-        mainView.configure(withDataSource: mainViewModel)
-        
-        setupNavigationItems()
-        setupToolbarItems()
+        configureNavigationItems()
+        configureToolbarItems()
         configureImagePicker()
+        
+        mainView.configure(
+            withDataSource: mainViewModel,
+            albumButtonClosure: albumButtonClosure,
+            cameraButtonClosure: cameraButtonClosure
+        )
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -72,7 +80,7 @@ final class MainViewController: UIViewController {
      
     //MARK: - Private funk(s)
     
-    private func setupNavigationItems() {
+    private func configureNavigationItems() {
 
         let shareButton = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: "shareButtonTapped")
         
@@ -87,35 +95,18 @@ final class MainViewController: UIViewController {
         navigationItem.rightBarButtonItem = cancelButton
     }
     
-    private func setupToolbarItems() {
-//        var toolbarItemArray = [UIBarButtonItem]()
-//        
-//        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
-//        
-//        toolbarItemArray.append(flexSpace)
-//        
-//        /** Only add a camera button if camera is available */
-//        if UIImagePickerController.isSourceTypeAvailable(.Camera) {
-//            let fixedSpace = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil, action: nil)
-//            fixedSpace.width = 44
-//            
-//            let cameraButton = UIBarButtonItem(barButtonSystemItem: .Camera, target: self, action: "cameraButtonTapped")
-//            
-//            toolbarItemArray.append(flexSpace)
-//            toolbarItemArray.append(cameraButton)
-//            toolbarItemArray.append(fixedSpace)
-//        }
-//        
-//        let albumButton = UIBarButtonItem(
-//            title: LocalizedStrings.NavigationControllerButtons.album,
-//            style: .Plain,
-//            target: self,
-//            action: "albumButtonTapped")
-//        
-//        toolbarItemArray.append(albumButton)
-//        toolbarItemArray.append(flexSpace)
-//        
-//        setToolbarItems(toolbarItemArray, animated: true)
+    private func configureToolbarItems() {
+     
+        /** Only add a camera button if camera is available */
+        if UIImagePickerController.isSourceTypeAvailable(.Camera) {
+            cameraButtonClosure = { [weak self] in
+                self!.cameraButtonTapped()
+            }
+        }
+        
+        albumButtonClosure = { [weak self] in
+            self!.albumButtonTapped()
+        }
     }
     
     

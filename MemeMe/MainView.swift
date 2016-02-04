@@ -13,6 +13,11 @@ protocol MainViewDataSource {
 }
 
 class MainView: UIView {
+    typealias ToolbarButtonAction = () -> Void
+    private var albumButtonAction: ToolbarButtonAction?
+    private var cameraButtonAction: ToolbarButtonAction?
+    
+    
     private var image: UIImage? = nil {
         didSet {
             /** Set image in imageView */
@@ -37,16 +42,33 @@ class MainView: UIView {
     
     //MARK: - Public funk(s)
     
-    func configure(withDataSource viewModel: MainViewModel) {
-        dataSource = viewModel
+    func configure(
+        withDataSource viewModel: MainViewModel,
+        albumButtonClosure: ToolbarButtonAction,
+        cameraButtonClosure: ToolbarButtonAction? = nil)
+    {
+        dataSource          = viewModel
+        albumButtonAction   = albumButtonClosure
+        cameraButtonAction  = cameraButtonClosure
         
+        configureToolbarItems()
         
     }
 
     
+    //MARK: - Public funk(s)
+    
+    func cameraButtonTapped() {
+        cameraButtonAction?()
+    }
+    
+    func albumButtonTapped() {
+        albumButtonAction?()
+    }
+    
     //MARK: - Private funk(s)
     
-    private func setupToolbarItems() {
+    private func configureToolbarItems() {
         var toolbarItemArray = [UIBarButtonItem]()
         
         let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
@@ -74,6 +96,34 @@ class MainView: UIView {
         toolbarItemArray.append(albumButton)
         toolbarItemArray.append(flexSpace)
         
-        toolbar.setToolbarItems(toolbarItemArray, animated: true)
+        toolbar.setItems(toolbarItemArray, animated: false)
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

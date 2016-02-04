@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="rFU-mk-rHQ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="rFU-mk-rHQ">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -48,7 +48,7 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Uk3-37-oVi">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </imageView>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O5O-Lm-pak">
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="O5O-Lm-pak">
                                 <rect key="frame" x="0.0" y="524" width="320" height="44"/>
                                 <items>
                                     <barButtonItem title="Item" id="xBg-ru-4H1"/>
@@ -58,19 +58,23 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="lDJ-6o-SZU" secondAttribute="trailing" id="DBU-kL-sJM"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="O5O-Lm-pak" secondAttribute="bottom" id="HWl-D3-Exo"/>
                             <constraint firstItem="ElJ-y3-uEI" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="J06-sq-nji"/>
+                            <constraint firstAttribute="trailing" secondItem="O5O-Lm-pak" secondAttribute="trailing" id="K2d-Uj-mvO"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="lDJ-6o-SZU" secondAttribute="bottom" constant="60" id="SZ6-rG-cHP"/>
                             <constraint firstItem="ElJ-y3-uEI" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="16" id="VeQ-IP-DEa"/>
                             <constraint firstAttribute="trailing" secondItem="Uk3-37-oVi" secondAttribute="trailing" id="aPu-4r-B3T"/>
                             <constraint firstItem="Uk3-37-oVi" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="hQk-a8-mLU"/>
                             <constraint firstItem="Uk3-37-oVi" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="hbA-sF-rfY"/>
                             <constraint firstAttribute="trailingMargin" secondItem="ElJ-y3-uEI" secondAttribute="trailing" id="pQn-79-KKp"/>
+                            <constraint firstItem="O5O-Lm-pak" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="qmZ-pb-Rhb"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Uk3-37-oVi" secondAttribute="bottom" id="tn1-Eg-TCI"/>
                             <constraint firstItem="lDJ-6o-SZU" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="xTW-Qr-dpd"/>
                         </constraints>
                         <connections>
                             <outlet property="bottomField" destination="lDJ-6o-SZU" id="MNr-Of-CGN"/>
                             <outlet property="imageView" destination="Uk3-37-oVi" id="FcV-PF-vcC"/>
+                            <outlet property="toolbar" destination="O5O-Lm-pak" id="PHw-Bv-UYH"/>
                             <outlet property="topField" destination="ElJ-y3-uEI" id="hEt-TH-Fcg"/>
                         </connections>
                     </view>
