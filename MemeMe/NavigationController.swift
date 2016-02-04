@@ -16,20 +16,13 @@ class NavigationController: UINavigationController {
 //        navigationBar.barTintColor = GTColor.mediumGrey
 //        navigationBar.tintColor    = GTColor.orange
         navigationBar.translucent  = true
-        
-        
+
         let titleLabelAttributes = [
             NSForegroundColorAttributeName : Constants.ColorScheme.blue,
             NSFontAttributeName: UIFont.systemFontOfSize(17, weight: UIFontWeightMedium)
         ]
         //let titleAttributes: NSDictionary = [NSForegroundColorAttributeName: GTColor.white /*, NSFontAttributeName : font!*/]
         navigationBar.titleTextAttributes = titleLabelAttributes// as? [String : AnyObject]
-        
-        //toolbar.barTintColor   = GTColor.mediumGrey
-        //toolbar.tintColor      = GTColor.orange
-        toolbar.barStyle = .Default
-        //TODO: NOT WORKING!!!
-        toolbar.translucent = true
     }
     
     //MARK: - Private funk(s)

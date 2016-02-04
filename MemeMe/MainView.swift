@@ -101,12 +101,15 @@ class MainView: UIView {
     }
     
     private func configureTextFields() {
+        topField.delegate           = self
         topField.borderStyle        = .None
         topField.backgroundColor    = UIColor.clearColor()
+        topField.returnKeyType      = .Done
         
-        
+        bottomField.delegate        = self
         bottomField.borderStyle     = .None
         bottomField.backgroundColor = UIColor.clearColor()
+        bottomField.returnKeyType   = .Done
         
         
         let textFieldAttributes = [
@@ -122,6 +125,70 @@ class MainView: UIView {
         bottomField.attributedPlaceholder   = NSAttributedString(string: LocalizedStrings.PlaceholderText.MainView.bottom, attributes: textFieldAttributes)
         bottomField.textAlignment           = .Center
 
+    }
+}
+
+//MARK: - UITextFieldDelegate
+
+extension MainView: UITextFieldDelegate {
+    
+    /** 
+     * Set View rect so bottom text is visible 
+     *
+     * Adapted from this post on Stack Overflow:
+     * http://stackoverflow.com/questions/11282449/move-uiview-up-when-the-keyboard-appears-in-ios
+     */
+    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: Selector("keyboardWillShow:"),
+            name: UIKeyboardWillShowNotification,
+            object: nil)
+        
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: Selector("keyboardWillHide:"),
+            name: UIKeyboardWillHideNotification,
+            object: nil)
+        
+        return true
+    }
+    
+    func textFieldShouldEndEditing(textField: UITextField) -> Bool {
+        magic("")
+        textField.endEditing(true)
+        
+        return true
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func keyboardWillShow(notification: NSNotification) {
+        if bottomField.editing {
+            let keyboardSize = notification.userInfo?[UIKeyboardFrameBeginUserInfoKey]?.CGRectValue.size
+            UIView.animateWithDuration(0.5) {
+                var frame = self.frame
+                frame.origin.y = -(keyboardSize?.height)!
+                self.frame = frame
+            }
+        }
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        magic("")
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+        
+        if bottomField.editing {
+            UIView.animateWithDuration(0.5) {
+                var frame = self.frame
+                frame.origin.y = 0.0
+                self.frame = frame
+            }
+        }
     }
 }
 
