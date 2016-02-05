@@ -57,10 +57,14 @@ final class MainViewController: UIViewController {
     /** Navigation Bar Actions */
     func shareButtonTapped() {
         magic("")
+        
+        let activityVC = UIActivityViewController(activityItems: ["foo"], applicationActivities: nil)
+        presentViewController(activityVC, animated: true, completion: nil)
     }
     
     func cancelButtonTapped() {
         magic("")
+        mainView.reset()
     }
     
     /** Toolbar Actions */

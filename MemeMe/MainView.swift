@@ -67,6 +67,16 @@ class MainView: UIView {
         albumButtonAction?()
     }
     
+    func reset() {
+        magic("")
+        
+        topField.endEditing(true)
+        bottomField.endEditing(true)
+        
+        configureTextFields()
+        imageView.image = nil
+    }
+    
     //MARK: - Private funk(s)
     
     private func configureToolbarItems() {
@@ -111,6 +121,9 @@ class MainView: UIView {
         bottomField.backgroundColor = UIColor.clearColor()
         bottomField.returnKeyType   = .Done
         
+        /** For resetting when 'Cancel' is tapped */
+        topField.attributedText     = nil
+        bottomField.attributedText  = nil
         
         let textFieldAttributes = [
             NSForegroundColorAttributeName: Constants.ColorScheme.white,
