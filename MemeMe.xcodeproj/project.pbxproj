@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A324810F1C65704200D10134 /* Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A324810E1C65704200D10134 /* Magic.swift */; };
 		A383BF061C627AB500D80668 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A383BF051C627AB500D80668 /* AppDelegate.swift */; };
 		A383BF081C627AB500D80668 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A383BF071C627AB500D80668 /* MainViewController.swift */; };
 		A383BF0B1C627AB500D80668 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A383BF091C627AB500D80668 /* Main.storyboard */; };
@@ -14,7 +15,6 @@
 		A383BF101C627AB500D80668 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A383BF0E1C627AB500D80668 /* LaunchScreen.storyboard */; };
 		A383BF1C1C627C1A00D80668 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A383BF181C627C1A00D80668 /* Constants.swift */; };
 		A383BF1D1C627C1A00D80668 /* LocalizedStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A383BF191C627C1A00D80668 /* LocalizedStrings.swift */; };
-		A383BF1E1C627C1A00D80668 /* Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A383BF1A1C627C1A00D80668 /* Magic.swift */; };
 		A383BF1F1C627C1A00D80668 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A383BF1B1C627C1A00D80668 /* NavigationController.swift */; };
 		A383BF231C62822E00D80668 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A383BF221C62822E00D80668 /* MainView.swift */; };
 		A383BF251C628A0C00D80668 /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A383BF241C628A0C00D80668 /* Dynamic.swift */; };
@@ -22,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A324810E1C65704200D10134 /* Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Magic.swift; path = Magic/Magic.swift; sourceTree = "<group>"; };
 		A383BF021C627AB500D80668 /* MemeMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MemeMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A383BF051C627AB500D80668 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A383BF071C627AB500D80668 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -31,7 +32,6 @@
 		A383BF111C627AB500D80668 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A383BF181C627C1A00D80668 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A383BF191C627C1A00D80668 /* LocalizedStrings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizedStrings.swift; sourceTree = "<group>"; };
-		A383BF1A1C627C1A00D80668 /* Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Magic.swift; sourceTree = "<group>"; };
 		A383BF1B1C627C1A00D80668 /* NavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		A383BF221C62822E00D80668 /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		A383BF241C628A0C00D80668 /* Dynamic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
@@ -85,8 +85,8 @@
 		A383BF201C627D3500D80668 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				A324810E1C65704200D10134 /* Magic.swift */,
 				A383BF241C628A0C00D80668 /* Dynamic.swift */,
-				A383BF1A1C627C1A00D80668 /* Magic.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -195,9 +195,9 @@
 				A383BF231C62822E00D80668 /* MainView.swift in Sources */,
 				A383BF1F1C627C1A00D80668 /* NavigationController.swift in Sources */,
 				A383BF061C627AB500D80668 /* AppDelegate.swift in Sources */,
+				A324810F1C65704200D10134 /* Magic.swift in Sources */,
 				A383BF1D1C627C1A00D80668 /* LocalizedStrings.swift in Sources */,
 				A383BF251C628A0C00D80668 /* Dynamic.swift in Sources */,
-				A383BF1E1C627C1A00D80668 /* Magic.swift in Sources */,
 				A383BF1C1C627C1A00D80668 /* Constants.swift in Sources */,
 				A383BF271C628C9900D80668 /* MainViewModel.swift in Sources */,
 			);
