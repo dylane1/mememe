@@ -1,0 +1,3 @@
+[submodule "MemeMe/Magic"]
+	path = MemeMe/Magic
+	url = git@github.com:dylane1/Magic.git

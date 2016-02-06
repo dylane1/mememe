@@ -76,6 +76,14 @@ class MainView: UIView {
         configureTextFields()
         imageView.image = nil
     }
+    /**
+     * February 4, 2016: End point.
+     */
+    //TODO: Make a func that returns image w/ text (snapshot?) to be saved
+    
+    
+    
+    
     
     //MARK: - Private funk(s)
     
