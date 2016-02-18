@@ -194,9 +194,6 @@ extension MainView: UITextFieldDelegate {
      */
     
     func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
-//        magic("")
-        /** Text field is being edited, enable share & cancel buttons */
-//        enableNavBarButtonsClosure?()
         
         /** Set up observers */
         NSNotificationCenter.defaultCenter().addObserver(
@@ -214,11 +211,7 @@ extension MainView: UITextFieldDelegate {
         return true
     }
     
-//    func textFieldDidBeginEditing(textField: UITextField) {
-////        magic("")
-//        
-//    }
-//    
+    
     func textFieldShouldEndEditing(textField: UITextField) -> Bool {
         textField.endEditing(true)
         
