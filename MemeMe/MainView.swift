@@ -13,19 +13,37 @@ protocol MainViewDataSource {
 }
 
 class MainView: UIView {
-    typealias ToolbarButtonAction = () -> Void
-    private var albumButtonAction: ToolbarButtonAction?
-    private var cameraButtonAction: ToolbarButtonAction?
+    typealias BarButtonClosure = () -> Void
+    private var albumButtonClosure: BarButtonClosure?
+    private var cameraButtonClosure: BarButtonClosure?
     
     
     private var image: UIImage? = nil {
         didSet {
             /** Set image in imageView */
             imageView.image = image
+            
+            stateMachine.changeState(withImage: image, topText: topText, bottomText: bottomText)
+        }
+    }
+    /** 
+      * Setting this to String? to be consistent with UITextField.text, even
+      * though the documentation says that it's set to @"" by default. Not
+      * sure why anyone would want to set UITextField.text to nil, but I suppose
+      * there's a reason.
+     */
+    private var topText: String? = "" {
+        didSet {
+            stateMachine.changeState(withImage: image, topText: topText, bottomText: bottomText)
+        }
+    }
+    private var bottomText: String? = "" {
+        didSet {
+            stateMachine.changeState(withImage: image, topText: topText, bottomText: bottomText)
         }
     }
     
-    private var dataSource: MainViewModel! {
+    private var dataSource: MainViewViewModel! {
         didSet {
             dataSource.image.bind { [unowned self] in
                 self.image = $0
@@ -33,8 +51,7 @@ class MainView: UIView {
         }
     }
     
-    private var topText     = ""
-    private var bottomText  = ""
+    private var stateMachine: StateMachine!
     
     @IBOutlet weak var topField: UITextField!
     @IBOutlet weak var bottomField: UITextField!
@@ -44,13 +61,15 @@ class MainView: UIView {
     //MARK: - Public funk(s)
     
     func configure(
-        withDataSource viewModel: MainViewModel,
-        albumButtonClosure: ToolbarButtonAction,
-        cameraButtonClosure: ToolbarButtonAction? = nil)
+        withDataSource dataSource: MainViewViewModel,
+        albumButtonClosure: BarButtonClosure,
+        cameraButtonClosure: BarButtonClosure? = nil,
+        stateMachine: StateMachine)
     {
-        dataSource          = viewModel
-        albumButtonAction   = albumButtonClosure
-        cameraButtonAction  = cameraButtonClosure
+        self.dataSource             = dataSource
+        self.albumButtonClosure     = albumButtonClosure
+        self.cameraButtonClosure    = cameraButtonClosure
+        self.stateMachine           = stateMachine
         
         configureToolbarItems()
         configureTextFields()
@@ -60,30 +79,32 @@ class MainView: UIView {
     //MARK: - Public funk(s)
     
     func cameraButtonTapped() {
-        cameraButtonAction?()
+        cameraButtonClosure?()
     }
     
     func albumButtonTapped() {
-        albumButtonAction?()
+        albumButtonClosure?()
     }
     
-    func reset() {
-        magic("")
+    func resetTextFields() {
+        topText     = nil
+        bottomText  = nil
         
         topField.endEditing(true)
         bottomField.endEditing(true)
         
         configureTextFields()
-        imageView.image = nil
     }
-    /**
-     * February 4, 2016: End point.
-     */
-    //TODO: Make a func that returns image w/ text (snapshot?) to be saved
+
+    //TODO: hide on entering field
+    //TODO: hide if user doesn't edit one of the fields
+    func hidePlaceholderText() {
+        
+    }
     
-    
-    
-    
+    func showPlaceholderText() {
+        //May not need this.
+    }
     
     //MARK: - Private funk(s)
     
@@ -94,17 +115,23 @@ class MainView: UIView {
         
         toolbarItemArray.append(flexSpace)
         
-        /** Only add a camera button if camera is available */
-        if UIImagePickerController.isSourceTypeAvailable(.Camera) {
+        /** 
+         * According to spec: Add camera button but disable if camera not available
+         * 
+         * Not in spec: Only add a camera button if camera is available
+         */
+//        if UIImagePickerController.isSourceTypeAvailable(.Camera) {
             let fixedSpace = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil, action: nil)
             fixedSpace.width = 44
             
             let cameraButton = UIBarButtonItem(barButtonSystemItem: .Camera, target: self, action: "cameraButtonTapped")
-            
-            toolbarItemArray.append(flexSpace)
+            cameraButton.enabled = false
+        
+//            toolbarItemArray.append(flexSpace)
             toolbarItemArray.append(cameraButton)
             toolbarItemArray.append(fixedSpace)
-        }
+//        }
+        if UIImagePickerController.isSourceTypeAvailable(.Camera) { cameraButton.enabled = true }
         
         let albumButton = UIBarButtonItem(
             title: LocalizedStrings.NavigationControllerButtons.album,
@@ -133,17 +160,23 @@ class MainView: UIView {
         topField.attributedText     = nil
         bottomField.attributedText  = nil
         
+        //FIXME: text must be all caps
         let textFieldAttributes = [
             NSForegroundColorAttributeName: Constants.ColorScheme.white,
             NSFontAttributeName:            Constants.Fonts.textFields
         ]
         
+        let placeholderAttributes = [
+            NSForegroundColorAttributeName: Constants.ColorScheme.whiteAlpha50,
+            NSFontAttributeName:            Constants.Fonts.textFields
+        ]
+        
         topField.defaultTextAttributes  = textFieldAttributes
-        topField.attributedPlaceholder  = NSAttributedString(string: LocalizedStrings.PlaceholderText.MainView.top, attributes: textFieldAttributes)
+        topField.attributedPlaceholder  = NSAttributedString(string: LocalizedStrings.PlaceholderText.MainView.top, attributes: placeholderAttributes)
         topField.textAlignment          = .Center //Must be set after the string is set in order to work...
         
         bottomField.defaultTextAttributes   = textFieldAttributes
-        bottomField.attributedPlaceholder   = NSAttributedString(string: LocalizedStrings.PlaceholderText.MainView.bottom, attributes: textFieldAttributes)
+        bottomField.attributedPlaceholder   = NSAttributedString(string: LocalizedStrings.PlaceholderText.MainView.bottom, attributes: placeholderAttributes)
         bottomField.textAlignment           = .Center
 
     }
@@ -159,7 +192,13 @@ extension MainView: UITextFieldDelegate {
      * Adapted from this post on Stack Overflow:
      * http://stackoverflow.com/questions/11282449/move-uiview-up-when-the-keyboard-appears-in-ios
      */
+    
     func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+//        magic("")
+        /** Text field is being edited, enable share & cancel buttons */
+//        enableNavBarButtonsClosure?()
+        
+        /** Set up observers */
         NSNotificationCenter.defaultCenter().addObserver(
             self,
             selector: Selector("keyboardWillShow:"),
@@ -175,11 +214,22 @@ extension MainView: UITextFieldDelegate {
         return true
     }
     
+//    func textFieldDidBeginEditing(textField: UITextField) {
+////        magic("")
+//        
+//    }
+//    
     func textFieldShouldEndEditing(textField: UITextField) -> Bool {
-        magic("")
         textField.endEditing(true)
         
         return true
+    }
+    
+    func textFieldDidEndEditing(textField: UITextField) {
+//        magic("text: \(textField.text); topField.text: \(topField.text); bottomField.text: \(bottomField.text)")
+        
+        topText     = topField.text as String?
+        bottomText  = bottomField.text as String?
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -188,26 +238,29 @@ extension MainView: UITextFieldDelegate {
     }
     
     func keyboardWillShow(notification: NSNotification) {
+        
+        /** Animate the view up so bottom text field is visible while editing */
         if bottomField.editing {
             let keyboardSize = notification.userInfo?[UIKeyboardFrameBeginUserInfoKey]?.CGRectValue.size
+            
             UIView.animateWithDuration(0.5) {
-                var frame = self.frame
-                frame.origin.y = -(keyboardSize?.height)!
-                self.frame = frame
+                var frame       = self.frame
+                frame.origin.y  = -(keyboardSize?.height)!
+                self.frame      = frame
             }
         }
     }
     
     func keyboardWillHide(notification: NSNotification) {
-        magic("")
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
         
+        /** Animate view back down if done editing the bottom text field */
         if bottomField.editing {
             UIView.animateWithDuration(0.5) {
-                var frame = self.frame
-                frame.origin.y = 0.0
-                self.frame = frame
+                var frame       = self.frame
+                frame.origin.y  = 0.0
+                self.frame      = frame
             }
         }
     }

@@ -9,20 +9,14 @@
 import UIKit
 
 struct Constants {
-//    struct SegueIDs {
-//        static let showPlaybackViewController = "showPlaybackViewController"
-//    }
     
     struct ColorScheme {
-        static let blue     = UIColor.blueColor()
-        static let white    = UIColor.whiteColor()
+        static let blue         = UIColor.blueColor()
+        static let white        = UIColor.whiteColor()
+        static let whiteAlpha50 = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.50)
     }
     
     struct Fonts {
         static let textFields = UIFont.systemFontOfSize(32, weight: UIFontWeightBold)
     }
 }
-
-//enum AudioPlaybackType {
-//    case Snail, Rabbit, Chipmunk, Vader
-//}
