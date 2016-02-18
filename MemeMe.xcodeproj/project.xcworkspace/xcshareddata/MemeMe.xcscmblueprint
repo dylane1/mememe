@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "F92E1D9E48A85895D3C81673C326B07047AA1DB3",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "1DD020817609BAA3E8009336D558EA439C485EDA" : 0,
+    "F92E1D9E48A85895D3C81673C326B07047AA1DB3" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "23B0E672-2150-4DEF-9D58-1AC300354E8F",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "1DD020817609BAA3E8009336D558EA439C485EDA" : "MemeMe\/MemeMe\/Magic\/",
+    "F92E1D9E48A85895D3C81673C326B07047AA1DB3" : "MemeMe\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "MemeMe",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "MemeMe.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:dylane1\/Magic.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "1DD020817609BAA3E8009336D558EA439C485EDA"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:dylane1\/Udacity-MemeMe.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "F92E1D9E48A85895D3C81673C326B07047AA1DB3"
+    }
+  ]
+}

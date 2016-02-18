@@ -6,6 +6,8 @@
 //  Copyright © 2016 Slinging Pixels Media. All rights reserved.
 //
 
+//TODO: Camera button must be there & disabled on simulator
+
 import UIKit
 import MobileCoreServices
 
@@ -14,11 +16,14 @@ final class MainViewController: UIViewController {
     private var cameraButtonClosure: ToolbarButtonClosure?
     private var albumButtonClosure: ToolbarButtonClosure!
     
+    private var stateMachine = StateMachine()
+    
     private var mainView: MainView!
-    private var mainViewModel: MainViewModel!
+    private var mainViewViewModel: MainViewViewModel!
     
     private let imagePickerController = UIImagePickerController()
     
+    private var navController: NavigationController!
     
     //MARK: - View Lifecycle
     
@@ -27,24 +32,22 @@ final class MainViewController: UIViewController {
         title = LocalizedStrings.ViewControllerTitles.memeMe
         
         mainView = view as! MainView
-        mainViewModel = MainViewModel()
+        mainViewViewModel = MainViewViewModel()
         
         configureNavigationItems()
         configureToolbarItems()
         configureImagePicker()
         
         mainView.configure(
-            withDataSource: mainViewModel,
+            withDataSource: mainViewViewModel,
             albumButtonClosure: albumButtonClosure,
-            cameraButtonClosure: cameraButtonClosure
+            cameraButtonClosure: cameraButtonClosure,
+            stateMachine: stateMachine
         )
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
-//        navigationController?.setToolbarHidden(false, animated: false)
-        magic("imageView.frame: \(mainView.frame); bounds: \(mainView.bounds)")
     }
 //    
 //    override func viewDidAppear(animated: Bool) {
@@ -53,26 +56,25 @@ final class MainViewController: UIViewController {
 //    }
     
     //MARK: - Public funk(s)
+
+    
     
     /** Navigation Bar Actions */
-    func shareButtonTapped() {
-        magic("")
+
+    
+    func savedCompletion() {
+        magic("image saved to photos album")
     }
     
-    func cancelButtonTapped() {
-        magic("")
-    }
     
     /** Toolbar Actions */
     func cameraButtonTapped() {
-        magic("")
         imagePickerController.sourceType = .Camera
-        //TODO: Custom animation
+        
         presentViewController(imagePickerController, animated: true, completion: nil)
     }
     
     func albumButtonTapped() {
-        magic("")
         imagePickerController.sourceType = .PhotoLibrary
         presentViewController(imagePickerController, animated: true, completion: nil)
     }
@@ -81,18 +83,33 @@ final class MainViewController: UIViewController {
     //MARK: - Private funk(s)
     
     private func configureNavigationItems() {
-
-        let shareButton = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: "shareButtonTapped")
+        navController = navigationController as! NavigationController
         
-        navigationItem.leftBarButtonItem = shareButton
+        let shareButtonClosure = { [weak self] in
+            magic("")
+            
+            let imageToShare = self!.createImage()
+            
+            let activityVC = UIActivityViewController(activityItems: [imageToShare], applicationActivities: nil)
+            
+            activityVC.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
+                if completed {
+                    magic("completed!")
+                    UIImageWriteToSavedPhotosAlbum(imageToShare, self!, "savedCompletion", nil)
+                } else {
+                    magic("error: \(activityError)")
+                }
+            }
+            self!.presentViewController(activityVC, animated: true, completion: nil)
+        }
         
-        let cancelButton = UIBarButtonItem(
-            title: LocalizedStrings.NavigationControllerButtons.cancel,
-            style: .Plain,
-            target: self,
-            action: "cancelButtonTapped")
+        let cancelButtonClosure = { [weak self] in
+            //TODO: Probably should pop a warning alert if an image has been selected & text has been entered
+            self!.mainViewViewModel.image.value = nil
+            self!.mainView.resetTextFields()
+        }
         
-        navigationItem.rightBarButtonItem = cancelButton
+        navController.configure(withShareButtonClosure: shareButtonClosure, cancelButtonClosure: cancelButtonClosure, stateMachine: stateMachine)
     }
     
     private func configureToolbarItems() {
@@ -114,19 +131,35 @@ final class MainViewController: UIViewController {
         imagePickerController.delegate = self
         imagePickerController.mediaTypes = [kUTTypeImage as String]
     }
+    
+    private func createImage() -> UIImage {
+        //TODO: If share is tapped when no text has been set, hide the placeholder text before creating image
+        mainView.hidePlaceholderText()
+        
+        
+        UIGraphicsBeginImageContext(self.view.bounds.size);
+        self.view.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+        let screenShot = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return screenShot
+    }
 }
 
 //MARK: - UINavigationControllerDelegate
 extension MainViewController: UINavigationControllerDelegate {
-    
+    /**
+    * Need this in order to set self as UIImagePikerController delegate 
+    * in configureImagePicker()
+    */
 }
 
 //MARK: - UIImagePickerControllerDelegate
 extension MainViewController: UIImagePickerControllerDelegate {
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-        magic("selected image: \(image)")
-        mainViewModel.image.value = image
         
+        /** Update viewModel so view can update itself */
+        mainViewViewModel.image.value = image
+
         dismissViewControllerAnimated(true, completion: nil)
     }
     
