@@ -6,7 +6,32 @@
 //  Copyright © 2016 Slinging Pixels Media. All rights reserved.
 //
 
-//TODO: Camera button must be there & disabled on simulator
+/*******************************************************************************
+CURRENT:
+(Oop... Saving to photo library wasn't part of the spec -- now a "feature")
+
+* Future “feature” branches:
+
+• Meme Model
+    - Save to nsuserdefaults for now.
+
+• Text field work
+    - All caps
+    - Choose font
+    - Text outline
+    - Shrink to fit
+
+• Table view to view previously saved memes
+    - Edit?
+    - Save to photo library button
+
+• Nav & Toolbar style
+    - Pick color scheme
+    - Would be nice to show/hide nav & toolbar like photo app
+
+
+*
+*******************************************************************************/
 
 import UIKit
 import MobileCoreServices
@@ -25,7 +50,9 @@ final class MainViewController: UIViewController {
     
     private var navController: NavigationController!
     
-    //MARK: - View Lifecycle
+    private var errorQueue = [[String]]()
+    
+  //MARK: - View Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,13 +84,32 @@ final class MainViewController: UIViewController {
     
     //MARK: - Public funk(s)
 
-    
-    
-    /** Navigation Bar Actions */
-
-    
-    func savedCompletion() {
-        magic("image saved to photos album")
+    /** Save Image completion */
+    func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Void>) {
+        /** NSError for testing errorQueue */
+//        let testErrorUserInfo = [
+//            NSLocalizedDescriptionKey : "Operation was unsuccessful."
+//        ]
+//        let NSTestErrorDomain = "foo"
+//        
+//        var testError: NSError? = NSError(domain: NSTestErrorDomain, code: 42, userInfo: testErrorUserInfo)
+        
+        if error == nil {
+            /** Reset everything */
+            mainViewViewModel.image.value = nil
+            mainView.resetTextFields()
+        } else {
+            magic("error: \(error?.localizedDescription)")
+            
+            /** 
+             Unable to present an error alert because activityVC is already open 
+            
+             Add error to errorQueue & display after activityVC is dismissed.
+            */
+            let message     = LocalizedStrings.ErrorAlerts.ImageSaveError.message + error!.localizedDescription
+            let errorArray  = [LocalizedStrings.ErrorAlerts.ImageSaveError.title, message]
+            errorQueue.insert(errorArray, atIndex: 0)
+        }
     }
     
     
@@ -86,19 +132,31 @@ final class MainViewController: UIViewController {
         navController = navigationController as! NavigationController
         
         let shareButtonClosure = { [weak self] in
-            magic("")
-            
+
             let imageToShare = self!.createImage()
             
+            /** Save the meme image */
+            UIImageWriteToSavedPhotosAlbum(imageToShare, self, "image:didFinishSavingWithError:contextInfo:", nil)
+            
+            /** Open Activity View Controller */
             let activityVC = UIActivityViewController(activityItems: [imageToShare], applicationActivities: nil)
             
-            activityVC.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
-                if completed {
-                    magic("completed!")
-                    UIImageWriteToSavedPhotosAlbum(imageToShare, self!, "savedCompletion", nil)
-                } else {
-                    magic("error: \(activityError)")
+            /** Set completion handler for Share */
+            activityVC.completionWithItemsHandler = { [weak self] activityType, completed, returnedItems, activityError in
+//                magic("activityType: \(activityType), completed: \(completed), returnedItems: \(returnedItems), activityError: \(activityError)")
+                if !completed {
+                    var message = LocalizedStrings.ErrorAlerts.ShareError.message
+                    
+                    if activityError != nil {
+                        message += activityError!.localizedDescription
+                    } else {
+                        message += LocalizedStrings.ErrorAlerts.ShareError.unknownError
+                    }
+                    let errorArray = [LocalizedStrings.ErrorAlerts.ShareError.title, message]
+                    self!.errorQueue.insert(errorArray, atIndex: 0)
                 }
+                
+                self!.checkForErrors()
             }
             self!.presentViewController(activityVC, animated: true, completion: nil)
         }
@@ -113,8 +171,7 @@ final class MainViewController: UIViewController {
     }
     
     private func configureToolbarItems() {
-     
-        /** Only add a camera button if camera is available */
+        
         if UIImagePickerController.isSourceTypeAvailable(.Camera) {
             cameraButtonClosure = { [weak self] in
                 self!.cameraButtonTapped()
@@ -126,31 +183,39 @@ final class MainViewController: UIViewController {
         }
     }
     
-    
     private func configureImagePicker() {
         imagePickerController.delegate = self
         imagePickerController.mediaTypes = [kUTTypeImage as String]
     }
     
     private func createImage() -> UIImage {
-        //TODO: If share is tapped when no text has been set, hide the placeholder text before creating image
+        /** Hide unedited field before taking snapshot */
         mainView.hidePlaceholderText()
-        
         
         UIGraphicsBeginImageContext(self.view.bounds.size);
         self.view.layer.renderInContext(UIGraphicsGetCurrentContext()!)
         let screenShot = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
+        
         return screenShot
     }
-}
-
-//MARK: - UINavigationControllerDelegate
-extension MainViewController: UINavigationControllerDelegate {
-    /**
-    * Need this in order to set self as UIImagePikerController delegate 
-    * in configureImagePicker()
-    */
+    
+    private func checkForErrors() {
+        if errorQueue.count > 0 {
+            presentError(withErrorArray: errorQueue.removeLast())
+        }
+    }
+    
+    private func presentError(withErrorArray error: [String]) {
+        
+        let alert = UIAlertController(title: error[0], message: error[1], preferredStyle: .Alert)
+       
+        alert.addAction(UIAlertAction(title: LocalizedStrings.ButtonTitles.ok, style: .Default, handler: { [weak self] (alert: UIAlertAction!) in
+            /** There may be more errors in the queue */
+            self!.checkForErrors()
+        }))
+        presentViewController(alert, animated: true, completion: nil)
+    }
 }
 
 //MARK: - UIImagePickerControllerDelegate
@@ -168,7 +233,13 @@ extension MainViewController: UIImagePickerControllerDelegate {
     }
 }
 
-
+//MARK: - UINavigationControllerDelegate
+extension MainViewController: UINavigationControllerDelegate {
+    /**
+    * Need this in order to set self as UIImagePikerController delegate
+    * in configureImagePicker()
+    */
+}
 
 
 

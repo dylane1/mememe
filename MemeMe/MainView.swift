@@ -93,18 +93,22 @@ class MainView: UIView {
         topField.endEditing(true)
         bottomField.endEditing(true)
         
+        topField.alpha      = 1
+        bottomField.alpha   = 1
+        
         configureTextFields()
     }
 
-    //TODO: hide on entering field
-    //TODO: hide if user doesn't edit one of the fields
     func hidePlaceholderText() {
-        
+        /** Hide unedited field if taking snapshot of view to share */
+        topField.alpha      = (topText == "" || topText == nil) ? 0 : 1
+        bottomField.alpha   = (bottomText == "" || bottomText == nil) ? 0 : 1
     }
     
-    func showPlaceholderText() {
-        //May not need this.
-    }
+//    func unhidePlaceholderText() {
+//        topField.alpha      = 1
+//        bottomField.alpha   = 1
+//    }
     
     //MARK: - Private funk(s)
     
