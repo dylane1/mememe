@@ -62,8 +62,27 @@ final class MainViewController: UIViewController {
     /** Navigation Bar Actions */
 
     
-    func savedCompletion() {
-        magic("image saved to photos album")
+    func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Void>) {
+        if error == nil {
+            magic("image saved to photos album")
+            
+            /** Reset everything */
+            mainViewViewModel.image.value = nil
+            mainView.resetTextFields()
+            
+            
+            
+            
+            
+//            let ac = UIAlertController(title: "Saved!", message: "Your altered image has been saved to your photos.", preferredStyle: .Alert)
+//            ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+//            presentViewController(ac, animated: true, completion: nil)
+        } else {
+            magic("error: \(error?.localizedDescription)")
+//            let ac = UIAlertController(title: "Save error", message: error?.localizedDescription, preferredStyle: .Alert)
+//            ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+//            presentViewController(ac, animated: true, completion: nil)
+        }
     }
     
     
@@ -86,18 +105,25 @@ final class MainViewController: UIViewController {
         navController = navigationController as! NavigationController
         
         let shareButtonClosure = { [weak self] in
-            magic("")
-            
+
             let imageToShare = self!.createImage()
             
+            /** Save the screenShot */
+            UIImageWriteToSavedPhotosAlbum(imageToShare, self, "image:didFinishSavingWithError:contextInfo:", nil)
+            
+            /** Open Activity View Controller */
             let activityVC = UIActivityViewController(activityItems: [imageToShare], applicationActivities: nil)
             
+            /** Set completion handler for Share */
             activityVC.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
+                magic("activityType: \(activityType), completed: \(completed), returnedItems: \(returnedItems), activityError: \(activityError)")
+                
                 if completed {
                     magic("completed!")
-                    UIImageWriteToSavedPhotosAlbum(imageToShare, self!, "savedCompletion", nil)
                 } else {
-                    magic("error: \(activityError)")
+                    magic("Did not complete share activity")
+                    
+                    if activityError != nil { magic("error: \(activityError?.localizedDescription)") }
                 }
             }
             self!.presentViewController(activityVC, animated: true, completion: nil)
@@ -133,24 +159,16 @@ final class MainViewController: UIViewController {
     }
     
     private func createImage() -> UIImage {
-        //TODO: If share is tapped when no text has been set, hide the placeholder text before creating image
+        /** Hide unedited field before taking snapshot */
         mainView.hidePlaceholderText()
-        
         
         UIGraphicsBeginImageContext(self.view.bounds.size);
         self.view.layer.renderInContext(UIGraphicsGetCurrentContext()!)
         let screenShot = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
+        
         return screenShot
     }
-}
-
-//MARK: - UINavigationControllerDelegate
-extension MainViewController: UINavigationControllerDelegate {
-    /**
-    * Need this in order to set self as UIImagePikerController delegate 
-    * in configureImagePicker()
-    */
 }
 
 //MARK: - UIImagePickerControllerDelegate
@@ -168,7 +186,13 @@ extension MainViewController: UIImagePickerControllerDelegate {
     }
 }
 
-
+//MARK: - UINavigationControllerDelegate
+extension MainViewController: UINavigationControllerDelegate {
+    /**
+    * Need this in order to set self as UIImagePikerController delegate
+    * in configureImagePicker()
+    */
+}
 
 
 
