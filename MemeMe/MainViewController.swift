@@ -7,7 +7,13 @@
 //
 
 /*******************************************************************************
+CURRENT:
+(Oop... Saving to photo library wasn't part of the spec -- now a "feature")
+
 * Future “feature” branches:
+
+• Meme Model
+    - Save to nsuserdefaults for now.
 
 • Text field work
     - All caps
@@ -15,8 +21,13 @@
     - Text outline
     - Shrink to fit
 
-• Nav & Toolbar style
+• Table view to view previously saved memes
+    - Edit?
+    - Save to photo library button
 
+• Nav & Toolbar style
+    - Pick color scheme
+    - Would be nice to show/hide nav & toolbar like photo app
 
 
 *
@@ -73,11 +84,7 @@ final class MainViewController: UIViewController {
     
     //MARK: - Public funk(s)
 
-    
-    
-    /** Navigation Bar Actions */
-
-    
+    /** Save Image completion */
     func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Void>) {
         /** NSError for testing errorQueue */
 //        let testErrorUserInfo = [
@@ -128,7 +135,7 @@ final class MainViewController: UIViewController {
 
             let imageToShare = self!.createImage()
             
-            /** Save the screenShot */
+            /** Save the meme image */
             UIImageWriteToSavedPhotosAlbum(imageToShare, self, "image:didFinishSavingWithError:contextInfo:", nil)
             
             /** Open Activity View Controller */
@@ -136,12 +143,8 @@ final class MainViewController: UIViewController {
             
             /** Set completion handler for Share */
             activityVC.completionWithItemsHandler = { [weak self] activityType, completed, returnedItems, activityError in
-                magic("activityType: \(activityType), completed: \(completed), returnedItems: \(returnedItems), activityError: \(activityError)")
-                
-                if completed {
-                    magic("completed!")
-                } else {
-
+//                magic("activityType: \(activityType), completed: \(completed), returnedItems: \(returnedItems), activityError: \(activityError)")
+                if !completed {
                     var message = LocalizedStrings.ErrorAlerts.ShareError.message
                     
                     if activityError != nil {
