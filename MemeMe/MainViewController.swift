@@ -6,7 +6,21 @@
 //  Copyright © 2016 Slinging Pixels Media. All rights reserved.
 //
 
-//TODO: Camera button must be there & disabled on simulator
+/*******************************************************************************
+* Future “feature” branches:
+
+• Text field work
+    - All caps
+    - Choose font
+    - Text outline
+    - Shrink to fit
+
+• Nav & Toolbar style
+
+
+
+*
+*******************************************************************************/
 
 import UIKit
 import MobileCoreServices
@@ -25,7 +39,9 @@ final class MainViewController: UIViewController {
     
     private var navController: NavigationController!
     
-    //MARK: - View Lifecycle
+    private var errorQueue = [[String]]()
+    
+  //MARK: - View Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,25 +79,29 @@ final class MainViewController: UIViewController {
 
     
     func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Void>) {
+        /** NSError for testing errorQueue */
+//        let testErrorUserInfo = [
+//            NSLocalizedDescriptionKey : "Operation was unsuccessful."
+//        ]
+//        let NSTestErrorDomain = "foo"
+//        
+//        var testError: NSError? = NSError(domain: NSTestErrorDomain, code: 42, userInfo: testErrorUserInfo)
+        
         if error == nil {
-            magic("image saved to photos album")
-            
             /** Reset everything */
             mainViewViewModel.image.value = nil
             mainView.resetTextFields()
-            
-            
-            
-            
-            
-//            let ac = UIAlertController(title: "Saved!", message: "Your altered image has been saved to your photos.", preferredStyle: .Alert)
-//            ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-//            presentViewController(ac, animated: true, completion: nil)
         } else {
             magic("error: \(error?.localizedDescription)")
-//            let ac = UIAlertController(title: "Save error", message: error?.localizedDescription, preferredStyle: .Alert)
-//            ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-//            presentViewController(ac, animated: true, completion: nil)
+            
+            /** 
+             Unable to present an error alert because activityVC is already open 
+            
+             Add error to errorQueue & display after activityVC is dismissed.
+            */
+            let message     = LocalizedStrings.ErrorAlerts.ImageSaveError.message + error!.localizedDescription
+            let errorArray  = [LocalizedStrings.ErrorAlerts.ImageSaveError.title, message]
+            errorQueue.insert(errorArray, atIndex: 0)
         }
     }
     
@@ -115,16 +135,25 @@ final class MainViewController: UIViewController {
             let activityVC = UIActivityViewController(activityItems: [imageToShare], applicationActivities: nil)
             
             /** Set completion handler for Share */
-            activityVC.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
+            activityVC.completionWithItemsHandler = { [weak self] activityType, completed, returnedItems, activityError in
                 magic("activityType: \(activityType), completed: \(completed), returnedItems: \(returnedItems), activityError: \(activityError)")
                 
                 if completed {
                     magic("completed!")
                 } else {
-                    magic("Did not complete share activity")
+
+                    var message = LocalizedStrings.ErrorAlerts.ShareError.message
                     
-                    if activityError != nil { magic("error: \(activityError?.localizedDescription)") }
+                    if activityError != nil {
+                        message += activityError!.localizedDescription
+                    } else {
+                        message += LocalizedStrings.ErrorAlerts.ShareError.unknownError
+                    }
+                    let errorArray = [LocalizedStrings.ErrorAlerts.ShareError.title, message]
+                    self!.errorQueue.insert(errorArray, atIndex: 0)
                 }
+                
+                self!.checkForErrors()
             }
             self!.presentViewController(activityVC, animated: true, completion: nil)
         }
@@ -139,8 +168,7 @@ final class MainViewController: UIViewController {
     }
     
     private func configureToolbarItems() {
-     
-        /** Only add a camera button if camera is available */
+        
         if UIImagePickerController.isSourceTypeAvailable(.Camera) {
             cameraButtonClosure = { [weak self] in
                 self!.cameraButtonTapped()
@@ -151,7 +179,6 @@ final class MainViewController: UIViewController {
             self!.albumButtonTapped()
         }
     }
-    
     
     private func configureImagePicker() {
         imagePickerController.delegate = self
@@ -168,6 +195,23 @@ final class MainViewController: UIViewController {
         UIGraphicsEndImageContext()
         
         return screenShot
+    }
+    
+    private func checkForErrors() {
+        if errorQueue.count > 0 {
+            presentError(withErrorArray: errorQueue.removeLast())
+        }
+    }
+    
+    private func presentError(withErrorArray error: [String]) {
+        
+        let alert = UIAlertController(title: error[0], message: error[1], preferredStyle: .Alert)
+       
+        alert.addAction(UIAlertAction(title: LocalizedStrings.ButtonTitles.ok, style: .Default, handler: { [weak self] (alert: UIAlertAction!) in
+            /** There may be more errors in the queue */
+            self!.checkForErrors()
+        }))
+        presentViewController(alert, animated: true, completion: nil)
     }
 }
 
