@@ -9,7 +9,7 @@ import Foundation
 
 struct LocalizedStrings {
     struct ViewControllerTitles {
-        static let memeMe   = NSLocalizedString("vcTitles.memeMe", value: "MemeMe", comment: "")
+        static let memeMe = NSLocalizedString("vcTitles.memeMe", value: "MemeMe", comment: "")
     }
     
     struct PlaceholderText {
@@ -31,8 +31,8 @@ struct LocalizedStrings {
         }
         
         struct ShareError {
-            static let title    = NSLocalizedString("shareError.title",   value: "Share Error", comment: "")
-            static let message  = NSLocalizedString("shareError.message", value: "Sorry, sharing meme was not successful because: ", comment: "")
+            static let title        = NSLocalizedString("shareError.title",   value: "Share Error", comment: "")
+            static let message      = NSLocalizedString("shareError.message", value: "Sorry, sharing meme was not successful because: ", comment: "")
             static let unknownError = NSLocalizedString("shareError.unknownError", value: "Unknown Error", comment: "")
         }
     }

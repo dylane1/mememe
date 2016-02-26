@@ -6,33 +6,6 @@
 //  Copyright © 2016 Slinging Pixels Media. All rights reserved.
 //
 
-/*******************************************************************************
-CURRENT:
-(Oop... Saving to photo library wasn't part of the spec -- now a "feature")
-
-* Future “feature” branches:
-
-• Meme Model
-    - Save to nsuserdefaults for now.
-
-• Text field work
-    - All caps
-    - Choose font
-    - Text outline
-    - Shrink to fit
-
-• Table view to view previously saved memes
-    - Edit?
-    - Save to photo library button
-
-• Nav & Toolbar style
-    - Pick color scheme
-    - Would be nice to show/hide nav & toolbar like photo app
-
-
-*
-*******************************************************************************/
-
 import UIKit
 import MobileCoreServices
 
@@ -41,17 +14,30 @@ final class MainViewController: UIViewController {
     private var cameraButtonClosure: ToolbarButtonClosure?
     private var albumButtonClosure: ToolbarButtonClosure!
     
+    /** For keeping track of app state and enabling/disabling navbar buttons */
     private var stateMachine = StateMachine()
+    private var navController: NavigationController!
     
     private var mainView: MainView!
     private var mainViewViewModel: MainViewViewModel!
     
     private let imagePickerController = UIImagePickerController()
     
-    private var navController: NavigationController!
-    
+    /** 
+     * For keeping track of errors that occur when the imagePickerController is 
+     * open, then popping an error alert after imagePickerController has been
+     * dismissed
+     */
     private var errorQueue = [[String]]()
     
+    private var imageToShare: UIImage?
+    
+    private var memeModel = Meme()
+    
+    /** Storage */
+    private var storedMemesProvider = MemesProvider()
+     
+     
   //MARK: - View Lifecycle
     
     override func viewDidLoad() {
@@ -65,10 +51,26 @@ final class MainViewController: UIViewController {
         configureToolbarItems()
         configureImagePicker()
         
+        let memeTextUpdatedClosure = { [weak self] (updatedMeme: Meme) -> Void in
+            self!.memeModel = updatedMeme
+        }
+        
+        let memeImageUpdatedClosure = { [weak self] (originalMeme: Meme, newImage: UIImage?) -> Meme in
+            /** Delete previous image from storage if needed (MemeMe v2)*/
+            
+            
+            /** Update meme model */
+            self!.memeModel.image = newImage
+            
+            return self!.memeModel
+        }
+        
         mainView.configure(
             withDataSource: mainViewViewModel,
             albumButtonClosure: albumButtonClosure,
             cameraButtonClosure: cameraButtonClosure,
+            memeTextUpdatedClosure: memeTextUpdatedClosure,
+            memeImageUpdatedClosure: memeImageUpdatedClosure,
             stateMachine: stateMachine
         )
     }
@@ -76,16 +78,15 @@ final class MainViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
     }
-//    
-//    override func viewDidAppear(animated: Bool) {
-//        super.viewDidAppear(animated)
-//        
-//    }
     
     //MARK: - Public funk(s)
 
     /** Save Image completion */
-    func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Void>) {
+    /*******************************************************************************
+    * Not currently saving to the Photo Album, but will be an option in MemeMe v2
+    *
+    *******************************************************************************/
+//    func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Void>) {
         /** NSError for testing errorQueue */
 //        let testErrorUserInfo = [
 //            NSLocalizedDescriptionKey : "Operation was unsuccessful."
@@ -94,23 +95,23 @@ final class MainViewController: UIViewController {
 //        
 //        var testError: NSError? = NSError(domain: NSTestErrorDomain, code: 42, userInfo: testErrorUserInfo)
         
-        if error == nil {
-            /** Reset everything */
-            mainViewViewModel.image.value = nil
-            mainView.resetTextFields()
-        } else {
-            magic("error: \(error?.localizedDescription)")
-            
-            /** 
-             Unable to present an error alert because activityVC is already open 
-            
-             Add error to errorQueue & display after activityVC is dismissed.
-            */
-            let message     = LocalizedStrings.ErrorAlerts.ImageSaveError.message + error!.localizedDescription
-            let errorArray  = [LocalizedStrings.ErrorAlerts.ImageSaveError.title, message]
-            errorQueue.insert(errorArray, atIndex: 0)
-        }
-    }
+//        if error == nil {
+//            /** Reset everything */
+//            mainViewViewModel.image.value = nil
+//            mainView.resetTextFields()
+//        } else {
+//            magic("error: \(error?.localizedDescription)")
+//            
+//            /** 
+//             Unable to present an error alert because activityVC is already open 
+//            
+//             Add error to errorQueue & display after activityVC is dismissed.
+//            */
+//            let message     = LocalizedStrings.ErrorAlerts.ImageSaveError.message + error!.localizedDescription
+//            let errorArray  = [LocalizedStrings.ErrorAlerts.ImageSaveError.title, message]
+//            errorQueue.insert(errorArray, atIndex: 0)
+//        }
+//    }
     
     
     /** Toolbar Actions */
@@ -133,17 +134,19 @@ final class MainViewController: UIViewController {
         
         let shareButtonClosure = { [weak self] in
 
-            let imageToShare = self!.createImage()
+            self!.imageToShare = self!.createImage()
             
-            /** Save the meme image */
-            UIImageWriteToSavedPhotosAlbum(imageToShare, self, "image:didFinishSavingWithError:contextInfo:", nil)
+            /** Save the meme image to photos album */
+//            UIImageWriteToSavedPhotosAlbum(self!.imageToShare!, self, "image:didFinishSavingWithError:contextInfo:", nil)
             
             /** Open Activity View Controller */
-            let activityVC = UIActivityViewController(activityItems: [imageToShare], applicationActivities: nil)
+
+            guard let image = self!.imageToShare as UIImage! else  { fatalError("error creating image") }
             
+            let activityVC = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+                
             /** Set completion handler for Share */
             activityVC.completionWithItemsHandler = { [weak self] activityType, completed, returnedItems, activityError in
-//                magic("activityType: \(activityType), completed: \(completed), returnedItems: \(returnedItems), activityError: \(activityError)")
                 if !completed {
                     var message = LocalizedStrings.ErrorAlerts.ShareError.message
                     
@@ -154,6 +157,18 @@ final class MainViewController: UIViewController {
                     }
                     let errorArray = [LocalizedStrings.ErrorAlerts.ShareError.title, message]
                     self!.errorQueue.insert(errorArray, atIndex: 0)
+                } else {
+                    /** Success! */
+                    
+                    
+                    /** Save the meme to storage */
+                    self!.memeModel.memedImage = image
+                    self!.storedMemesProvider.addNewMemeToStorage(self!.memeModel)
+
+                    /** Reset everything */
+                    self!.memeModel = Meme()
+                    self!.mainViewViewModel.image.value = nil
+                    self!.mainView.resetTextFields()
                 }
                 
                 self!.checkForErrors()
@@ -224,7 +239,11 @@ extension MainViewController: UIImagePickerControllerDelegate {
         
         /** Update viewModel so view can update itself */
         mainViewViewModel.image.value = image
-
+        
+        /** Set the image in the memeModel so it can be saved to storage */
+        memeModel.image = image
+        magic("updated memeModel (with image) \(memeModel)")
+        
         dismissViewControllerAnimated(true, completion: nil)
     }
     
@@ -240,32 +259,3 @@ extension MainViewController: UINavigationControllerDelegate {
     * in configureImagePicker()
     */
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -17,11 +17,20 @@ class MainView: UIView {
     private var albumButtonClosure: BarButtonClosure?
     private var cameraButtonClosure: BarButtonClosure?
     
+    typealias MemeTextUpdated = (Meme) -> Void
+    private var memeTextUpdatedClosure: MemeTextUpdated?
+    
+    typealias MemeImageUpdated = (Meme, UIImage?) -> Meme
+    private var memeImageUpdatedClosure: MemeImageUpdated?
+    
+    private var meme = Meme()
     
     private var image: UIImage? = nil {
         didSet {
             /** Set image in imageView */
             imageView.image = image
+            
+            meme = memeImageUpdatedClosure!(meme, image)
             
             stateMachine.changeState(withImage: image, topText: topText, bottomText: bottomText)
         }
@@ -34,11 +43,15 @@ class MainView: UIView {
      */
     private var topText: String? = "" {
         didSet {
+            meme.topText = topText
+            memeTextUpdatedClosure?(meme)
             stateMachine.changeState(withImage: image, topText: topText, bottomText: bottomText)
         }
     }
     private var bottomText: String? = "" {
         didSet {
+            meme.bottomText = bottomText
+            memeTextUpdatedClosure?(meme)
             stateMachine.changeState(withImage: image, topText: topText, bottomText: bottomText)
         }
     }
@@ -64,20 +77,21 @@ class MainView: UIView {
         withDataSource dataSource: MainViewViewModel,
         albumButtonClosure: BarButtonClosure,
         cameraButtonClosure: BarButtonClosure? = nil,
+        memeTextUpdatedClosure: MemeTextUpdated,
+        memeImageUpdatedClosure: MemeImageUpdated,
         stateMachine: StateMachine)
     {
-        self.dataSource             = dataSource
-        self.albumButtonClosure     = albumButtonClosure
-        self.cameraButtonClosure    = cameraButtonClosure
-        self.stateMachine           = stateMachine
+        self.dataSource              = dataSource
+        self.albumButtonClosure      = albumButtonClosure
+        self.cameraButtonClosure     = cameraButtonClosure
+        self.memeTextUpdatedClosure  = memeTextUpdatedClosure
+        self.memeImageUpdatedClosure = memeImageUpdatedClosure
+        self.stateMachine            = stateMachine
         
         configureToolbarItems()
         configureTextFields()
     }
 
-    
-    //MARK: - Public funk(s)
-    
     func cameraButtonTapped() {
         cameraButtonClosure?()
     }
@@ -105,11 +119,6 @@ class MainView: UIView {
         bottomField.alpha   = (bottomText == "" || bottomText == nil) ? 0 : 1
     }
     
-//    func unhidePlaceholderText() {
-//        topField.alpha      = 1
-//        bottomField.alpha   = 1
-//    }
-    
     //MARK: - Private funk(s)
     
     private func configureToolbarItems() {
@@ -119,22 +128,19 @@ class MainView: UIView {
         
         toolbarItemArray.append(flexSpace)
         
-        /** 
-         * According to spec: Add camera button but disable if camera not available
-         * 
-         * Not in spec: Only add a camera button if camera is available
-         */
-//        if UIImagePickerController.isSourceTypeAvailable(.Camera) {
-            let fixedSpace = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil, action: nil)
-            fixedSpace.width = 44
-            
-            let cameraButton = UIBarButtonItem(barButtonSystemItem: .Camera, target: self, action: "cameraButtonTapped")
-            cameraButton.enabled = false
+        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil, action: nil)
+        fixedSpace.width = 44
         
-//            toolbarItemArray.append(flexSpace)
-            toolbarItemArray.append(cameraButton)
-            toolbarItemArray.append(fixedSpace)
-//        }
+        let cameraButton = UIBarButtonItem(
+            barButtonSystemItem: .Camera,
+            target: self,
+            action: "cameraButtonTapped")
+        
+        cameraButton.enabled = false
+
+        toolbarItemArray.append(cameraButton)
+        toolbarItemArray.append(fixedSpace)
+
         if UIImagePickerController.isSourceTypeAvailable(.Camera) { cameraButton.enabled = true }
         
         let albumButton = UIBarButtonItem(
@@ -215,16 +221,13 @@ extension MainView: UITextFieldDelegate {
         return true
     }
     
-    
     func textFieldShouldEndEditing(textField: UITextField) -> Bool {
         textField.endEditing(true)
         
         return true
     }
     
-    func textFieldDidEndEditing(textField: UITextField) {
-//        magic("text: \(textField.text); topField.text: \(topField.text); bottomField.text: \(bottomField.text)")
-        
+    func textFieldDidEndEditing(textField: UITextField) {        
         topText     = topField.text as String?
         bottomText  = bottomField.text as String?
     }
@@ -262,31 +265,3 @@ extension MainView: UITextFieldDelegate {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

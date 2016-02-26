@@ -7,7 +7,9 @@
 //
 
 
-//TODO: DOCUMENTATION
+/** 
+ * MainView listens for changes to image and updates the view accordingly
+ */
 
 import UIKit
 
@@ -17,5 +19,4 @@ struct MainViewViewModel: MainViewDataSource {
     init() {
         image = Dynamic(nil)
     }
-    
 }

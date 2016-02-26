@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
+        checkForApplicationSupportDirectory()
         return true
     }
 
@@ -41,6 +41,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-
+    /** Create Application Support directory if it doesn't exist */
+    private func checkForApplicationSupportDirectory() {
+        let fileManager = NSFileManager.defaultManager()
+        
+        if !fileManager.fileExistsAtPath(Constants.FileSystem.applicationSupport as String, isDirectory: nil) {
+            do {
+                try fileManager.createDirectoryAtPath(Constants.FileSystem.applicationSupport, withIntermediateDirectories: true, attributes: nil)
+            } catch {
+                magic("error creating app support dir: \(error)")
+            }
+            
+        }
+    }
 }
 
