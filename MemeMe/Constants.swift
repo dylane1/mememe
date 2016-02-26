@@ -10,13 +10,13 @@ import UIKit
 
 struct Constants {
     
-    struct ColorScheme {
+    internal struct ColorScheme {
         static let blue         = UIColor.blueColor()
         static let white        = UIColor.whiteColor()
         static let whiteAlpha50 = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.50)
     }
     
-    struct Fonts {
+    internal struct Fonts {
         static let textFields = UIFont.systemFontOfSize(32, weight: UIFontWeightBold)
     }
     
@@ -33,11 +33,11 @@ struct Constants {
 //        static let memeArray        = "com.slingingpixels.mememe.storageKeys.memeArray"
 //    }
     
-    struct FileSystem {
+    internal struct FileSystem {
         static let applicationSupport = NSSearchPathForDirectoriesInDomains(.ApplicationSupportDirectory, .UserDomainMask, true)[0]
     }
     
-    struct ArchiveFiles {
+    internal struct ArchiveFiles {
         static let storedMemes = FileSystem.applicationSupport + "/storedMemes.json"
     }
 }

@@ -34,7 +34,7 @@ class NavigationController: UINavigationController {
         }
     }
     
-    override func viewDidLoad() {
+    internal override func viewDidLoad() {
         super.viewDidLoad()
         
         configureNavigationItems()
@@ -51,19 +51,19 @@ class NavigationController: UINavigationController {
     }
     
     
-    //MARK: - Public funk(s)
+    //MARK: - Internal funk(s)
     
-    func configure(withShareButtonClosure share: NavbarButtonClosure, cancelButtonClosure cancel: NavbarButtonClosure, stateMachine state: StateMachine){
+    internal func configure(withShareButtonClosure share: NavbarButtonClosure, cancelButtonClosure cancel: NavbarButtonClosure, stateMachine state: StateMachine){
         shareClosure    = share
         cancelClosure   = cancel
         stateMachine    = state
     }
     
-    func shareButtonTapped() {
+    internal func shareButtonTapped() {
         shareClosure?()
     }
     
-    func cancelButtonTapped() {
+    internal func cancelButtonTapped() {
         cancelClosure?()
     }
     

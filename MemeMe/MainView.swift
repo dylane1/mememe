@@ -71,9 +71,9 @@ class MainView: UIView {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var toolbar: UIToolbar!
     
-    //MARK: - Public funk(s)
+    //MARK: - Internal funk(s)
     
-    func configure(
+    internal func configure(
         withDataSource dataSource: MainViewViewModel,
         albumButtonClosure: BarButtonClosure,
         cameraButtonClosure: BarButtonClosure? = nil,
@@ -92,15 +92,15 @@ class MainView: UIView {
         configureTextFields()
     }
 
-    func cameraButtonTapped() {
+    internal func cameraButtonTapped() {
         cameraButtonClosure?()
     }
     
-    func albumButtonTapped() {
+    internal func albumButtonTapped() {
         albumButtonClosure?()
     }
     
-    func resetTextFields() {
+    internal func resetTextFields() {
         topText     = nil
         bottomText  = nil
         
@@ -113,7 +113,7 @@ class MainView: UIView {
         configureTextFields()
     }
 
-    func hidePlaceholderText() {
+    internal func hidePlaceholderText() {
         /** Hide unedited field if taking snapshot of view to share */
         topField.alpha      = (topText == "" || topText == nil) ? 0 : 1
         bottomField.alpha   = (bottomText == "" || bottomText == nil) ? 0 : 1
@@ -203,7 +203,7 @@ extension MainView: UITextFieldDelegate {
      * http://stackoverflow.com/questions/11282449/move-uiview-up-when-the-keyboard-appears-in-ios
      */
     
-    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+    internal func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
         
         /** Set up observers */
         NSNotificationCenter.defaultCenter().addObserver(
@@ -221,23 +221,23 @@ extension MainView: UITextFieldDelegate {
         return true
     }
     
-    func textFieldShouldEndEditing(textField: UITextField) -> Bool {
+    internal func textFieldShouldEndEditing(textField: UITextField) -> Bool {
         textField.endEditing(true)
         
         return true
     }
     
-    func textFieldDidEndEditing(textField: UITextField) {        
+    internal func textFieldDidEndEditing(textField: UITextField) {
         topText     = topField.text as String?
         bottomText  = bottomField.text as String?
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    internal func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
     
-    func keyboardWillShow(notification: NSNotification) {
+    internal func keyboardWillShow(notification: NSNotification) {
         
         /** Animate the view up so bottom text field is visible while editing */
         if bottomField.editing {
@@ -251,7 +251,7 @@ extension MainView: UITextFieldDelegate {
         }
     }
     
-    func keyboardWillHide(notification: NSNotification) {
+    internal func keyboardWillHide(notification: NSNotification) {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
         

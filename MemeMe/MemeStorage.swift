@@ -16,12 +16,12 @@
 import UIKit
 
 struct StoredMeme {
-    var topText: String
-    var bottomText: String
-    var imageName: String
-    var memedImageName: String
+    internal var topText: String
+    internal var bottomText: String
+    internal var imageName: String
+    internal var memedImageName: String
     
-    var jsonDictionary: [String: String] {
+    internal var jsonDictionary: [String: String] {
         return ["topText": topText,
                 "bottomText": bottomText,
                 "imageName": imageName,
@@ -45,7 +45,7 @@ struct MemesProvider {
     private var storedMemeArray: [StoredMeme]
     
     private var _memeArray = [Meme]()
-    var memeArray: [Meme] {
+    internal var memeArray: [Meme] {
         return _memeArray
     }
     
@@ -55,7 +55,7 @@ struct MemesProvider {
         loadMemesFromStorage()
     }
     
-    mutating func addNewMemeToStorage(meme: Meme) {
+    mutating internal func addNewMemeToStorage(meme: Meme) {
         _memeArray.append(meme)
         
         var storedMeme = StoredMeme()
@@ -101,14 +101,14 @@ struct MemesProvider {
             jsonData = try NSJSONSerialization.dataWithJSONObject(jsonArray, options: NSJSONWritingOptions.PrettyPrinted)
 //            magic("jsonData: \(String(data: jsonData, encoding: NSUTF8StringEncoding))")
         } catch let error as NSError {
-            print("Array to JSON conversion failed: \(error.localizedDescription)")
+            magic("Array to JSON conversion failed: \(error.localizedDescription)")
         }
         
         /** Write (or overrite existing) json file */
         let fileManager = NSFileManager.defaultManager()
         
         if !fileManager.createFileAtPath(Constants.ArchiveFiles.storedMemes, contents: jsonData, attributes: nil) {
-            magic("error creating archive json file! Error code: \(errno); message: \(strerror(errno))")
+            magic("Error creating archive json file! Error code: \(errno); message: \(strerror(errno))")
         }
     }
     
@@ -121,7 +121,7 @@ struct MemesProvider {
             jsonArray = try NSJSONSerialization.JSONObjectWithData(jsonData, options: []) as! [[String:String]]
             
         } catch let error as NSError {
-            magic(error)
+            magic("Error creating jsonArray: \(error.localizedDescription)")
             return
         }
         

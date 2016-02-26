@@ -79,14 +79,14 @@ final class MainViewController: UIViewController {
         super.viewWillAppear(animated)
     }
     
-    //MARK: - Public funk(s)
+    //MARK: - Internal funk(s)
 
     /** Save Image completion */
     /*******************************************************************************
     * Not currently saving to the Photo Album, but will be an option in MemeMe v2
     *
     *******************************************************************************/
-//    func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Void>) {
+//    internal func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Void>) {
         /** NSError for testing errorQueue */
 //        let testErrorUserInfo = [
 //            NSLocalizedDescriptionKey : "Operation was unsuccessful."
@@ -115,13 +115,13 @@ final class MainViewController: UIViewController {
     
     
     /** Toolbar Actions */
-    func cameraButtonTapped() {
+    internal func cameraButtonTapped() {
         imagePickerController.sourceType = .Camera
         
         presentViewController(imagePickerController, animated: true, completion: nil)
     }
     
-    func albumButtonTapped() {
+    internal func albumButtonTapped() {
         imagePickerController.sourceType = .PhotoLibrary
         presentViewController(imagePickerController, animated: true, completion: nil)
     }
@@ -235,7 +235,7 @@ final class MainViewController: UIViewController {
 
 //MARK: - UIImagePickerControllerDelegate
 extension MainViewController: UIImagePickerControllerDelegate {
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+    internal func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         
         /** Update viewModel so view can update itself */
         mainViewViewModel.image.value = image
@@ -247,7 +247,7 @@ extension MainViewController: UIImagePickerControllerDelegate {
         dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+    internal func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         dismissViewControllerAnimated(true, completion: nil)
     }
 }

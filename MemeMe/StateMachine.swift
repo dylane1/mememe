@@ -20,15 +20,18 @@ enum AppState {
  */
 
 class StateMachine {
-    
-    var state: Dynamic<AppState>
+    /** 
+     * NavigationController is listening for changes in this var & enables/disables
+     * bar buttons based on current app state
+     */
+    internal var state: Dynamic<AppState>
     
     init() {
         state = Dynamic(.NoImageNoText)
     }
     
     //TODO: May need to add an .IsEditingText state to enable Cancel button while editing, even though "Done" works
-    func changeState(withImage img: UIImage?, topText: String?, bottomText: String?) {
+    internal func changeState(withImage img: UIImage?, topText: String?, bottomText: String?) {
         
         let image = (img == nil)                            ? false : true
         let tText = (topText == nil || topText == "")       ? false : true

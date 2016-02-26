@@ -14,7 +14,7 @@
 import UIKit
 
 struct MainViewViewModel: MainViewDataSource {
-    let image: Dynamic<UIImage?>
+    internal let image: Dynamic<UIImage?>
     
     init() {
         image = Dynamic(nil)
