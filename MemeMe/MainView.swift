@@ -30,6 +30,17 @@ class MainView: UIView {
             /** Set image in imageView */
             imageView.image = image
             
+            /** 
+             Update text field constraints for new image at current orientation 
+             */
+            let orientation: DestinationOrientation
+            if UIDevice.currentDevice().orientation.isLandscape.boolValue {
+                orientation = .Landscape
+            } else {
+                orientation = .Portrait
+            }
+            updateTextFieldContstraints(withNewOrientation: orientation)
+            
             meme = memeImageUpdatedClosure!(meme, image)
             
             stateMachine.changeState(withImage: image, topText: topText, bottomText: bottomText)
@@ -71,6 +82,15 @@ class MainView: UIView {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var toolbar: UIToolbar!
     
+    @IBOutlet weak var topFieldTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var topFieldLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var topFieldTrailingConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var bottomFieldBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bottomFieldLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bottomFieldTrailingConstraint: NSLayoutConstraint!
+    
+    
     //MARK: - Internal funk(s)
     
     internal func configure(
@@ -110,6 +130,15 @@ class MainView: UIView {
         topField.alpha      = 1
         bottomField.alpha   = 1
         
+        /** Reset constraints */
+        topFieldLeadingConstraint.constant = 0
+        topFieldTopConstraint.constant = 16
+        topFieldTrailingConstraint.constant = 0
+        
+        bottomFieldLeadingConstraint.constant = 0
+        bottomFieldBottomConstraint.constant = 16
+        bottomFieldTrailingConstraint.constant = 0
+        
         configureTextFields()
     }
 
@@ -119,8 +148,25 @@ class MainView: UIView {
         bottomField.alpha   = (bottomText == "" || bottomText == nil) ? 0 : 1
     }
     
+//    override func drawRect(rect: CGRect) {
+//        magic("topFieldTopConstraint.constant: \(topFieldTopConstraint.constant)")
+//        magic("bottomFieldBottomConstraint.constant: \(bottomFieldBottomConstraint.constant)")
+//        magic("bottomFieldLeadingConstraint.constant: \(bottomFieldLeadingConstraint.constant)")
+//    }
     //MARK: - Private funk(s)
+    /*******************************************************************************
+    * February 26, 2016 ENDPOINT
     
+      Need to allow users to choose a font. look here: http://iosfonts.com
+        
+      compare with font list
+    
+    AmericanTypewriter-Bold
+    Arial-BoldMT
+    AvenirNext-Heavy
+    
+    *
+    *******************************************************************************/
     private func configureToolbarItems() {
         var toolbarItemArray = [UIBarButtonItem]()
         
@@ -156,29 +202,34 @@ class MainView: UIView {
     }
     
     private func configureTextFields() {
-        topField.delegate           = self
-        topField.borderStyle        = .None
-        topField.backgroundColor    = UIColor.clearColor()
-        topField.returnKeyType      = .Done
+        topField.delegate                   = self
+        topField.borderStyle                = .None
+        topField.backgroundColor            = UIColor.clearColor()
+        topField.returnKeyType              = .Done
+        topField.autocapitalizationType     = .AllCharacters
+        topField.adjustsFontSizeToFitWidth  = true
         
-        bottomField.delegate        = self
-        bottomField.borderStyle     = .None
-        bottomField.backgroundColor = UIColor.clearColor()
-        bottomField.returnKeyType   = .Done
+        bottomField.delegate                    = self
+        bottomField.borderStyle                 = .None
+        bottomField.backgroundColor             = UIColor.clearColor()
+        bottomField.returnKeyType               = .Done
+        bottomField.autocapitalizationType      = .AllCharacters
+        bottomField.adjustsFontSizeToFitWidth   = true
         
         /** For resetting when 'Cancel' is tapped */
         topField.attributedText     = nil
         bottomField.attributedText  = nil
         
-        //FIXME: text must be all caps
         let textFieldAttributes = [
             NSForegroundColorAttributeName: Constants.ColorScheme.white,
-            NSFontAttributeName:            Constants.Fonts.textFields
+            NSStrokeColorAttributeName:     UIColor.blackColor(),
+            NSStrokeWidthAttributeName:     -5.0,
+            NSFontAttributeName:            Constants.Fonts.TextFields.impactFont!
         ]
         
         let placeholderAttributes = [
             NSForegroundColorAttributeName: Constants.ColorScheme.whiteAlpha50,
-            NSFontAttributeName:            Constants.Fonts.textFields
+            NSFontAttributeName:            Constants.Fonts.TextFields.impactFont!
         ]
         
         topField.defaultTextAttributes  = textFieldAttributes
@@ -188,16 +239,68 @@ class MainView: UIView {
         bottomField.defaultTextAttributes   = textFieldAttributes
         bottomField.attributedPlaceholder   = NSAttributedString(string: LocalizedStrings.PlaceholderText.MainView.bottom, attributes: placeholderAttributes)
         bottomField.textAlignment           = .Center
+        
+        
+        /** Set auto layout constraints */
+//        let margins = imageView.image.layoutMarginsGuide
 
     }
+    
+    internal func updateTextFieldContstraints(withNewOrientation orientation: DestinationOrientation) {
+        if imageView.image == nil {return}
+        
+        magic("imageView.image!.size.height: \(imageView.image!.size.height)")
+        magic("imageView.image!.size.width: \(imageView.image!.size.width)")
+        
+        if orientation == .Landscape {
+            magic("update to landscape")
+            /**
+            * Need to update text input constraints:
+            *
+            * Top & Bottom: 16? pts from bars
+            * Leading & trailing 8pts inside edges of image
+            *
+            */
+            topFieldTopConstraint.constant = 16
+            bottomFieldBottomConstraint.constant = 16
+            
+            let correctWidth = (imageView.frame.height / imageView.image!.size.height) * imageView.image!.size.width
+            
+            let newConstant = (imageView.frame.width - correctWidth) / 2
+            topFieldLeadingConstraint.constant      = newConstant
+            topFieldTrailingConstraint.constant     = newConstant
+            bottomFieldLeadingConstraint.constant   = newConstant
+            bottomFieldTrailingConstraint.constant  = newConstant
+        } else {
+            magic("update to portrait")
+            /**
+            * Need to update text input constraints:
+            *
+            * Top & Bottom: 16? pts inside edges of image
+            * Leading & trailing 8pts from superview
+            *
+            */
+            topFieldLeadingConstraint.constant      = 0
+            topFieldTrailingConstraint.constant     = 0
+            bottomFieldLeadingConstraint.constant   = 0
+            bottomFieldTrailingConstraint.constant  = 0
+            
+            let correctHeight = (imageView.frame.width / imageView.image!.size.width) * imageView.image!.size.height
+
+            let newConstant = ((imageView.frame.height - correctHeight) / 2) + 16
+            topFieldTopConstraint.constant = newConstant
+            bottomFieldBottomConstraint.constant = newConstant
+        }
+    }
 }
+
 
 //MARK: - UITextFieldDelegate
 
 extension MainView: UITextFieldDelegate {
     
-    /** 
-     * Set View rect so bottom text is visible 
+    /**
+     * Set View rect so bottom text is visible
      *
      * Adapted from this post on Stack Overflow:
      * http://stackoverflow.com/questions/11282449/move-uiview-up-when-the-keyboard-appears-in-ios
@@ -264,4 +367,16 @@ extension MainView: UITextFieldDelegate {
             }
         }
     }
+}
+extension MainView {
+//    override func traitCollectionDidChange(previousTraitCollection: UITraitCollection?) {
+//        super.traitCollectionDidChange(previousTraitCollection)
+//        updateTextFieldContstraints()
+//    }
+    
+
+//    
+//    override func traitCollectionDidChange(previousTraitCollection: UITraitCollection!) {
+//        updateConstraintsWithTraitCollection(traitCollection)
+//    }
 }

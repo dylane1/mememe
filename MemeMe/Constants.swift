@@ -17,7 +17,11 @@ struct Constants {
     }
     
     internal struct Fonts {
-        static let textFields = UIFont.systemFontOfSize(32, weight: UIFontWeightBold)
+        struct TextFields {
+            static let defaultFont = UIFont.boldSystemFontOfSize(32)
+            static let impactFont  = UIFont(name: "Impact", size: 32)
+//            static let helveticaNeueMed32   =  UIFont(name: "HelveticaNeue-Medium", size: 32)
+        }
     }
     
     /** 

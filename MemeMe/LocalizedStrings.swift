@@ -14,8 +14,8 @@ struct LocalizedStrings {
     
     internal struct PlaceholderText {
         struct MainView {
-            static let top      = NSLocalizedString("placeholder.top",    value: "Top",    comment: "")
-            static let bottom   = NSLocalizedString("placeholder.bottom", value: "Bottom", comment: "")
+            static let top      = NSLocalizedString("placeholder.top",    value: "ENTER TOP TEXT HERE",    comment: "")
+            static let bottom   = NSLocalizedString("placeholder.bottom", value: "ENTER BOTTOM TEXT HERE", comment: "")
         }
     }
     

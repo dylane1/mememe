@@ -6,6 +6,36 @@
 //  Copyright © 2016 Slinging Pixels Media. All rights reserved.
 //
 
+/*******************************************************************************
+CURRENT:
+
+• Text field work 0.05.0
+- Choose font
+- Cancel button should hide keyboard when editing
+- fields need to be contained within the image boundaries
+
+//FIXME:
+- Crop image to correct size...
+- image will be 4:3 or 3:4. Do not let image go behind navbars
+
+
+
+* Future “feature” branches:
+
+• Nav & Toolbar style 0.06.0
+- Pick color scheme
+- Would be nice to show/hide nav & toolbar like photo app
+
+
+
+(2.0)• Table & collection views to view previously saved(?) memes (Docs say SENT memes)
+- Edit?
+- Save to photo library button?
+*
+
+(2.0) Allow user to zoom in/out on image?
+*******************************************************************************/
+
 import UIKit
 import MobileCoreServices
 
@@ -182,7 +212,10 @@ final class MainViewController: UIViewController {
             self!.mainView.resetTextFields()
         }
         
-        navController.configure(withShareButtonClosure: shareButtonClosure, cancelButtonClosure: cancelButtonClosure, stateMachine: stateMachine)
+        navController.configure(
+            withShareButtonClosure: shareButtonClosure,
+            cancelButtonClosure: cancelButtonClosure,
+            stateMachine: stateMachine)
     }
     
     private func configureToolbarItems() {
@@ -231,6 +264,15 @@ final class MainViewController: UIViewController {
         }))
         presentViewController(alert, animated: true, completion: nil)
     }
+    
+//    private func listFonts() {
+//        for family: String in UIFont.familyNames() {
+//            print("\(family)")
+//            for names: String in UIFont.fontNamesForFamilyName(family) {
+//                print("   \(names)")
+//            }
+//        }
+//    }
 }
 
 //MARK: - UIImagePickerControllerDelegate
@@ -258,4 +300,25 @@ extension MainViewController: UINavigationControllerDelegate {
     * Need this in order to set self as UIImagePikerController delegate
     * in configureImagePicker()
     */
+}
+
+enum DestinationOrientation {
+    case Landscape, Portrait
+}
+extension MainViewController {
+    /** Tell view to update constraints on text fields upon rotation */    
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+//        magic("width: \(size.width) x height: \(size.height)")
+        
+        let newOrientation: DestinationOrientation
+        if size.width > size.height {
+            newOrientation = .Landscape
+        } else {
+            newOrientation = .Portrait
+        }
+        coordinator.animateAlongsideTransition({ (context: UIViewControllerTransitionCoordinatorContext!) in
+            self.mainView.updateTextFieldContstraints(withNewOrientation: newOrientation)
+            self.mainView.setNeedsLayout()
+            }, completion: nil)
+    }
 }
