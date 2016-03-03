@@ -8,36 +8,40 @@
 import Foundation
 
 struct LocalizedStrings {
-    internal struct ViewControllerTitles {
+    struct ViewControllerTitles {
         static let memeMe = NSLocalizedString("vcTitles.memeMe", value: "MemeMe", comment: "")
     }
     
-    internal struct PlaceholderText {
+    struct PlaceholderText {
         struct MainView {
             static let top      = NSLocalizedString("placeholder.top",    value: "ENTER TOP TEXT HERE",    comment: "")
             static let bottom   = NSLocalizedString("placeholder.bottom", value: "ENTER BOTTOM TEXT HERE", comment: "")
         }
     }
     
-    internal struct NavigationControllerButtons {
-        static let cancel   = NSLocalizedString("navButtons.cancel", value: "Cancel", comment: "")
-        static let album    = NSLocalizedString("navButtons.album",  value: "Album",  comment: "")
+    struct NavigationControllerButtons {
+        static let cancel = NSLocalizedString("navButtons.cancel", value: "Cancel", comment: "")
     }
     
-    internal struct ErrorAlerts {
+    struct ToolbarButtons {
+        static let album    = NSLocalizedString("toolbarButtons.album", value: "Album", comment: "")
+        static let font     = NSLocalizedString("toolbarButtons.font",  value: "Font",  comment: "")
+    }
+    
+    struct ErrorAlerts {
         struct ImageSaveError {
             static let title    = NSLocalizedString("imageSaveError.title",   value: "Save Error", comment: "")
             static let message  = NSLocalizedString("imageSaveError.message", value: "Sorry, image was not saved because: ", comment: "")
         }
         
         struct ShareError {
-            static let title        = NSLocalizedString("shareError.title",   value: "Share Error", comment: "")
-            static let message      = NSLocalizedString("shareError.message", value: "Sorry, sharing meme was not successful because: ", comment: "")
-            static let unknownError = NSLocalizedString("shareError.unknownError", value: "Unknown Error", comment: "")
+            static let title        = NSLocalizedString("shareError.title",         value: "Share Error", comment: "")
+            static let message      = NSLocalizedString("shareError.message",       value: "Sorry, sharing meme was not successful because: ", comment: "")
+            static let unknownError = NSLocalizedString("shareError.unknownError",  value: "Unknown Error", comment: "")
         }
     }
     
-    internal struct ButtonTitles {
+    struct ButtonTitles {
         static let ok = NSLocalizedString("buttonTitles.ok", value: "OK", comment: "")
     }
 }

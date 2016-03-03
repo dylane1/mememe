@@ -10,15 +10,22 @@
 CURRENT:
 
 • Text field work 0.05.0
-- Choose font
-- Cancel button should hide keyboard when editing
-- fields need to be contained within the image boundaries
 
-//FIXME:
-- Crop image to correct size...
-- image will be 4:3 or 3:4. Do not let image go behind navbars
+- Choose font:
+Need to allow users to choose a font. look here: http://iosfonts.com
 
+compare with font list
 
+AmericanTypewriter-Bold
+Arial-BoldMT
+AvenirNext-Heavy
+
+- Disable cancel button when editing
+- Hide/remove placeholder text when tapping into field
+//FIXME: 
+- outline text isn't working in lower text field
+- need to take snapshot of only image & text (need to wrap everything in a view?, can I specify a rect?)
+- fix bottom text location with keyboard on rotation (hard?) -or- close keyboard on rotation (easy) http://smnh.me/synchronizing-rotation-animation-between-the-keyboard-and-the-attached-view/
 
 * Future “feature” branches:
 
@@ -34,6 +41,9 @@ CURRENT:
 *
 
 (2.0) Allow user to zoom in/out on image?
+
+(2.0) Allow user to choose text color
+
 *******************************************************************************/
 
 import UIKit
@@ -43,6 +53,9 @@ final class MainViewController: UIViewController {
     typealias ToolbarButtonClosure = () -> Void
     private var cameraButtonClosure: ToolbarButtonClosure?
     private var albumButtonClosure: ToolbarButtonClosure!
+    
+    typealias FontButtonClosure = (UIBarButtonItem) -> Void
+    private var fontButtonClosure: FontButtonClosure!
     
     /** For keeping track of app state and enabling/disabling navbar buttons */
     private var stateMachine = StateMachine()
@@ -99,6 +112,7 @@ final class MainViewController: UIViewController {
             withDataSource: mainViewViewModel,
             albumButtonClosure: albumButtonClosure,
             cameraButtonClosure: cameraButtonClosure,
+            fontButtonClosure: fontButtonClosure,
             memeTextUpdatedClosure: memeTextUpdatedClosure,
             memeImageUpdatedClosure: memeImageUpdatedClosure,
             stateMachine: stateMachine
@@ -154,6 +168,23 @@ final class MainViewController: UIViewController {
     internal func albumButtonTapped() {
         imagePickerController.sourceType = .PhotoLibrary
         presentViewController(imagePickerController, animated: true, completion: nil)
+    }
+    
+    internal func fontButtonTapped(button: UIBarButtonItem) {
+        /** Present a popover with available fonts */
+        let storyboard = UIStoryboard(name: Constants.StoryBoardIDs.main, bundle: nil)
+        
+        let fontListTableVC = storyboard.instantiateViewControllerWithIdentifier(Constants.StoryBoardIDs.fontListTableVC) as! FontListTableViewController
+        fontListTableVC.preferredContentSize = CGSizeMake(250, 300)
+        fontListTableVC.configure(withViewModel: mainViewViewModel)
+        fontListTableVC.modalPresentationStyle = UIModalPresentationStyle.Popover
+        
+        let popoverController = fontListTableVC.popoverPresentationController!
+        popoverController.barButtonItem = button
+        popoverController.permittedArrowDirections = .Any
+        popoverController.delegate = self
+        
+        presentViewController(fontListTableVC, animated: true, completion: nil)
     }
      
      
@@ -228,6 +259,10 @@ final class MainViewController: UIViewController {
         
         albumButtonClosure = { [weak self] in
             self!.albumButtonTapped()
+        }
+        
+        fontButtonClosure = { [weak self] (button: UIBarButtonItem) in
+            self!.fontButtonTapped(button)
         }
     }
     
@@ -308,17 +343,22 @@ enum DestinationOrientation {
 extension MainViewController {
     /** Tell view to update constraints on text fields upon rotation */    
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-//        magic("width: \(size.width) x height: \(size.height)")
         
-        let newOrientation: DestinationOrientation
-        if size.width > size.height {
-            newOrientation = .Landscape
-        } else {
-            newOrientation = .Portrait
-        }
+        let newOrientation: DestinationOrientation = (size.width > size.height) ? .Landscape : .Portrait
+
         coordinator.animateAlongsideTransition({ (context: UIViewControllerTransitionCoordinatorContext!) in
-            self.mainView.updateTextFieldContstraints(withNewOrientation: newOrientation)
-            self.mainView.setNeedsLayout()
+                self.mainView.updateTextFieldContstraints(withNewOrientation: newOrientation)
+                self.mainView.setNeedsLayout()
             }, completion: nil)
+    }
+}
+
+extension MainViewController: UIPopoverPresentationControllerDelegate {
+    /**
+     * Needed to show the font list in popover in compact
+     * environments (phone), otherwise it's a full screen modal
+     */
+    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .None
     }
 }

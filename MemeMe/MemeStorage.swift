@@ -99,7 +99,6 @@ struct MemesProvider {
         var jsonData: NSData!
         do {
             jsonData = try NSJSONSerialization.dataWithJSONObject(jsonArray, options: NSJSONWritingOptions.PrettyPrinted)
-//            magic("jsonData: \(String(data: jsonData, encoding: NSUTF8StringEncoding))")
         } catch let error as NSError {
             magic("Array to JSON conversion failed: \(error.localizedDescription)")
         }

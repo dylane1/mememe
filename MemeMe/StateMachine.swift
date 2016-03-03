@@ -12,7 +12,8 @@ enum AppState {
     case NoImageNoText,
          NoImageYesText,
          YesImageNoText,
-         YesImageYesText
+         YesImageYesText,
+         IsEditingText
 }
 
 /** 

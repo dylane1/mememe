@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		A324810F1C65704200D10134 /* Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A324810E1C65704200D10134 /* Magic.swift */; };
+		A324A2321C877AC50037BA27 /* FontListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A324A2311C877AC50037BA27 /* FontListTableViewCell.swift */; };
+		A324A2351C8787500037BA27 /* FontListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A324A2341C8787500037BA27 /* FontListTableViewController.swift */; };
 		A33DADE61C7514AE005C0A85 /* StateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A33DADE51C7514AE005C0A85 /* StateMachine.swift */; };
 		A33DADE81C77CBA0005C0A85 /* Meme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A33DADE71C77CBA0005C0A85 /* Meme.swift */; };
 		A33DADEA1C7E3F09005C0A85 /* MemeStorageNSCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = A33DADE91C7E3F09005C0A85 /* MemeStorageNSCoding.swift */; };
@@ -28,6 +30,8 @@
 
 /* Begin PBXFileReference section */
 		A324810E1C65704200D10134 /* Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Magic.swift; path = Magic/Magic.swift; sourceTree = "<group>"; };
+		A324A2311C877AC50037BA27 /* FontListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontListTableViewCell.swift; sourceTree = "<group>"; };
+		A324A2341C8787500037BA27 /* FontListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontListTableViewController.swift; sourceTree = "<group>"; };
 		A33DADE51C7514AE005C0A85 /* StateMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StateMachine.swift; sourceTree = "<group>"; };
 		A33DADE71C77CBA0005C0A85 /* Meme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Meme.swift; sourceTree = "<group>"; };
 		A33DADE91C7E3F09005C0A85 /* MemeStorageNSCoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemeStorageNSCoding.swift; sourceTree = "<group>"; };
@@ -59,6 +63,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A324A2331C877ACE0037BA27 /* Font Selection */ = {
+			isa = PBXGroup;
+			children = (
+				A324A2341C8787500037BA27 /* FontListTableViewController.swift */,
+				A324A2311C877AC50037BA27 /* FontListTableViewCell.swift */,
+			);
+			name = "Font Selection";
+			sourceTree = "<group>";
+		};
 		A37A2BC01C8126F200D243A8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -95,6 +108,7 @@
 				A33DADE71C77CBA0005C0A85 /* Meme.swift */,
 				A37A2BBC1C7F713400D243A8 /* MemeStorage.swift */,
 				A33DADE91C7E3F09005C0A85 /* MemeStorageNSCoding.swift */,
+				A324A2331C877ACE0037BA27 /* Font Selection */,
 				A383BF211C62820C00D80668 /* Main View */,
 				A383BF091C627AB500D80668 /* Main.storyboard */,
 				A383BF0C1C627AB500D80668 /* Assets.xcassets */,
@@ -219,11 +233,13 @@
 				A33DADEA1C7E3F09005C0A85 /* MemeStorageNSCoding.swift in Sources */,
 				A383BF231C62822E00D80668 /* MainView.swift in Sources */,
 				A383BF1F1C627C1A00D80668 /* NavigationController.swift in Sources */,
+				A324A2321C877AC50037BA27 /* FontListTableViewCell.swift in Sources */,
 				A33DADE61C7514AE005C0A85 /* StateMachine.swift in Sources */,
 				A383BF061C627AB500D80668 /* AppDelegate.swift in Sources */,
 				A324810F1C65704200D10134 /* Magic.swift in Sources */,
 				A383BF1D1C627C1A00D80668 /* LocalizedStrings.swift in Sources */,
 				A33DADE81C77CBA0005C0A85 /* Meme.swift in Sources */,
+				A324A2351C8787500037BA27 /* FontListTableViewController.swift in Sources */,
 				A383BF251C628A0C00D80668 /* Dynamic.swift in Sources */,
 				A37A2BBD1C7F713400D243A8 /* MemeStorage.swift in Sources */,
 				A383BF1C1C627C1A00D80668 /* Constants.swift in Sources */,

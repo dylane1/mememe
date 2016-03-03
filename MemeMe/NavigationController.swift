@@ -50,7 +50,7 @@ class NavigationController: UINavigationController {
         navigationBar.titleTextAttributes = titleLabelAttributes
     }
     
-    
+
     //MARK: - Internal funk(s)
     
     internal func configure(withShareButtonClosure share: NavbarButtonClosure, cancelButtonClosure cancel: NavbarButtonClosure, stateMachine state: StateMachine){

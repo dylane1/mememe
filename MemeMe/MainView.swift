@@ -17,6 +17,10 @@ class MainView: UIView {
     private var albumButtonClosure: BarButtonClosure?
     private var cameraButtonClosure: BarButtonClosure?
     
+    typealias FontButtonClosure = (UIBarButtonItem) -> Void
+    private var fontButtonClosure: FontButtonClosure?
+    private var fontButton: UIBarButtonItem!
+    
     typealias MemeTextUpdated = (Meme) -> Void
     private var memeTextUpdatedClosure: MemeTextUpdated?
     
@@ -67,10 +71,20 @@ class MainView: UIView {
         }
     }
     
+    private var font: UIFont = Constants.Fonts.impact {
+        didSet {
+            /** Update text field fonts */
+            configureTextFieldAttributes()
+        }
+    }
+    
     private var dataSource: MainViewViewModel! {
         didSet {
             dataSource.image.bind { [unowned self] in
                 self.image = $0
+            }
+            dataSource.font.bind { [unowned self] in
+                self.font = $0
             }
         }
     }
@@ -97,6 +111,7 @@ class MainView: UIView {
         withDataSource dataSource: MainViewViewModel,
         albumButtonClosure: BarButtonClosure,
         cameraButtonClosure: BarButtonClosure? = nil,
+        fontButtonClosure: FontButtonClosure,
         memeTextUpdatedClosure: MemeTextUpdated,
         memeImageUpdatedClosure: MemeImageUpdated,
         stateMachine: StateMachine)
@@ -104,6 +119,7 @@ class MainView: UIView {
         self.dataSource              = dataSource
         self.albumButtonClosure      = albumButtonClosure
         self.cameraButtonClosure     = cameraButtonClosure
+        self.fontButtonClosure       = fontButtonClosure
         self.memeTextUpdatedClosure  = memeTextUpdatedClosure
         self.memeImageUpdatedClosure = memeImageUpdatedClosure
         self.stateMachine            = stateMachine
@@ -120,6 +136,10 @@ class MainView: UIView {
         albumButtonClosure?()
     }
     
+    internal func fontButtonTapped() {
+        fontButtonClosure?(fontButton)
+    }
+    
     internal func resetTextFields() {
         topText     = nil
         bottomText  = nil
@@ -131,13 +151,13 @@ class MainView: UIView {
         bottomField.alpha   = 1
         
         /** Reset constraints */
-        topFieldLeadingConstraint.constant = 0
-        topFieldTopConstraint.constant = 16
+        topFieldLeadingConstraint.constant  = 0
+        topFieldTopConstraint.constant      = 8
         topFieldTrailingConstraint.constant = 0
         
-        bottomFieldLeadingConstraint.constant = 0
-        bottomFieldBottomConstraint.constant = 16
-        bottomFieldTrailingConstraint.constant = 0
+        bottomFieldLeadingConstraint.constant   = 0
+        bottomFieldBottomConstraint.constant    = 52
+        bottomFieldTrailingConstraint.constant  = 0
         
         configureTextFields()
     }
@@ -147,26 +167,10 @@ class MainView: UIView {
         topField.alpha      = (topText == "" || topText == nil) ? 0 : 1
         bottomField.alpha   = (bottomText == "" || bottomText == nil) ? 0 : 1
     }
+
     
-//    override func drawRect(rect: CGRect) {
-//        magic("topFieldTopConstraint.constant: \(topFieldTopConstraint.constant)")
-//        magic("bottomFieldBottomConstraint.constant: \(bottomFieldBottomConstraint.constant)")
-//        magic("bottomFieldLeadingConstraint.constant: \(bottomFieldLeadingConstraint.constant)")
-//    }
     //MARK: - Private funk(s)
-    /*******************************************************************************
-    * February 26, 2016 ENDPOINT
-    
-      Need to allow users to choose a font. look here: http://iosfonts.com
-        
-      compare with font list
-    
-    AmericanTypewriter-Bold
-    Arial-BoldMT
-    AvenirNext-Heavy
-    
-    *
-    *******************************************************************************/
+
     private func configureToolbarItems() {
         var toolbarItemArray = [UIBarButtonItem]()
         
@@ -190,12 +194,21 @@ class MainView: UIView {
         if UIImagePickerController.isSourceTypeAvailable(.Camera) { cameraButton.enabled = true }
         
         let albumButton = UIBarButtonItem(
-            title: LocalizedStrings.NavigationControllerButtons.album,
+            title: LocalizedStrings.ToolbarButtons.album,
             style: .Plain,
             target: self,
             action: "albumButtonTapped")
         
         toolbarItemArray.append(albumButton)
+        toolbarItemArray.append(fixedSpace)
+        
+        fontButton = UIBarButtonItem(
+            title: LocalizedStrings.ToolbarButtons.font,
+            style: .Plain,
+            target: self,
+            action: "fontButtonTapped")
+        
+        toolbarItemArray.append(fontButton)
         toolbarItemArray.append(flexSpace)
         
         toolbar.setItems(toolbarItemArray, animated: false)
@@ -220,16 +233,20 @@ class MainView: UIView {
         topField.attributedText     = nil
         bottomField.attributedText  = nil
         
+        configureTextFieldAttributes()
+    }
+    
+    internal func configureTextFieldAttributes() {
         let textFieldAttributes = [
             NSForegroundColorAttributeName: Constants.ColorScheme.white,
             NSStrokeColorAttributeName:     UIColor.blackColor(),
             NSStrokeWidthAttributeName:     -5.0,
-            NSFontAttributeName:            Constants.Fonts.TextFields.impactFont!
+            NSFontAttributeName:            font
         ]
         
         let placeholderAttributes = [
             NSForegroundColorAttributeName: Constants.ColorScheme.whiteAlpha50,
-            NSFontAttributeName:            Constants.Fonts.TextFields.impactFont!
+            NSFontAttributeName:            font
         ]
         
         topField.defaultTextAttributes  = textFieldAttributes
@@ -239,30 +256,20 @@ class MainView: UIView {
         bottomField.defaultTextAttributes   = textFieldAttributes
         bottomField.attributedPlaceholder   = NSAttributedString(string: LocalizedStrings.PlaceholderText.MainView.bottom, attributes: placeholderAttributes)
         bottomField.textAlignment           = .Center
-        
-        
-        /** Set auto layout constraints */
-//        let margins = imageView.image.layoutMarginsGuide
-
     }
     
     internal func updateTextFieldContstraints(withNewOrientation orientation: DestinationOrientation) {
-        if imageView.image == nil {return}
-        
-        magic("imageView.image!.size.height: \(imageView.image!.size.height)")
-        magic("imageView.image!.size.width: \(imageView.image!.size.width)")
-        
+        /** Close keyboard on rotation */
+        //FIXME: Find a better solution to text field location on rotation issue: http://smnh.me/synchronizing-rotation-animation-between-the-keyboard-and-the-attached-view/
+        if bottomField.isFirstResponder() {
+            bottomField.resignFirstResponder()
+        }
+        if imageView.image == nil { return }
+
         if orientation == .Landscape {
-            magic("update to landscape")
-            /**
-            * Need to update text input constraints:
-            *
-            * Top & Bottom: 16? pts from bars
-            * Leading & trailing 8pts inside edges of image
-            *
-            */
-            topFieldTopConstraint.constant = 16
-            bottomFieldBottomConstraint.constant = 16
+            /** Landscape */
+            topFieldTopConstraint.constant          = 8
+            bottomFieldBottomConstraint.constant    = 52
             
             let correctWidth = (imageView.frame.height / imageView.image!.size.height) * imageView.image!.size.width
             
@@ -272,14 +279,7 @@ class MainView: UIView {
             bottomFieldLeadingConstraint.constant   = newConstant
             bottomFieldTrailingConstraint.constant  = newConstant
         } else {
-            magic("update to portrait")
-            /**
-            * Need to update text input constraints:
-            *
-            * Top & Bottom: 16? pts inside edges of image
-            * Leading & trailing 8pts from superview
-            *
-            */
+            /** Portrait */
             topFieldLeadingConstraint.constant      = 0
             topFieldTrailingConstraint.constant     = 0
             bottomFieldLeadingConstraint.constant   = 0
@@ -287,9 +287,9 @@ class MainView: UIView {
             
             let correctHeight = (imageView.frame.width / imageView.image!.size.width) * imageView.image!.size.height
 
-            let newConstant = ((imageView.frame.height - correctHeight) / 2) + 16
-            topFieldTopConstraint.constant = newConstant
-            bottomFieldBottomConstraint.constant = newConstant
+            let newConstant = ((imageView.frame.height - correctHeight) / 2)
+            topFieldTopConstraint.constant          = newConstant + 8
+            bottomFieldBottomConstraint.constant    = newConstant + 52
         }
     }
 }
@@ -341,7 +341,7 @@ extension MainView: UITextFieldDelegate {
     }
     
     internal func keyboardWillShow(notification: NSNotification) {
-        
+        magic("")
         /** Animate the view up so bottom text field is visible while editing */
         if bottomField.editing {
             let keyboardSize = notification.userInfo?[UIKeyboardFrameBeginUserInfoKey]?.CGRectValue.size
@@ -368,7 +368,7 @@ extension MainView: UITextFieldDelegate {
         }
     }
 }
-extension MainView {
+//extension MainView {
 //    override func traitCollectionDidChange(previousTraitCollection: UITraitCollection?) {
 //        super.traitCollectionDidChange(previousTraitCollection)
 //        updateTextFieldContstraints()
@@ -379,4 +379,6 @@ extension MainView {
 //    override func traitCollectionDidChange(previousTraitCollection: UITraitCollection!) {
 //        updateConstraintsWithTraitCollection(traitCollection)
 //    }
-}
+//}
+
+

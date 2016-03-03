@@ -15,8 +15,10 @@ import UIKit
 
 struct MainViewViewModel: MainViewDataSource {
     internal let image: Dynamic<UIImage?>
+    internal let font: Dynamic<UIFont>
     
     init() {
-        image = Dynamic(nil)
+        image   = Dynamic(nil)
+        font    = Dynamic(Constants.Fonts.impact)
     }
 }
