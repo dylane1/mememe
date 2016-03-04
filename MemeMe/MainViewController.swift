@@ -236,8 +236,25 @@ final class MainViewController: UIViewController {
         /** Hide unedited field before taking snapshot */
         mainView.hidePlaceholderText()
         
-        UIGraphicsBeginImageContext(self.view.bounds.size);
-        self.view.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+        let info = mainView.getInfoForImageContext()
+        
+        /** Correct for height of navigationBar */
+        var correctedY = info.y + CGFloat(navController.navigationBar.frame.size.height)
+        
+        /** 
+         * If portrait, also correct for status bar
+         *
+         * Note: using !isLandscape because isPortrait is nil if the device
+         * hasn't been rotated yet.
+         */
+        if !UIDevice.currentDevice().orientation.isLandscape.boolValue {
+            correctedY += UIApplication.sharedApplication().statusBarFrame.size.height
+        }
+
+        UIGraphicsBeginImageContextWithOptions(info.size, false, 0.0)
+        let context = UIGraphicsGetCurrentContext()!
+        CGContextTranslateCTM(context, -info.x, -correctedY)
+        view.layer.renderInContext(context)
         let screenShot = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         

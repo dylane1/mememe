@@ -299,6 +299,38 @@ class MainView: UIView {
             bottomFieldBottomConstraint.constant    = newConstant + 52
         }
     }
+    
+    internal func getInfoForImageContext() -> (size: CGSize, x: CGFloat, y: CGFloat) {
+        
+        let multiplier: CGFloat
+        
+        if UIDevice.currentDevice().orientation.isLandscape.boolValue {
+            /** Landscape: height is constricted */
+            multiplier = imageView.frame.height / imageView.image!.size.height
+        } else {
+            /** Portrait: width is constricted */
+            multiplier = imageView.frame.width / imageView.image!.size.width
+        }
+        
+        let width = imageView.image!.size.width * multiplier
+        let height = imageView.image!.size.height * multiplier
+        
+        let x: CGFloat
+        if width >= imageView.frame.width {
+            x = 0
+        } else {
+            x = (imageView.frame.width - width) / 2
+        }
+        
+        let y: CGFloat
+        if height >= imageView.frame.height {
+            y = 0
+        } else {
+            y = (imageView.frame.height - height) / 2
+        }
+        
+        return (size: CGSizeMake(width, height), x: x, y: y)
+    }
 }
 
 
