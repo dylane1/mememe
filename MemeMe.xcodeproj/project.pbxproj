@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A324810F1C65704200D10134 /* Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A324810E1C65704200D10134 /* Magic.swift */; };
+		A324A2321C877AC50037BA27 /* FontListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A324A2311C877AC50037BA27 /* FontListTableViewCell.swift */; };
+		A324A2351C8787500037BA27 /* FontListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A324A2341C8787500037BA27 /* FontListTableViewController.swift */; };
+		A33DADE61C7514AE005C0A85 /* StateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A33DADE51C7514AE005C0A85 /* StateMachine.swift */; };
+		A33DADE81C77CBA0005C0A85 /* Meme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A33DADE71C77CBA0005C0A85 /* Meme.swift */; };
+		A33DADEA1C7E3F09005C0A85 /* MemeStorageNSCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = A33DADE91C7E3F09005C0A85 /* MemeStorageNSCoding.swift */; };
+		A37A2BBD1C7F713400D243A8 /* MemeStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37A2BBC1C7F713400D243A8 /* MemeStorage.swift */; };
+		A37A2BBF1C81266E00D243A8 /* ufonts.com_impact.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A37A2BBE1C81266E00D243A8 /* ufonts.com_impact.ttf */; };
 		A383BF061C627AB500D80668 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A383BF051C627AB500D80668 /* AppDelegate.swift */; };
 		A383BF081C627AB500D80668 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A383BF071C627AB500D80668 /* MainViewController.swift */; };
 		A383BF0B1C627AB500D80668 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A383BF091C627AB500D80668 /* Main.storyboard */; };
@@ -14,14 +22,21 @@
 		A383BF101C627AB500D80668 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A383BF0E1C627AB500D80668 /* LaunchScreen.storyboard */; };
 		A383BF1C1C627C1A00D80668 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A383BF181C627C1A00D80668 /* Constants.swift */; };
 		A383BF1D1C627C1A00D80668 /* LocalizedStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A383BF191C627C1A00D80668 /* LocalizedStrings.swift */; };
-		A383BF1E1C627C1A00D80668 /* Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A383BF1A1C627C1A00D80668 /* Magic.swift */; };
 		A383BF1F1C627C1A00D80668 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A383BF1B1C627C1A00D80668 /* NavigationController.swift */; };
 		A383BF231C62822E00D80668 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A383BF221C62822E00D80668 /* MainView.swift */; };
 		A383BF251C628A0C00D80668 /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A383BF241C628A0C00D80668 /* Dynamic.swift */; };
-		A383BF271C628C9900D80668 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A383BF261C628C9900D80668 /* MainViewModel.swift */; };
+		A383BF271C628C9900D80668 /* MainViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A383BF261C628C9900D80668 /* MainViewViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A324810E1C65704200D10134 /* Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Magic.swift; path = Magic/Magic.swift; sourceTree = "<group>"; };
+		A324A2311C877AC50037BA27 /* FontListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontListTableViewCell.swift; sourceTree = "<group>"; };
+		A324A2341C8787500037BA27 /* FontListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontListTableViewController.swift; sourceTree = "<group>"; };
+		A33DADE51C7514AE005C0A85 /* StateMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StateMachine.swift; sourceTree = "<group>"; };
+		A33DADE71C77CBA0005C0A85 /* Meme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Meme.swift; sourceTree = "<group>"; };
+		A33DADE91C7E3F09005C0A85 /* MemeStorageNSCoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemeStorageNSCoding.swift; sourceTree = "<group>"; };
+		A37A2BBC1C7F713400D243A8 /* MemeStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemeStorage.swift; sourceTree = "<group>"; };
+		A37A2BBE1C81266E00D243A8 /* ufonts.com_impact.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ufonts.com_impact.ttf; sourceTree = "<group>"; };
 		A383BF021C627AB500D80668 /* MemeMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MemeMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A383BF051C627AB500D80668 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A383BF071C627AB500D80668 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -31,11 +46,10 @@
 		A383BF111C627AB500D80668 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A383BF181C627C1A00D80668 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A383BF191C627C1A00D80668 /* LocalizedStrings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizedStrings.swift; sourceTree = "<group>"; };
-		A383BF1A1C627C1A00D80668 /* Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Magic.swift; sourceTree = "<group>"; };
 		A383BF1B1C627C1A00D80668 /* NavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		A383BF221C62822E00D80668 /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		A383BF241C628A0C00D80668 /* Dynamic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
-		A383BF261C628C9900D80668 /* MainViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		A383BF261C628C9900D80668 /* MainViewViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +63,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A324A2331C877ACE0037BA27 /* Font Selection */ = {
+			isa = PBXGroup;
+			children = (
+				A324A2341C8787500037BA27 /* FontListTableViewController.swift */,
+				A324A2311C877AC50037BA27 /* FontListTableViewCell.swift */,
+			);
+			name = "Font Selection";
+			sourceTree = "<group>";
+		};
+		A37A2BC01C8126F200D243A8 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A37A2BBE1C81266E00D243A8 /* ufonts.com_impact.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		A383BEF91C627AB500D80668 = {
 			isa = PBXGroup;
 			children = (
@@ -73,11 +104,17 @@
 				A383BF191C627C1A00D80668 /* LocalizedStrings.swift */,
 				A383BF1B1C627C1A00D80668 /* NavigationController.swift */,
 				A383BF051C627AB500D80668 /* AppDelegate.swift */,
+				A33DADE51C7514AE005C0A85 /* StateMachine.swift */,
+				A33DADE71C77CBA0005C0A85 /* Meme.swift */,
+				A37A2BBC1C7F713400D243A8 /* MemeStorage.swift */,
+				A33DADE91C7E3F09005C0A85 /* MemeStorageNSCoding.swift */,
+				A324A2331C877ACE0037BA27 /* Font Selection */,
 				A383BF211C62820C00D80668 /* Main View */,
 				A383BF091C627AB500D80668 /* Main.storyboard */,
 				A383BF0C1C627AB500D80668 /* Assets.xcassets */,
 				A383BF0E1C627AB500D80668 /* LaunchScreen.storyboard */,
 				A383BF111C627AB500D80668 /* Info.plist */,
+				A37A2BC01C8126F200D243A8 /* Resources */,
 			);
 			path = MemeMe;
 			sourceTree = "<group>";
@@ -85,8 +122,8 @@
 		A383BF201C627D3500D80668 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				A324810E1C65704200D10134 /* Magic.swift */,
 				A383BF241C628A0C00D80668 /* Dynamic.swift */,
-				A383BF1A1C627C1A00D80668 /* Magic.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -94,8 +131,8 @@
 		A383BF211C62820C00D80668 /* Main View */ = {
 			isa = PBXGroup;
 			children = (
-				A383BF261C628C9900D80668 /* MainViewModel.swift */,
 				A383BF071C627AB500D80668 /* MainViewController.swift */,
+				A383BF261C628C9900D80668 /* MainViewViewModel.swift */,
 				A383BF221C62822E00D80668 /* MainView.swift */,
 			);
 			name = "Main View";
@@ -134,6 +171,7 @@
 				TargetAttributes = {
 					A383BF011C627AB500D80668 = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = C6TW237FTY;
 					};
 				};
 			};
@@ -162,6 +200,7 @@
 			files = (
 				A383BF101C627AB500D80668 /* LaunchScreen.storyboard in Resources */,
 				A383BF0D1C627AB500D80668 /* Assets.xcassets in Resources */,
+				A37A2BBF1C81266E00D243A8 /* ufonts.com_impact.ttf in Resources */,
 				A383BF0B1C627AB500D80668 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -181,7 +220,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#\n# Set the build number to the current git commit count.\n# If we're using the Dev scheme, then we'll suffix the build\n# number with the current branch name, to make collisions\n# far less likely across feature branches.\n# Based on: http://w3facility.info/question/how-do-i-force-xcode-to-rebuild-the-info-plist-file-in-my-project-every-time-i-build-the-project/\n#\ngit=`sh /etc/profile; which git`\nappBuild=`\"$git\" rev-list --all |wc -l`\nif [ $CONFIGURATION = \"Debug\" ]; then\nbranchName=`\"$git\" rev-parse --abbrev-ref HEAD`\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $appBuild-$branchName\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nelse\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $appBuild\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nfi\necho \"Updated ${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"";
+			shellScript = "# The following is from: http://blog.jaredsinclair.com/post/97193356620/the-best-of-all-possible-xcode-automated-build\n#\n# Set the build number to the current git commit count.\n# If we're using the Dev scheme, then we'll suffix the build\n# number with the current branch name, to make collisions\n# far less likely across feature branches.\n# Based on: http://w3facility.info/question/how-do-i-force-xcode-to-rebuild-the-info-plist-file-in-my-project-every-time-i-build-the-project/\n#\n# Updated with dSYM handling from http://yellowfeather.co.uk/blog/auto-incrementing-build-number-in-xcode-revisited/\n#\n\ngit=`sh /etc/profile; which git`\nappBuild=`\"$git\" rev-list HEAD --count`\nif [ $CONFIGURATION = \"Debug\" ]; then\nbranchName=`\"$git\" rev-parse --abbrev-ref HEAD`\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $appBuild-$branchName\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $appBuild-$branchName\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}.dSYM/Contents/Info.plist\"\nelse\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $appBuild\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $appBuild\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}.dSYM/Contents/Info.plist\"\nfi\necho \"Incremented the build number ${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -191,14 +230,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				A383BF081C627AB500D80668 /* MainViewController.swift in Sources */,
+				A33DADEA1C7E3F09005C0A85 /* MemeStorageNSCoding.swift in Sources */,
 				A383BF231C62822E00D80668 /* MainView.swift in Sources */,
 				A383BF1F1C627C1A00D80668 /* NavigationController.swift in Sources */,
+				A324A2321C877AC50037BA27 /* FontListTableViewCell.swift in Sources */,
+				A33DADE61C7514AE005C0A85 /* StateMachine.swift in Sources */,
 				A383BF061C627AB500D80668 /* AppDelegate.swift in Sources */,
+				A324810F1C65704200D10134 /* Magic.swift in Sources */,
 				A383BF1D1C627C1A00D80668 /* LocalizedStrings.swift in Sources */,
+				A33DADE81C77CBA0005C0A85 /* Meme.swift in Sources */,
+				A324A2351C8787500037BA27 /* FontListTableViewController.swift in Sources */,
 				A383BF251C628A0C00D80668 /* Dynamic.swift in Sources */,
-				A383BF1E1C627C1A00D80668 /* Magic.swift in Sources */,
+				A37A2BBD1C7F713400D243A8 /* MemeStorage.swift in Sources */,
 				A383BF1C1C627C1A00D80668 /* Constants.swift in Sources */,
-				A383BF271C628C9900D80668 /* MainViewModel.swift in Sources */,
+				A383BF271C628C9900D80668 /* MainViewViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -309,10 +354,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = MemeMe/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.slingingpixels.MemeMe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -320,10 +368,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = MemeMe/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.slingingpixels.MemeMe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -346,6 +397,7 @@
 				A383BF161C627AB500D80668 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

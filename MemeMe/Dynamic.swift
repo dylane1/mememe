@@ -10,6 +10,8 @@
  *
  * http://five.agency/solving-the-binding-problem-with-swift/
  * http://rasic.info/bindings-generics-swift-and-mvvm/
+ *
+ * Basically a simpler version of KVO...
  */
 
 class Dynamic<T> {
