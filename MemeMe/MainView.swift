@@ -78,6 +78,12 @@ class MainView: UIView {
         }
     }
     
+    private var textFieldAttributes = [
+        NSForegroundColorAttributeName: Constants.ColorScheme.white,
+        NSStrokeColorAttributeName:     Constants.ColorScheme.black,
+        NSStrokeWidthAttributeName:     -5.0
+    ]
+    
     private var dataSource: MainViewViewModel! {
         didSet {
             dataSource.image.bind { [unowned self] in
@@ -212,6 +218,10 @@ class MainView: UIView {
         toolbarItemArray.append(flexSpace)
         
         toolbar.setItems(toolbarItemArray, animated: false)
+        
+        toolbar.barTintColor = Constants.ColorScheme.white
+        toolbar.tintColor    = Constants.ColorScheme.darkBlue
+        toolbar.translucent  = true
     }
     
     private func configureTextFields() {
@@ -237,12 +247,8 @@ class MainView: UIView {
     }
     
     internal func configureTextFieldAttributes() {
-        let textFieldAttributes = [
-            NSForegroundColorAttributeName: Constants.ColorScheme.white,
-            NSStrokeColorAttributeName:     UIColor.blackColor(),
-            NSStrokeWidthAttributeName:     -5.0,
-            NSFontAttributeName:            font
-        ]
+
+        textFieldAttributes[NSFontAttributeName] = font
         
         let placeholderAttributes = [
             NSForegroundColorAttributeName: Constants.ColorScheme.whiteAlpha50,
@@ -259,11 +265,12 @@ class MainView: UIView {
     }
     
     internal func updateTextFieldContstraints(withNewOrientation orientation: DestinationOrientation) {
+        //FIXME: Find a better solution to text field location on rotation issue: http://smnh.me/synchronizing-rotation-animation-between-the-keyboard-and-the-attached-view-part-2/
         /** Close keyboard on rotation */
-        //FIXME: Find a better solution to text field location on rotation issue: http://smnh.me/synchronizing-rotation-animation-between-the-keyboard-and-the-attached-view/
         if bottomField.isFirstResponder() {
             bottomField.resignFirstResponder()
         }
+
         if imageView.image == nil { return }
 
         if orientation == .Landscape {
@@ -299,14 +306,19 @@ class MainView: UIView {
 
 extension MainView: UITextFieldDelegate {
     
-    /**
-     * Set View rect so bottom text is visible
-     *
-     * Adapted from this post on Stack Overflow:
-     * http://stackoverflow.com/questions/11282449/move-uiview-up-when-the-keyboard-appears-in-ios
-     */
-    
     internal func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+        stateMachine.state.value = .IsEditingText
+        
+        /** 
+         * For some reason defaultTextAttributes get changed if you tap into
+         * the field, don't type anything, then tap 'Done' on the keyboard. This
+         * fixes that scenario.
+        */
+        textField.defaultTextAttributes  = textFieldAttributes
+        textField.textAlignment          = .Center
+        
+        /** Remove placeholder text */
+        textField.placeholder = nil
         
         /** Set up observers */
         NSNotificationCenter.defaultCenter().addObserver(
@@ -320,6 +332,13 @@ extension MainView: UITextFieldDelegate {
             selector: Selector("keyboardWillHide:"),
             name: UIKeyboardWillHideNotification,
             object: nil)
+        
+        //FIXME: Get rotation working correctly
+//        NSNotificationCenter.defaultCenter().addObserver(
+//            self,
+//            selector: Selector("keyboardWillChangeFrame:"),
+//            name: UIKeyboardWillChangeFrameNotification,
+//            object: nil)
         
         return true
     }
@@ -341,7 +360,6 @@ extension MainView: UITextFieldDelegate {
     }
     
     internal func keyboardWillShow(notification: NSNotification) {
-        magic("")
         /** Animate the view up so bottom text field is visible while editing */
         if bottomField.editing {
             let keyboardSize = notification.userInfo?[UIKeyboardFrameBeginUserInfoKey]?.CGRectValue.size
@@ -357,6 +375,8 @@ extension MainView: UITextFieldDelegate {
     internal func keyboardWillHide(notification: NSNotification) {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+        //FIXME: Get rotation working correctly
+//        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillChangeFrameNotification, object: nil)
         
         /** Animate view back down if done editing the bottom text field */
         if bottomField.editing {
@@ -367,18 +387,21 @@ extension MainView: UITextFieldDelegate {
             }
         }
     }
+    //FIXME: Get rotation working correctly
+    //See: http://smnh.me/synchronizing-rotation-animation-between-the-keyboard-and-the-attached-view-part-2/
+//    internal func keyboardWillChangeFrame(notification: NSNotification) {
+//        magic("")
+//        if bottomField.editing {
+//            let keyboardSize = notification.userInfo?[UIKeyboardFrameBeginUserInfoKey]?.CGRectValue.size
+//            
+//            UIView.animateWithDuration(0.5) {
+//                var frame       = self.frame
+//                frame.origin.y  = -(keyboardSize?.height)!
+//                self.frame      = frame
+//            }
+//        }
+//    }
 }
-//extension MainView {
-//    override func traitCollectionDidChange(previousTraitCollection: UITraitCollection?) {
-//        super.traitCollectionDidChange(previousTraitCollection)
-//        updateTextFieldContstraints()
-//    }
-    
 
-//    
-//    override func traitCollectionDidChange(previousTraitCollection: UITraitCollection!) {
-//        updateConstraintsWithTraitCollection(traitCollection)
-//    }
-//}
 
 

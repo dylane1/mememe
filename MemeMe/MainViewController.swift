@@ -6,45 +6,6 @@
 //  Copyright © 2016 Slinging Pixels Media. All rights reserved.
 //
 
-/*******************************************************************************
-CURRENT:
-
-• Text field work 0.05.0
-
-- Choose font:
-Need to allow users to choose a font. look here: http://iosfonts.com
-
-compare with font list
-
-AmericanTypewriter-Bold
-Arial-BoldMT
-AvenirNext-Heavy
-
-- Disable cancel button when editing
-- Hide/remove placeholder text when tapping into field
-//FIXME: 
-- outline text isn't working in lower text field
-- need to take snapshot of only image & text (need to wrap everything in a view?, can I specify a rect?)
-- fix bottom text location with keyboard on rotation (hard?) -or- close keyboard on rotation (easy) http://smnh.me/synchronizing-rotation-animation-between-the-keyboard-and-the-attached-view/
-
-* Future “feature” branches:
-
-• Nav & Toolbar style 0.06.0
-- Pick color scheme
-- Would be nice to show/hide nav & toolbar like photo app
-
-
-
-(2.0)• Table & collection views to view previously saved(?) memes (Docs say SENT memes)
-- Edit?
-- Save to photo library button?
-*
-
-(2.0) Allow user to zoom in/out on image?
-
-(2.0) Allow user to choose text color
-
-*******************************************************************************/
 
 import UIKit
 import MobileCoreServices

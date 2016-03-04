@@ -21,10 +21,14 @@ struct Constants {
     
     /** UI */
     struct ColorScheme {
-        static let blue         = UIColor.blueColor()
-        static let white        = UIColor.whiteColor()
-        static let whiteAlpha50 = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.50)
+        static let white        = UIColor(red: 0.969, green: 0.969, blue: 0.941, alpha: 1.00) //F7F7F0
+        static let whiteAlpha50 = UIColor(red: 0.969, green: 0.969, blue: 0.941, alpha: 0.50)
         static let lightGrey    = UIColor(red: 0.796, green: 0.796, blue: 0.796, alpha: 1.00) //CBCBCB
+        static let darkGrey     = UIColor(red: 0.149, green: 0.149, blue: 0.149, alpha: 1.00) //262626
+        static let black        = UIColor(red: 0.010, green: 0.010, blue: 0.010, alpha: 1.00)
+        static let darkBlue     = UIColor(red: 0.000, green: 0.455, blue: 0.478, alpha: 1.00) //00747A
+        static let orange       = UIColor(red: 1.000, green: 0.616, blue: 0.200, alpha: 1.00) //FF9D33
+        static let red          = UIColor(red: 0.800, green: 0.200, blue: 0.200, alpha: 1.00) //CC3333
     }
     
     static let fontSize: CGFloat = 32.0
@@ -58,7 +62,6 @@ struct Constants {
     }
     
     struct Fonts {
-//            static let defaultFont = UIFont.boldSystemFontOfSize(32)
         static let americanTypewriter   = UIFont(name: Constants.FontNames.americanTypewriter, size: Constants.fontSize)!
         static let arial                = UIFont(name: Constants.FontNames.arial, size: Constants.fontSize)!
         static let avenir               = UIFont(name: Constants.FontNames.avenir, size: Constants.fontSize)!
@@ -98,12 +101,6 @@ struct Constants {
         Constants.FontFamilyNames.hoeflerText,
         Constants.FontFamilyNames.impact,
         Constants.FontFamilyNames.markerFelt
-    ]
-    
-    static let textAttributes = [
-        NSForegroundColorAttributeName: Constants.ColorScheme.white,
-        NSStrokeColorAttributeName:     UIColor.blackColor(),
-        NSStrokeWidthAttributeName:     -5.0,
     ]
     
     

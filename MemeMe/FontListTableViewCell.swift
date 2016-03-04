@@ -18,7 +18,7 @@ extension FontListTableViewCellDataSource {
     var textAttributes: [String : AnyObject] {
         return [
             NSForegroundColorAttributeName: Constants.ColorScheme.white,
-            NSStrokeColorAttributeName:     UIColor.blackColor(),
+            NSStrokeColorAttributeName:     Constants.ColorScheme.black,
             NSStrokeWidthAttributeName:     -3.0,
         ]
     }
@@ -47,7 +47,7 @@ class FontListTableViewCell: UITableViewCell {
     
     private func configureLabel() {
         let resizedFont = dataSource.font.fontWithSize(20)
-        let attributedString = NSMutableAttributedString(string: dataSource.title, attributes: dataSource.textAttributes)
+        let attributedString = NSMutableAttributedString(string: dataSource.title.uppercaseString, attributes: dataSource.textAttributes)
         attributedString.addAttribute(NSFontAttributeName, value: resizedFont, range: NSRange(location: 0,length: dataSource.title.characters.count))
         
         label.attributedText = attributedString
