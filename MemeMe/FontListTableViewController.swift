@@ -25,7 +25,6 @@ class FontListTableViewController: UITableViewController {
             if viewModel.font.value == Constants.FontArray[i] {
                 selectedFont = viewModel.font.value
                 selectedIndexPath = NSIndexPath(forItem: i, inSection: 0)
-                magic("selectedIndexPath: \(selectedIndexPath)")
                 break
             }
         }

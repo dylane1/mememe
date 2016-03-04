@@ -173,7 +173,6 @@ class MainView: UIView {
     }
     
     internal func showPlaceholderText() {
-        magic("")
         topField.alpha      = 1
         bottomField.alpha   = 1
     }
