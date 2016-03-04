@@ -104,18 +104,14 @@ struct Constants {
     ]
     
     
-    /**
-     * StorageKeys for saving to disk via NSCoding
-     *
-     * NSCoding has been replaced by NSJSONSerialization
-     */
-//    struct StorageKeys {
-//        static let topText          = "com.slingingpixels.mememe.storageKeys.topText"
-//        static let bottomText       = "com.slingingpixels.mememe.storageKeys.bottomText"
-//        static let imageData        = "com.slingingpixels.mememe.storageKeys.imageData"
-//        static let memedImageData   = "com.slingingpixels.mememe.storageKeys.memedImageData"
-//        static let memeArray        = "com.slingingpixels.mememe.storageKeys.memeArray"
-//    }
+    /** Storage */
+    
+    static let userDefaults = NSUserDefaults.standardUserDefaults()
+    
+    struct StorageKeys {
+        static let fontName = "com.slingingPixels.mememe.storageKeys.fontName"
+    }
+
     
     struct FileSystem {
         static let applicationSupport = NSSearchPathForDirectoriesInDomains(.ApplicationSupportDirectory, .UserDomainMask, true)[0]

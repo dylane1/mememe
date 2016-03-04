@@ -89,7 +89,7 @@ class MainView: UIView {
             dataSource.image.bind { [unowned self] in
                 self.image = $0
             }
-            dataSource.font.bind { [unowned self] in
+            dataSource.font.bindAndFire { [unowned self] in
                 self.font = $0
             }
         }

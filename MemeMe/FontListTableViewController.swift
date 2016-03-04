@@ -79,6 +79,9 @@ class FontListTableViewController: UITableViewController {
 extension FontListTableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        /** Save selection to NSUserDefaults */
+        Constants.userDefaults.setObject(Constants.FontFamilyNameArray[indexPath.row] as NSString, forKey: Constants.StorageKeys.fontName)
+        
         /** Need to update MainViewViewModel & reloadData to set checkmark */
         viewModel.font.value = Constants.FontArray[indexPath.row]
         selectedFont = viewModel.font.value
