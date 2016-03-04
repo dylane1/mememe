@@ -166,7 +166,7 @@ final class MainViewController: UIViewController {
             guard let image = self!.imageToShare as UIImage! else  { fatalError("error creating image") }
             
             let activityVC = UIActivityViewController(activityItems: [image], applicationActivities: nil)
-                
+            
             /** Set completion handler for Share */
             activityVC.completionWithItemsHandler = { [weak self] activityType, completed, returnedItems, activityError in
                 if !completed {
@@ -179,6 +179,9 @@ final class MainViewController: UIViewController {
                     }
                     let errorArray = [LocalizedStrings.ErrorAlerts.ShareError.title, message]
                     self!.errorQueue.insert(errorArray, atIndex: 0)
+                    
+                    /** Show unedited field if hidden */
+                    self!.mainView.showPlaceholderText()
                 } else {
                     /** Success! */
                     
@@ -195,6 +198,7 @@ final class MainViewController: UIViewController {
                 
                 self!.checkForErrors()
             }
+
             self!.presentViewController(activityVC, animated: true, completion: nil)
         }
         
@@ -297,12 +301,12 @@ extension MainViewController: UIImagePickerControllerDelegate {
         
         /** Set the image in the memeModel so it can be saved to storage */
         memeModel.image = image
-        magic("updated memeModel (with image) \(memeModel)")
         
         dismissViewControllerAnimated(true, completion: nil)
     }
     
     internal func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        
         dismissViewControllerAnimated(true, completion: nil)
     }
 }
