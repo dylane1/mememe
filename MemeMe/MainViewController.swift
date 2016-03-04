@@ -6,6 +6,7 @@
 //  Copyright © 2016 Slinging Pixels Media. All rights reserved.
 //
 
+
 import UIKit
 import MobileCoreServices
 
@@ -13,6 +14,9 @@ final class MainViewController: UIViewController {
     typealias ToolbarButtonClosure = () -> Void
     private var cameraButtonClosure: ToolbarButtonClosure?
     private var albumButtonClosure: ToolbarButtonClosure!
+    
+    typealias FontButtonClosure = (UIBarButtonItem) -> Void
+    private var fontButtonClosure: FontButtonClosure!
     
     /** For keeping track of app state and enabling/disabling navbar buttons */
     private var stateMachine = StateMachine()
@@ -69,6 +73,7 @@ final class MainViewController: UIViewController {
             withDataSource: mainViewViewModel,
             albumButtonClosure: albumButtonClosure,
             cameraButtonClosure: cameraButtonClosure,
+            fontButtonClosure: fontButtonClosure,
             memeTextUpdatedClosure: memeTextUpdatedClosure,
             memeImageUpdatedClosure: memeImageUpdatedClosure,
             stateMachine: stateMachine
@@ -124,6 +129,23 @@ final class MainViewController: UIViewController {
     internal func albumButtonTapped() {
         imagePickerController.sourceType = .PhotoLibrary
         presentViewController(imagePickerController, animated: true, completion: nil)
+    }
+    
+    internal func fontButtonTapped(button: UIBarButtonItem) {
+        /** Present a popover with available fonts */
+        let storyboard = UIStoryboard(name: Constants.StoryBoardIDs.main, bundle: nil)
+        
+        let fontListTableVC = storyboard.instantiateViewControllerWithIdentifier(Constants.StoryBoardIDs.fontListTableVC) as! FontListTableViewController
+        fontListTableVC.preferredContentSize = CGSizeMake(250, 300)
+        fontListTableVC.configure(withViewModel: mainViewViewModel)
+        fontListTableVC.modalPresentationStyle = UIModalPresentationStyle.Popover
+        
+        let popoverController = fontListTableVC.popoverPresentationController!
+        popoverController.barButtonItem = button
+        popoverController.permittedArrowDirections = .Any
+        popoverController.delegate = self
+        
+        presentViewController(fontListTableVC, animated: true, completion: nil)
     }
      
      
@@ -182,7 +204,10 @@ final class MainViewController: UIViewController {
             self!.mainView.resetTextFields()
         }
         
-        navController.configure(withShareButtonClosure: shareButtonClosure, cancelButtonClosure: cancelButtonClosure, stateMachine: stateMachine)
+        navController.configure(
+            withShareButtonClosure: shareButtonClosure,
+            cancelButtonClosure: cancelButtonClosure,
+            stateMachine: stateMachine)
     }
     
     private func configureToolbarItems() {
@@ -195,6 +220,10 @@ final class MainViewController: UIViewController {
         
         albumButtonClosure = { [weak self] in
             self!.albumButtonTapped()
+        }
+        
+        fontButtonClosure = { [weak self] (button: UIBarButtonItem) in
+            self!.fontButtonTapped(button)
         }
     }
     
@@ -231,6 +260,15 @@ final class MainViewController: UIViewController {
         }))
         presentViewController(alert, animated: true, completion: nil)
     }
+    
+//    private func listFonts() {
+//        for family: String in UIFont.familyNames() {
+//            print("\(family)")
+//            for names: String in UIFont.fontNamesForFamilyName(family) {
+//                print("   \(names)")
+//            }
+//        }
+//    }
 }
 
 //MARK: - UIImagePickerControllerDelegate
@@ -258,4 +296,30 @@ extension MainViewController: UINavigationControllerDelegate {
     * Need this in order to set self as UIImagePikerController delegate
     * in configureImagePicker()
     */
+}
+
+enum DestinationOrientation {
+    case Landscape, Portrait
+}
+extension MainViewController {
+    /** Tell view to update constraints on text fields upon rotation */    
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        
+        let newOrientation: DestinationOrientation = (size.width > size.height) ? .Landscape : .Portrait
+
+        coordinator.animateAlongsideTransition({ (context: UIViewControllerTransitionCoordinatorContext!) in
+                self.mainView.updateTextFieldContstraints(withNewOrientation: newOrientation)
+                self.mainView.setNeedsLayout()
+            }, completion: nil)
+    }
+}
+
+extension MainViewController: UIPopoverPresentationControllerDelegate {
+    /**
+     * Needed to show the font list in popover in compact
+     * environments (phone), otherwise it's a full screen modal
+     */
+    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .None
+    }
 }

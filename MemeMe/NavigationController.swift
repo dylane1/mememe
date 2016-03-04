@@ -38,19 +38,19 @@ class NavigationController: UINavigationController {
         super.viewDidLoad()
         
         configureNavigationItems()
-        //TODO: get colors right: http://b2cloud.com.au/how-to-guides/bar-color-calculator-for-ios7-and-ios8/
-//        navigationBar.barTintColor = GTColor.mediumGrey
-//        navigationBar.tintColor    = GTColor.orange
+        
+        navigationBar.barTintColor = Constants.ColorScheme.white
+        navigationBar.tintColor    = Constants.ColorScheme.darkBlue
         navigationBar.translucent  = true
 
         let titleLabelAttributes = [
-            NSForegroundColorAttributeName : Constants.ColorScheme.blue,
-            NSFontAttributeName: UIFont.systemFontOfSize(17, weight: UIFontWeightMedium)
+            NSForegroundColorAttributeName : Constants.ColorScheme.black,
+            NSFontAttributeName: UIFont.systemFontOfSize(20, weight: UIFontWeightMedium)
         ]
         navigationBar.titleTextAttributes = titleLabelAttributes
     }
     
-    
+
     //MARK: - Internal funk(s)
     
     internal func configure(withShareButtonClosure share: NavbarButtonClosure, cancelButtonClosure cancel: NavbarButtonClosure, stateMachine state: StateMachine){

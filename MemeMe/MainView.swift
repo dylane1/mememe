@@ -17,6 +17,10 @@ class MainView: UIView {
     private var albumButtonClosure: BarButtonClosure?
     private var cameraButtonClosure: BarButtonClosure?
     
+    typealias FontButtonClosure = (UIBarButtonItem) -> Void
+    private var fontButtonClosure: FontButtonClosure?
+    private var fontButton: UIBarButtonItem!
+    
     typealias MemeTextUpdated = (Meme) -> Void
     private var memeTextUpdatedClosure: MemeTextUpdated?
     
@@ -29,6 +33,17 @@ class MainView: UIView {
         didSet {
             /** Set image in imageView */
             imageView.image = image
+            
+            /** 
+             Update text field constraints for new image at current orientation 
+             */
+            let orientation: DestinationOrientation
+            if UIDevice.currentDevice().orientation.isLandscape.boolValue {
+                orientation = .Landscape
+            } else {
+                orientation = .Portrait
+            }
+            updateTextFieldContstraints(withNewOrientation: orientation)
             
             meme = memeImageUpdatedClosure!(meme, image)
             
@@ -56,10 +71,26 @@ class MainView: UIView {
         }
     }
     
+    private var font: UIFont = Constants.Fonts.impact {
+        didSet {
+            /** Update text field fonts */
+            configureTextFieldAttributes()
+        }
+    }
+    
+    private var textFieldAttributes = [
+        NSForegroundColorAttributeName: Constants.ColorScheme.white,
+        NSStrokeColorAttributeName:     Constants.ColorScheme.black,
+        NSStrokeWidthAttributeName:     -5.0
+    ]
+    
     private var dataSource: MainViewViewModel! {
         didSet {
             dataSource.image.bind { [unowned self] in
                 self.image = $0
+            }
+            dataSource.font.bind { [unowned self] in
+                self.font = $0
             }
         }
     }
@@ -71,12 +102,22 @@ class MainView: UIView {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var toolbar: UIToolbar!
     
+    @IBOutlet weak var topFieldTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var topFieldLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var topFieldTrailingConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var bottomFieldBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bottomFieldLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bottomFieldTrailingConstraint: NSLayoutConstraint!
+    
+    
     //MARK: - Internal funk(s)
     
     internal func configure(
         withDataSource dataSource: MainViewViewModel,
         albumButtonClosure: BarButtonClosure,
         cameraButtonClosure: BarButtonClosure? = nil,
+        fontButtonClosure: FontButtonClosure,
         memeTextUpdatedClosure: MemeTextUpdated,
         memeImageUpdatedClosure: MemeImageUpdated,
         stateMachine: StateMachine)
@@ -84,6 +125,7 @@ class MainView: UIView {
         self.dataSource              = dataSource
         self.albumButtonClosure      = albumButtonClosure
         self.cameraButtonClosure     = cameraButtonClosure
+        self.fontButtonClosure       = fontButtonClosure
         self.memeTextUpdatedClosure  = memeTextUpdatedClosure
         self.memeImageUpdatedClosure = memeImageUpdatedClosure
         self.stateMachine            = stateMachine
@@ -100,6 +142,10 @@ class MainView: UIView {
         albumButtonClosure?()
     }
     
+    internal func fontButtonTapped() {
+        fontButtonClosure?(fontButton)
+    }
+    
     internal func resetTextFields() {
         topText     = nil
         bottomText  = nil
@@ -110,6 +156,15 @@ class MainView: UIView {
         topField.alpha      = 1
         bottomField.alpha   = 1
         
+        /** Reset constraints */
+        topFieldLeadingConstraint.constant  = 0
+        topFieldTopConstraint.constant      = 8
+        topFieldTrailingConstraint.constant = 0
+        
+        bottomFieldLeadingConstraint.constant   = 0
+        bottomFieldBottomConstraint.constant    = 52
+        bottomFieldTrailingConstraint.constant  = 0
+        
         configureTextFields()
     }
 
@@ -118,9 +173,10 @@ class MainView: UIView {
         topField.alpha      = (topText == "" || topText == nil) ? 0 : 1
         bottomField.alpha   = (bottomText == "" || bottomText == nil) ? 0 : 1
     }
+
     
     //MARK: - Private funk(s)
-    
+
     private func configureToolbarItems() {
         var toolbarItemArray = [UIBarButtonItem]()
         
@@ -144,41 +200,59 @@ class MainView: UIView {
         if UIImagePickerController.isSourceTypeAvailable(.Camera) { cameraButton.enabled = true }
         
         let albumButton = UIBarButtonItem(
-            title: LocalizedStrings.NavigationControllerButtons.album,
+            title: LocalizedStrings.ToolbarButtons.album,
             style: .Plain,
             target: self,
             action: "albumButtonTapped")
         
         toolbarItemArray.append(albumButton)
+        toolbarItemArray.append(fixedSpace)
+        
+        fontButton = UIBarButtonItem(
+            title: LocalizedStrings.ToolbarButtons.font,
+            style: .Plain,
+            target: self,
+            action: "fontButtonTapped")
+        
+        toolbarItemArray.append(fontButton)
         toolbarItemArray.append(flexSpace)
         
         toolbar.setItems(toolbarItemArray, animated: false)
+        
+        toolbar.barTintColor = Constants.ColorScheme.white
+        toolbar.tintColor    = Constants.ColorScheme.darkBlue
+        toolbar.translucent  = true
     }
     
     private func configureTextFields() {
-        topField.delegate           = self
-        topField.borderStyle        = .None
-        topField.backgroundColor    = UIColor.clearColor()
-        topField.returnKeyType      = .Done
+        topField.delegate                   = self
+        topField.borderStyle                = .None
+        topField.backgroundColor            = UIColor.clearColor()
+        topField.returnKeyType              = .Done
+        topField.autocapitalizationType     = .AllCharacters
+        topField.adjustsFontSizeToFitWidth  = true
         
-        bottomField.delegate        = self
-        bottomField.borderStyle     = .None
-        bottomField.backgroundColor = UIColor.clearColor()
-        bottomField.returnKeyType   = .Done
+        bottomField.delegate                    = self
+        bottomField.borderStyle                 = .None
+        bottomField.backgroundColor             = UIColor.clearColor()
+        bottomField.returnKeyType               = .Done
+        bottomField.autocapitalizationType      = .AllCharacters
+        bottomField.adjustsFontSizeToFitWidth   = true
         
         /** For resetting when 'Cancel' is tapped */
         topField.attributedText     = nil
         bottomField.attributedText  = nil
         
-        //FIXME: text must be all caps
-        let textFieldAttributes = [
-            NSForegroundColorAttributeName: Constants.ColorScheme.white,
-            NSFontAttributeName:            Constants.Fonts.textFields
-        ]
+        configureTextFieldAttributes()
+    }
+    
+    internal func configureTextFieldAttributes() {
+
+        textFieldAttributes[NSFontAttributeName] = font
         
         let placeholderAttributes = [
             NSForegroundColorAttributeName: Constants.ColorScheme.whiteAlpha50,
-            NSFontAttributeName:            Constants.Fonts.textFields
+            NSFontAttributeName:            font
         ]
         
         topField.defaultTextAttributes  = textFieldAttributes
@@ -188,22 +262,63 @@ class MainView: UIView {
         bottomField.defaultTextAttributes   = textFieldAttributes
         bottomField.attributedPlaceholder   = NSAttributedString(string: LocalizedStrings.PlaceholderText.MainView.bottom, attributes: placeholderAttributes)
         bottomField.textAlignment           = .Center
+    }
+    
+    internal func updateTextFieldContstraints(withNewOrientation orientation: DestinationOrientation) {
+        //FIXME: Find a better solution to text field location on rotation issue: http://smnh.me/synchronizing-rotation-animation-between-the-keyboard-and-the-attached-view-part-2/
+        /** Close keyboard on rotation */
+        if bottomField.isFirstResponder() {
+            bottomField.resignFirstResponder()
+        }
 
+        if imageView.image == nil { return }
+
+        if orientation == .Landscape {
+            /** Landscape */
+            topFieldTopConstraint.constant          = 8
+            bottomFieldBottomConstraint.constant    = 52
+            
+            let correctWidth = (imageView.frame.height / imageView.image!.size.height) * imageView.image!.size.width
+            
+            let newConstant = (imageView.frame.width - correctWidth) / 2
+            topFieldLeadingConstraint.constant      = newConstant
+            topFieldTrailingConstraint.constant     = newConstant
+            bottomFieldLeadingConstraint.constant   = newConstant
+            bottomFieldTrailingConstraint.constant  = newConstant
+        } else {
+            /** Portrait */
+            topFieldLeadingConstraint.constant      = 0
+            topFieldTrailingConstraint.constant     = 0
+            bottomFieldLeadingConstraint.constant   = 0
+            bottomFieldTrailingConstraint.constant  = 0
+            
+            let correctHeight = (imageView.frame.width / imageView.image!.size.width) * imageView.image!.size.height
+
+            let newConstant = ((imageView.frame.height - correctHeight) / 2)
+            topFieldTopConstraint.constant          = newConstant + 8
+            bottomFieldBottomConstraint.constant    = newConstant + 52
+        }
     }
 }
+
 
 //MARK: - UITextFieldDelegate
 
 extension MainView: UITextFieldDelegate {
     
-    /** 
-     * Set View rect so bottom text is visible 
-     *
-     * Adapted from this post on Stack Overflow:
-     * http://stackoverflow.com/questions/11282449/move-uiview-up-when-the-keyboard-appears-in-ios
-     */
-    
     internal func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+        stateMachine.state.value = .IsEditingText
+        
+        /** 
+         * For some reason defaultTextAttributes get changed if you tap into
+         * the field, don't type anything, then tap 'Done' on the keyboard. This
+         * fixes that scenario.
+        */
+        textField.defaultTextAttributes  = textFieldAttributes
+        textField.textAlignment          = .Center
+        
+        /** Remove placeholder text */
+        textField.placeholder = nil
         
         /** Set up observers */
         NSNotificationCenter.defaultCenter().addObserver(
@@ -217,6 +332,13 @@ extension MainView: UITextFieldDelegate {
             selector: Selector("keyboardWillHide:"),
             name: UIKeyboardWillHideNotification,
             object: nil)
+        
+        //FIXME: Get rotation working correctly
+//        NSNotificationCenter.defaultCenter().addObserver(
+//            self,
+//            selector: Selector("keyboardWillChangeFrame:"),
+//            name: UIKeyboardWillChangeFrameNotification,
+//            object: nil)
         
         return true
     }
@@ -238,7 +360,6 @@ extension MainView: UITextFieldDelegate {
     }
     
     internal func keyboardWillShow(notification: NSNotification) {
-        
         /** Animate the view up so bottom text field is visible while editing */
         if bottomField.editing {
             let keyboardSize = notification.userInfo?[UIKeyboardFrameBeginUserInfoKey]?.CGRectValue.size
@@ -254,6 +375,8 @@ extension MainView: UITextFieldDelegate {
     internal func keyboardWillHide(notification: NSNotification) {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+        //FIXME: Get rotation working correctly
+//        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillChangeFrameNotification, object: nil)
         
         /** Animate view back down if done editing the bottom text field */
         if bottomField.editing {
@@ -264,4 +387,21 @@ extension MainView: UITextFieldDelegate {
             }
         }
     }
+    //FIXME: Get rotation working correctly
+    //See: http://smnh.me/synchronizing-rotation-animation-between-the-keyboard-and-the-attached-view-part-2/
+//    internal func keyboardWillChangeFrame(notification: NSNotification) {
+//        magic("")
+//        if bottomField.editing {
+//            let keyboardSize = notification.userInfo?[UIKeyboardFrameBeginUserInfoKey]?.CGRectValue.size
+//            
+//            UIView.animateWithDuration(0.5) {
+//                var frame       = self.frame
+//                frame.origin.y  = -(keyboardSize?.height)!
+//                self.frame      = frame
+//            }
+//        }
+//    }
 }
+
+
+
