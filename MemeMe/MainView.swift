@@ -152,10 +152,7 @@ class MainView: UIView {
         
         topField.endEditing(true)
         bottomField.endEditing(true)
-        
-        topField.alpha      = 1
-        bottomField.alpha   = 1
-        
+
         /** Reset constraints */
         topFieldLeadingConstraint.constant  = 0
         topFieldTopConstraint.constant      = 8
@@ -165,6 +162,7 @@ class MainView: UIView {
         bottomFieldBottomConstraint.constant    = 52
         bottomFieldTrailingConstraint.constant  = 0
         
+        showPlaceholderText()
         configureTextFields()
     }
 
@@ -173,7 +171,12 @@ class MainView: UIView {
         topField.alpha      = (topText == "" || topText == nil) ? 0 : 1
         bottomField.alpha   = (bottomText == "" || bottomText == nil) ? 0 : 1
     }
-
+    
+    internal func showPlaceholderText() {
+        magic("")
+        topField.alpha      = 1
+        bottomField.alpha   = 1
+    }
     
     //MARK: - Private funk(s)
 
