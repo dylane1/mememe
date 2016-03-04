@@ -51,6 +51,8 @@ final class MainViewController: UIViewController {
         mainView = view as! MainView
         mainViewViewModel = MainViewViewModel()
         
+        mainViewViewModel.font.value = getFontFromDefaults()
+        
         configureNavigationItems()
         configureToolbarItems()
         configureImagePicker()
@@ -150,6 +152,23 @@ final class MainViewController: UIViewController {
      
      
     //MARK: - Private funk(s)
+    
+    private func getFontFromDefaults() -> UIFont {
+        guard let fontName = Constants.userDefaults.stringForKey(Constants.StorageKeys.fontName) as String! else {
+            /** Return default font */
+            return Constants.Fonts.impact
+        }
+        
+        var i = 0
+        for name in Constants.FontFamilyNameArray {
+            if name == fontName {
+                return Constants.FontArray[i]
+            }
+            i++
+        }
+        /** Make compiler happy */
+        return Constants.Fonts.impact
+    }
     
     private func configureNavigationItems() {
         navController = navigationController as! NavigationController
