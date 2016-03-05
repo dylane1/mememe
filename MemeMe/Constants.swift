@@ -11,8 +11,9 @@ import UIKit
 struct Constants {
     /** Storyboard */
     struct StoryBoardIDs {
-        static let main              = "Main"
-        static let fontListTableVC   = "sb_fontListTableVC"
+        static let main                 = "Main"
+        static let fontListTableVC      = "sb_fontListTableVC"
+        static let fontColorSelectionVC = "sb_fontColorSelectionVC"
     }
     
     struct ReuseIDs {
@@ -26,10 +27,36 @@ struct Constants {
         static let lightGrey    = UIColor(red: 0.796, green: 0.796, blue: 0.796, alpha: 1.00) //CBCBCB
         static let darkGrey     = UIColor(red: 0.149, green: 0.149, blue: 0.149, alpha: 1.00) //262626
         static let black        = UIColor(red: 0.010, green: 0.010, blue: 0.010, alpha: 1.00)
+        static let lightBlue    = UIColor(red: 0.243, green: 0.733, blue: 0.655, alpha: 1.00) //3EBBA7
         static let darkBlue     = UIColor(red: 0.000, green: 0.455, blue: 0.478, alpha: 1.00) //00747A
         static let orange       = UIColor(red: 1.000, green: 0.616, blue: 0.200, alpha: 1.00) //FF9D33
         static let red          = UIColor(red: 0.800, green: 0.200, blue: 0.200, alpha: 1.00) //CC3333
+        static let green        = UIColor(red: 0.494, green: 0.827, blue: 0.129, alpha: 1.00) //7ED321
+        static let purple       = UIColor(red: 0.294, green: 0.180, blue: 0.631, alpha: 1.00) //4B2EA1
+        static let yellow       = UIColor(red: 0.898, green: 0.792, blue: 0.090, alpha: 1.00) //E5CA17
     }
+    
+    static let FontColorStringArray = [
+        "White",
+        "Yellow",
+        "Orange",
+        "Red",
+        "Purple",
+        "Dark Blue",
+        "Light Blue",
+        "Green"
+    ]
+    
+    static let FontColorArray = [
+        Constants.ColorScheme.white,
+        Constants.ColorScheme.yellow,
+        Constants.ColorScheme.orange,
+        Constants.ColorScheme.red,
+        Constants.ColorScheme.purple,
+        Constants.ColorScheme.darkBlue,
+        Constants.ColorScheme.lightBlue,
+        Constants.ColorScheme.green
+    ]
     
     static let fontSize: CGFloat = 32.0
 
@@ -109,7 +136,8 @@ struct Constants {
     static let userDefaults = NSUserDefaults.standardUserDefaults()
     
     struct StorageKeys {
-        static let fontName = "com.slingingPixels.mememe.storageKeys.fontName"
+        static let fontName     = "com.slingingPixels.mememe.storageKeys.fontName"
+        static let fontColor    = "com.slingingPixels.mememe.storageKeys.fontColor"
     }
 
     

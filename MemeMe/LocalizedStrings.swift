@@ -26,6 +26,7 @@ struct LocalizedStrings {
     struct ToolbarButtons {
         static let album    = NSLocalizedString("toolbarButtons.album", value: "Album", comment: "")
         static let font     = NSLocalizedString("toolbarButtons.font",  value: "Font",  comment: "")
+        static let color    = NSLocalizedString("toolbarButtons.color", value: "Color", comment: "")
     }
     
     struct ErrorAlerts {

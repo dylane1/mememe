@@ -37,6 +37,7 @@ class FontListTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        backgroundColor = Constants.ColorScheme.lightGrey
     }
     
     internal func configure(withDataSource dataSource: FontListTableViewCellDataSource) {

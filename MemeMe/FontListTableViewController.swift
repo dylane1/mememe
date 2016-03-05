@@ -17,7 +17,8 @@ class FontListTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = Constants.ColorScheme.lightGrey
+        view.backgroundColor        = Constants.ColorScheme.lightGrey
+        tableView.separatorColor    = Constants.ColorScheme.darkGrey
     }
 
     override func viewWillAppear(animated: Bool) {
