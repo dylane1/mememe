@@ -20,6 +20,8 @@ class MainView: UIView {
     typealias FontButtonClosure = (UIBarButtonItem) -> Void
     private var fontButtonClosure: FontButtonClosure?
     private var fontButton: UIBarButtonItem!
+    private var fontColorButtonClosure: FontButtonClosure?
+    private var fontColorButton: UIBarButtonItem!
     
     typealias MemeTextUpdated = (Meme) -> Void
     private var memeTextUpdatedClosure: MemeTextUpdated?
@@ -78,8 +80,14 @@ class MainView: UIView {
         }
     }
     
+    private var fontColor: UIColor = Constants.ColorScheme.white {
+        didSet {
+            /** Update text field fonts */
+            configureTextFieldAttributes()
+        }
+    }
+    
     private var textFieldAttributes = [
-        NSForegroundColorAttributeName: Constants.ColorScheme.white,
         NSStrokeColorAttributeName:     Constants.ColorScheme.black,
         NSStrokeWidthAttributeName:     -5.0
     ]
@@ -91,6 +99,9 @@ class MainView: UIView {
             }
             dataSource.font.bindAndFire { [unowned self] in
                 self.font = $0
+            }
+            dataSource.fontColor.bindAndFire { [unowned self] in
+                self.fontColor = $0
             }
         }
     }
@@ -118,6 +129,7 @@ class MainView: UIView {
         albumButtonClosure: BarButtonClosure,
         cameraButtonClosure: BarButtonClosure? = nil,
         fontButtonClosure: FontButtonClosure,
+        fontColorButtonClosure: FontButtonClosure,
         memeTextUpdatedClosure: MemeTextUpdated,
         memeImageUpdatedClosure: MemeImageUpdated,
         stateMachine: StateMachine)
@@ -126,6 +138,7 @@ class MainView: UIView {
         self.albumButtonClosure      = albumButtonClosure
         self.cameraButtonClosure     = cameraButtonClosure
         self.fontButtonClosure       = fontButtonClosure
+        self.fontColorButtonClosure  = fontColorButtonClosure
         self.memeTextUpdatedClosure  = memeTextUpdatedClosure
         self.memeImageUpdatedClosure = memeImageUpdatedClosure
         self.stateMachine            = stateMachine
@@ -146,6 +159,10 @@ class MainView: UIView {
         fontButtonClosure?(fontButton)
     }
     
+    internal func fontColorButtonTapped() {
+        fontColorButtonClosure?(fontColorButton)
+    }
+    
     internal func resetTextFields() {
         topText     = nil
         bottomText  = nil
@@ -162,7 +179,7 @@ class MainView: UIView {
         bottomFieldBottomConstraint.constant    = 52
         bottomFieldTrailingConstraint.constant  = 0
         
-        showPlaceholderText()
+//        showPlaceholderText()
         configureTextFields()
     }
 
@@ -173,8 +190,8 @@ class MainView: UIView {
     }
     
     internal func showPlaceholderText() {
-        topField.alpha      = 1
-        bottomField.alpha   = 1
+        topField.alpha      = (topText == "" || topText == nil) ? 0.5 : 1
+        bottomField.alpha   = (bottomText == "" || bottomText == nil) ? 0.5 : 1
     }
     
     //MARK: - Private funk(s)
@@ -187,7 +204,7 @@ class MainView: UIView {
         toolbarItemArray.append(flexSpace)
         
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil, action: nil)
-        fixedSpace.width = 44
+        fixedSpace.width = 20
         
         let cameraButton = UIBarButtonItem(
             barButtonSystemItem: .Camera,
@@ -217,6 +234,15 @@ class MainView: UIView {
             action: "fontButtonTapped")
         
         toolbarItemArray.append(fontButton)
+        toolbarItemArray.append(fixedSpace)
+        
+        fontColorButton = UIBarButtonItem(
+            title: LocalizedStrings.ToolbarButtons.color,
+            style: .Plain,
+            target: self,
+            action: "fontColorButtonTapped")
+        
+        toolbarItemArray.append(fontColorButton)
         toolbarItemArray.append(flexSpace)
         
         toolbar.setItems(toolbarItemArray, animated: false)
@@ -246,14 +272,16 @@ class MainView: UIView {
         bottomField.attributedText  = nil
         
         configureTextFieldAttributes()
+        showPlaceholderText()
     }
     
     internal func configureTextFieldAttributes() {
 
         textFieldAttributes[NSFontAttributeName] = font
+        textFieldAttributes[NSForegroundColorAttributeName] = fontColor
         
         let placeholderAttributes = [
-            NSForegroundColorAttributeName: Constants.ColorScheme.whiteAlpha50,
+            NSForegroundColorAttributeName: fontColor,
             NSFontAttributeName:            font
         ]
         
@@ -350,9 +378,8 @@ extension MainView: UITextFieldDelegate {
         */
         textField.defaultTextAttributes  = textFieldAttributes
         textField.textAlignment          = .Center
-        
-        /** Remove placeholder text */
         textField.placeholder = nil
+        textField.alpha = 1.0
         
         /** Set up observers */
         NSNotificationCenter.defaultCenter().addObserver(

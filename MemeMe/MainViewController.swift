@@ -17,6 +17,7 @@ final class MainViewController: UIViewController {
     
     typealias FontButtonClosure = (UIBarButtonItem) -> Void
     private var fontButtonClosure: FontButtonClosure!
+    private var fontColorButtonClosure: FontButtonClosure!
     
     /** For keeping track of app state and enabling/disabling navbar buttons */
     private var stateMachine = StateMachine()
@@ -51,7 +52,7 @@ final class MainViewController: UIViewController {
         mainView = view as! MainView
         mainViewViewModel = MainViewViewModel()
         
-        mainViewViewModel.font.value = getFontFromDefaults()
+        getFontFromDefaults()
         
         configureNavigationItems()
         configureToolbarItems()
@@ -76,6 +77,7 @@ final class MainViewController: UIViewController {
             albumButtonClosure: albumButtonClosure,
             cameraButtonClosure: cameraButtonClosure,
             fontButtonClosure: fontButtonClosure,
+            fontColorButtonClosure: fontColorButtonClosure,
             memeTextUpdatedClosure: memeTextUpdatedClosure,
             memeImageUpdatedClosure: memeImageUpdatedClosure,
             stateMachine: stateMachine
@@ -86,54 +88,30 @@ final class MainViewController: UIViewController {
         super.viewWillAppear(animated)
     }
     
-    //MARK: - Internal funk(s)
 
-    /** Save Image completion */
-    /*******************************************************************************
-    * Not currently saving to the Photo Album, but will be an option in MemeMe v2
-    *
-    *******************************************************************************/
-//    internal func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Void>) {
-        /** NSError for testing errorQueue */
-//        let testErrorUserInfo = [
-//            NSLocalizedDescriptionKey : "Operation was unsuccessful."
-//        ]
-//        let NSTestErrorDomain = "foo"
-//        
-//        var testError: NSError? = NSError(domain: NSTestErrorDomain, code: 42, userInfo: testErrorUserInfo)
-        
-//        if error == nil {
-//            /** Reset everything */
-//            mainViewViewModel.image.value = nil
-//            mainView.resetTextFields()
-//        } else {
-//            magic("error: \(error?.localizedDescription)")
-//            
-//            /** 
-//             Unable to present an error alert because activityVC is already open 
-//            
-//             Add error to errorQueue & display after activityVC is dismissed.
-//            */
-//            let message     = LocalizedStrings.ErrorAlerts.ImageSaveError.message + error!.localizedDescription
-//            let errorArray  = [LocalizedStrings.ErrorAlerts.ImageSaveError.title, message]
-//            errorQueue.insert(errorArray, atIndex: 0)
-//        }
-//    }
-    
     
     /** Toolbar Actions */
-    internal func cameraButtonTapped() {
+    private func cameraButtonTapped() {
         imagePickerController.sourceType = .Camera
-        
-        presentViewController(imagePickerController, animated: true, completion: nil)
+        presentImagePicker()
     }
     
-    internal func albumButtonTapped() {
+    private func albumButtonTapped() {
         imagePickerController.sourceType = .PhotoLibrary
-        presentViewController(imagePickerController, animated: true, completion: nil)
+        presentImagePicker()
     }
     
-    internal func fontButtonTapped(button: UIBarButtonItem) {
+    private func presentImagePicker() {
+        if presentedViewController == nil {
+            presentViewController(imagePickerController, animated: true, completion: nil)
+        } else {
+            dismissViewControllerAnimated(true) {
+                self.presentViewController(self.imagePickerController, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    private func fontButtonTapped(button: UIBarButtonItem) {
         /** Present a popover with available fonts */
         let storyboard = UIStoryboard(name: Constants.StoryBoardIDs.main, bundle: nil)
         
@@ -142,32 +120,64 @@ final class MainViewController: UIViewController {
         fontListTableVC.configure(withViewModel: mainViewViewModel)
         fontListTableVC.modalPresentationStyle = UIModalPresentationStyle.Popover
         
-        let popoverController = fontListTableVC.popoverPresentationController!
+        presentPopover(withViewController: fontListTableVC, fromButton: button)
+    }
+    
+    private func fontColorButtonTapped(button: UIBarButtonItem) {
+        /** Present a popover with available font colors */
+        let storyboard = UIStoryboard(name: Constants.StoryBoardIDs.main, bundle: nil)
+        
+        let fontColorsVC = storyboard.instantiateViewControllerWithIdentifier(Constants.StoryBoardIDs.fontColorSelectionVC) as! FontColorSelectionViewController
+        fontColorsVC.preferredContentSize = CGSizeMake(260, 116)
+        fontColorsVC.configure(withViewModel: mainViewViewModel)
+        fontColorsVC.modalPresentationStyle = UIModalPresentationStyle.Popover
+        
+        presentPopover(withViewController: fontColorsVC, fromButton: button)
+    }
+    
+    private func presentPopover(withViewController vc: UIViewController, fromButton button: UIBarButtonItem) {
+        let popoverController = vc.popoverPresentationController!
         popoverController.barButtonItem = button
         popoverController.permittedArrowDirections = .Any
         popoverController.delegate = self
         
-        presentViewController(fontListTableVC, animated: true, completion: nil)
+        if presentedViewController == nil {
+            presentViewController(vc, animated: true, completion: nil)
+        } else {
+            dismissViewControllerAnimated(true) {
+                self.presentViewController(vc, animated: true, completion: nil)
+            }
+        }
     }
-     
      
     //MARK: - Private funk(s)
     
-    private func getFontFromDefaults() -> UIFont {
-        guard let fontName = Constants.userDefaults.stringForKey(Constants.StorageKeys.fontName) as String! else {
-            /** Return default font */
-            return Constants.Fonts.impact
+    private func getFontFromDefaults() {
+        if let fontName = Constants.userDefaults.stringForKey(Constants.StorageKeys.fontName) as String! {
+            var i = 0
+            for name in Constants.FontFamilyNameArray {
+                if name == fontName {
+                    mainViewViewModel.font.value = Constants.FontArray[i]
+                }
+                i++
+            }
+        } else {
+            /** Default font */
+            mainViewViewModel.font.value =  Constants.Fonts.impact
         }
         
-        var i = 0
-        for name in Constants.FontFamilyNameArray {
-            if name == fontName {
-                return Constants.FontArray[i]
+        if let fontColor = Constants.userDefaults.stringForKey(Constants.StorageKeys.fontColor) as String! {
+            var i = 0
+            for color in Constants.FontColorStringArray {
+                if color == fontColor {
+                    mainViewViewModel.fontColor.value = Constants.FontColorArray[i]
+                }
+                i++
             }
-            i++
+        } else {
+            /** Default color */
+            mainViewViewModel.fontColor.value =  Constants.ColorScheme.white
         }
-        /** Make compiler happy */
-        return Constants.Fonts.impact
     }
     
     private func configureNavigationItems() {
@@ -247,6 +257,10 @@ final class MainViewController: UIViewController {
         
         fontButtonClosure = { [weak self] (button: UIBarButtonItem) in
             self!.fontButtonTapped(button)
+        }
+        
+        fontColorButtonClosure = { [weak self] (button: UIBarButtonItem) in
+            self!.fontColorButtonTapped(button)
         }
     }
     
@@ -363,3 +377,38 @@ extension MainViewController: UIPopoverPresentationControllerDelegate {
         return .None
     }
 }
+
+/** Save Image completion */
+/*******************************************************************************
+* Not currently saving to the Photo Album, but will be an option in MemeMe v2
+*
+*******************************************************************************/
+//    internal func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Void>) {
+/** NSError for testing errorQueue */
+//        let testErrorUserInfo = [
+//            NSLocalizedDescriptionKey : "Operation was unsuccessful."
+//        ]
+//        let NSTestErrorDomain = "foo"
+//
+//        var testError: NSError? = NSError(domain: NSTestErrorDomain, code: 42, userInfo: testErrorUserInfo)
+
+//        if error == nil {
+//            /** Reset everything */
+//            mainViewViewModel.image.value = nil
+//            mainView.resetTextFields()
+//        } else {
+//            magic("error: \(error?.localizedDescription)")
+//
+//            /**
+//             Unable to present an error alert because activityVC is already open
+//
+//             Add error to errorQueue & display after activityVC is dismissed.
+//            */
+//            let message     = LocalizedStrings.ErrorAlerts.ImageSaveError.message + error!.localizedDescription
+//            let errorArray  = [LocalizedStrings.ErrorAlerts.ImageSaveError.title, message]
+//            errorQueue.insert(errorArray, atIndex: 0)
+//        }
+//    }
+
+
+

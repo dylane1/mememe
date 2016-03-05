@@ -25,6 +25,9 @@
 		A383BF231C62822E00D80668 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A383BF221C62822E00D80668 /* MainView.swift */; };
 		A383BF251C628A0C00D80668 /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A383BF241C628A0C00D80668 /* Dynamic.swift */; };
 		A383BF271C628C9900D80668 /* MainViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A383BF261C628C9900D80668 /* MainViewViewModel.swift */; };
+		A39FB0771C8A2C19007E0B95 /* FontColorSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39FB0761C8A2C19007E0B95 /* FontColorSelectionViewController.swift */; };
+		A39FB07A1C8A2C6D007E0B95 /* FontColorSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39FB0791C8A2C6D007E0B95 /* FontColorSelectionView.swift */; };
+		A39FB07C1C8A2C84007E0B95 /* FontColorSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39FB07B1C8A2C84007E0B95 /* FontColorSelectionViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +51,9 @@
 		A383BF221C62822E00D80668 /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		A383BF241C628A0C00D80668 /* Dynamic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
 		A383BF261C628C9900D80668 /* MainViewViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewViewModel.swift; sourceTree = "<group>"; };
+		A39FB0761C8A2C19007E0B95 /* FontColorSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontColorSelectionViewController.swift; sourceTree = "<group>"; };
+		A39FB0791C8A2C6D007E0B95 /* FontColorSelectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontColorSelectionView.swift; sourceTree = "<group>"; };
+		A39FB07B1C8A2C84007E0B95 /* FontColorSelectionViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontColorSelectionViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,8 +111,9 @@
 				A33DADE51C7514AE005C0A85 /* StateMachine.swift */,
 				A33DADE71C77CBA0005C0A85 /* Meme.swift */,
 				A37A2BBC1C7F713400D243A8 /* MemeStorage.swift */,
+				A383BF211C62820C00D80668 /* Meme Editor */,
 				A324A2331C877ACE0037BA27 /* Font Selection */,
-				A383BF211C62820C00D80668 /* Main View */,
+				A39FB0781C8A2C20007E0B95 /* Font Color Selection */,
 				A383BF091C627AB500D80668 /* Main.storyboard */,
 				A383BF0C1C627AB500D80668 /* Assets.xcassets */,
 				A383BF0E1C627AB500D80668 /* LaunchScreen.storyboard */,
@@ -125,14 +132,24 @@
 			name = Utilities;
 			sourceTree = "<group>";
 		};
-		A383BF211C62820C00D80668 /* Main View */ = {
+		A383BF211C62820C00D80668 /* Meme Editor */ = {
 			isa = PBXGroup;
 			children = (
 				A383BF071C627AB500D80668 /* MainViewController.swift */,
 				A383BF261C628C9900D80668 /* MainViewViewModel.swift */,
 				A383BF221C62822E00D80668 /* MainView.swift */,
 			);
-			name = "Main View";
+			name = "Meme Editor";
+			sourceTree = "<group>";
+		};
+		A39FB0781C8A2C20007E0B95 /* Font Color Selection */ = {
+			isa = PBXGroup;
+			children = (
+				A39FB0761C8A2C19007E0B95 /* FontColorSelectionViewController.swift */,
+				A39FB07B1C8A2C84007E0B95 /* FontColorSelectionViewModel.swift */,
+				A39FB0791C8A2C6D007E0B95 /* FontColorSelectionView.swift */,
+			);
+			name = "Font Color Selection";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -238,7 +255,10 @@
 				A324A2351C8787500037BA27 /* FontListTableViewController.swift in Sources */,
 				A383BF251C628A0C00D80668 /* Dynamic.swift in Sources */,
 				A37A2BBD1C7F713400D243A8 /* MemeStorage.swift in Sources */,
+				A39FB0771C8A2C19007E0B95 /* FontColorSelectionViewController.swift in Sources */,
 				A383BF1C1C627C1A00D80668 /* Constants.swift in Sources */,
+				A39FB07A1C8A2C6D007E0B95 /* FontColorSelectionView.swift in Sources */,
+				A39FB07C1C8A2C84007E0B95 /* FontColorSelectionViewModel.swift in Sources */,
 				A383BF271C628C9900D80668 /* MainViewViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
