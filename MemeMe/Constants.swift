@@ -14,6 +14,7 @@ struct Constants {
         static let main                 = "Main"
         static let fontListTableVC      = "sb_fontListTableVC"
         static let fontColorSelectionVC = "sb_fontColorSelectionVC"
+        static let sb_sentMemesVC       = "sb_sentMemesVC"
     }
     
     struct ReuseIDs {

@@ -16,9 +16,11 @@ import UIKit
 class NavigationController: UINavigationController {
     typealias NavbarButtonClosure = () -> Void
     private var shareClosure: NavbarButtonClosure?
+    private var saveClosure: NavbarButtonClosure?
     private var cancelClosure: NavbarButtonClosure?
     
     private var shareButton: UIBarButtonItem!
+    private var saveButton: UIBarButtonItem!
     private var cancelButton: UIBarButtonItem!
     
     private var state: AppState = .NoImageNoText {

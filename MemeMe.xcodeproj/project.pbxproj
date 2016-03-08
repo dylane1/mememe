@@ -28,6 +28,11 @@
 		A39FB0771C8A2C19007E0B95 /* FontColorSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39FB0761C8A2C19007E0B95 /* FontColorSelectionViewController.swift */; };
 		A39FB07A1C8A2C6D007E0B95 /* FontColorSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39FB0791C8A2C6D007E0B95 /* FontColorSelectionView.swift */; };
 		A39FB07C1C8A2C84007E0B95 /* FontColorSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39FB07B1C8A2C84007E0B95 /* FontColorSelectionViewModel.swift */; };
+		A3BDD49B1C8E65A40069AAFD /* SavedMemesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BDD49A1C8E65A40069AAFD /* SavedMemesTableViewController.swift */; };
+		A3BDD49E1C8E65D60069AAFD /* SavedMemesCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BDD49D1C8E65D60069AAFD /* SavedMemesCollectionViewController.swift */; };
+		A3BDD4A01C8E662D0069AAFD /* SavedMemesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BDD49F1C8E662D0069AAFD /* SavedMemesTableViewCell.swift */; };
+		A3BDD4A21C8E66500069AAFD /* SavedMemesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BDD4A11C8E66500069AAFD /* SavedMemesCollectionViewCell.swift */; };
+		A3BDD4A41C8E6E3F0069AAFD /* SavedMemesNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BDD4A31C8E6E3F0069AAFD /* SavedMemesNavigationController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +59,11 @@
 		A39FB0761C8A2C19007E0B95 /* FontColorSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontColorSelectionViewController.swift; sourceTree = "<group>"; };
 		A39FB0791C8A2C6D007E0B95 /* FontColorSelectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontColorSelectionView.swift; sourceTree = "<group>"; };
 		A39FB07B1C8A2C84007E0B95 /* FontColorSelectionViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontColorSelectionViewModel.swift; sourceTree = "<group>"; };
+		A3BDD49A1C8E65A40069AAFD /* SavedMemesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedMemesTableViewController.swift; sourceTree = "<group>"; };
+		A3BDD49D1C8E65D60069AAFD /* SavedMemesCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedMemesCollectionViewController.swift; sourceTree = "<group>"; };
+		A3BDD49F1C8E662D0069AAFD /* SavedMemesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedMemesTableViewCell.swift; sourceTree = "<group>"; };
+		A3BDD4A11C8E66500069AAFD /* SavedMemesCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedMemesCollectionViewCell.swift; sourceTree = "<group>"; };
+		A3BDD4A31C8E6E3F0069AAFD /* SavedMemesNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedMemesNavigationController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,11 +116,10 @@
 				A383BF201C627D3500D80668 /* Utilities */,
 				A383BF181C627C1A00D80668 /* Constants.swift */,
 				A383BF191C627C1A00D80668 /* LocalizedStrings.swift */,
-				A383BF1B1C627C1A00D80668 /* NavigationController.swift */,
 				A383BF051C627AB500D80668 /* AppDelegate.swift */,
-				A33DADE51C7514AE005C0A85 /* StateMachine.swift */,
 				A33DADE71C77CBA0005C0A85 /* Meme.swift */,
 				A37A2BBC1C7F713400D243A8 /* MemeStorage.swift */,
+				A3BDD49C1C8E65AB0069AAFD /* Saved Memes */,
 				A383BF211C62820C00D80668 /* Meme Editor */,
 				A324A2331C877ACE0037BA27 /* Font Selection */,
 				A39FB0781C8A2C20007E0B95 /* Font Color Selection */,
@@ -135,6 +144,8 @@
 		A383BF211C62820C00D80668 /* Meme Editor */ = {
 			isa = PBXGroup;
 			children = (
+				A33DADE51C7514AE005C0A85 /* StateMachine.swift */,
+				A383BF1B1C627C1A00D80668 /* NavigationController.swift */,
 				A383BF071C627AB500D80668 /* MainViewController.swift */,
 				A383BF261C628C9900D80668 /* MainViewViewModel.swift */,
 				A383BF221C62822E00D80668 /* MainView.swift */,
@@ -150,6 +161,18 @@
 				A39FB0791C8A2C6D007E0B95 /* FontColorSelectionView.swift */,
 			);
 			name = "Font Color Selection";
+			sourceTree = "<group>";
+		};
+		A3BDD49C1C8E65AB0069AAFD /* Saved Memes */ = {
+			isa = PBXGroup;
+			children = (
+				A3BDD4A31C8E6E3F0069AAFD /* SavedMemesNavigationController.swift */,
+				A3BDD49A1C8E65A40069AAFD /* SavedMemesTableViewController.swift */,
+				A3BDD49F1C8E662D0069AAFD /* SavedMemesTableViewCell.swift */,
+				A3BDD49D1C8E65D60069AAFD /* SavedMemesCollectionViewController.swift */,
+				A3BDD4A11C8E66500069AAFD /* SavedMemesCollectionViewCell.swift */,
+			);
+			name = "Saved Memes";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -244,6 +267,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A383BF081C627AB500D80668 /* MainViewController.swift in Sources */,
+				A3BDD4A01C8E662D0069AAFD /* SavedMemesTableViewCell.swift in Sources */,
 				A383BF231C62822E00D80668 /* MainView.swift in Sources */,
 				A383BF1F1C627C1A00D80668 /* NavigationController.swift in Sources */,
 				A324A2321C877AC50037BA27 /* FontListTableViewCell.swift in Sources */,
@@ -251,15 +275,19 @@
 				A383BF061C627AB500D80668 /* AppDelegate.swift in Sources */,
 				A324810F1C65704200D10134 /* Magic.swift in Sources */,
 				A383BF1D1C627C1A00D80668 /* LocalizedStrings.swift in Sources */,
+				A3BDD4A21C8E66500069AAFD /* SavedMemesCollectionViewCell.swift in Sources */,
 				A33DADE81C77CBA0005C0A85 /* Meme.swift in Sources */,
 				A324A2351C8787500037BA27 /* FontListTableViewController.swift in Sources */,
 				A383BF251C628A0C00D80668 /* Dynamic.swift in Sources */,
 				A37A2BBD1C7F713400D243A8 /* MemeStorage.swift in Sources */,
+				A3BDD49E1C8E65D60069AAFD /* SavedMemesCollectionViewController.swift in Sources */,
 				A39FB0771C8A2C19007E0B95 /* FontColorSelectionViewController.swift in Sources */,
 				A383BF1C1C627C1A00D80668 /* Constants.swift in Sources */,
+				A3BDD4A41C8E6E3F0069AAFD /* SavedMemesNavigationController.swift in Sources */,
 				A39FB07A1C8A2C6D007E0B95 /* FontColorSelectionView.swift in Sources */,
 				A39FB07C1C8A2C84007E0B95 /* FontColorSelectionViewModel.swift in Sources */,
 				A383BF271C628C9900D80668 /* MainViewViewModel.swift in Sources */,
+				A3BDD49B1C8E65A40069AAFD /* SavedMemesTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
