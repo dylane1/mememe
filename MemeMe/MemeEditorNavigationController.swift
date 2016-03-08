@@ -13,7 +13,7 @@ import UIKit
 //    var cancelButtonEnabled: Dynamic<Bool> { get }
 //}
 
-class NavigationController: UINavigationController {
+class MemeEditorNavigationController: UINavigationController {
     typealias NavbarButtonClosure = () -> Void
     private var shareClosure: NavbarButtonClosure?
     private var saveClosure: NavbarButtonClosure?
@@ -23,12 +23,12 @@ class NavigationController: UINavigationController {
     private var saveButton: UIBarButtonItem!
     private var cancelButton: UIBarButtonItem!
     
-    private var state: AppState = .NoImageNoText {
+    private var state: MemeEditorState = .NoImageNoText {
         didSet {
             updateButtonsEnabled()
         }
     }
-    private var stateMachine: StateMachine! {
+    private var stateMachine: MemeEditorStateMachine! {
         didSet {
             stateMachine.state.bindAndFire { [unowned self] in
                 self.state = $0
@@ -55,7 +55,7 @@ class NavigationController: UINavigationController {
 
     //MARK: - Internal funk(s)
     
-    internal func configure(withShareButtonClosure share: NavbarButtonClosure, cancelButtonClosure cancel: NavbarButtonClosure, stateMachine state: StateMachine){
+    internal func configure(withShareButtonClosure share: NavbarButtonClosure, cancelButtonClosure cancel: NavbarButtonClosure, stateMachine state: MemeEditorStateMachine){
         shareClosure    = share
         cancelClosure   = cancel
         stateMachine    = state

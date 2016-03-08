@@ -391,10 +391,10 @@
             </objects>
             <point key="canvasLocation" x="-489" y="340"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Meme Editor Navigation Controller-->
         <scene sceneID="UOd-j8-jrj">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="jZF-3N-A0k" customClass="NavigationController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="jZF-3N-A0k" customClass="MemeEditorNavigationController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="hxS-6d-bGv">

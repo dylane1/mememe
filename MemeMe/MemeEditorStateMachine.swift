@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum AppState {
+enum MemeEditorState {
     case NoImageNoText,
          NoImageYesText,
          YesImageNoText,
@@ -20,12 +20,12 @@ enum AppState {
  Adapted (sort of) from this article: http://www.figure.ink/blog/2015/2/1/swift-state-machines-part-2
  */
 
-class StateMachine {
+class MemeEditorStateMachine {
     /** 
      * NavigationController is listening for changes in this var & enables/disables
      * bar buttons based on current app state
      */
-    internal var state: Dynamic<AppState>
+    internal var state: Dynamic<MemeEditorState>
     
     init() {
         state = Dynamic(.NoImageNoText)

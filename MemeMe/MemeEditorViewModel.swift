@@ -13,7 +13,7 @@
 
 import UIKit
 
-struct MainViewViewModel: MainViewDataSource {
+struct MemeEditorViewModel: MemeEditorViewDataSource {
     internal let image: Dynamic<UIImage?>
     internal let font: Dynamic<UIFont>
     internal let fontColor: Dynamic<UIColor>

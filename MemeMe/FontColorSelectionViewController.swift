@@ -10,7 +10,7 @@ import UIKit
 
 class FontColorSelectionViewController: UIViewController {
 
-    private var mainViewViewModel: MainViewViewModel!
+    private var mainViewViewModel: MemeEditorViewModel!
     
     private var selectionView: FontColorSelectionView!
     
@@ -35,7 +35,7 @@ class FontColorSelectionViewController: UIViewController {
 
     //MARK: - Internal funk(s)
     
-    internal func configure(withViewModel viewModel: MainViewViewModel) {
+    internal func configure(withViewModel viewModel: MemeEditorViewModel) {
         mainViewViewModel = viewModel
     }
 
