@@ -22,6 +22,9 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="zKy-bF-gx2" kind="showDetail" id="g3O-AF-QIf"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -35,6 +38,30 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="opN-YE-4AW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="687" y="13"/>
+        </scene>
+        <!--Saved Meme View Controller-->
+        <scene sceneID="mFb-0Y-AR1">
+            <objects>
+                <viewController id="zKy-bF-gx2" customClass="SavedMemeViewController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="pyY-6r-sOq"/>
+                        <viewControllerLayoutGuide type="bottom" id="fVA-Ym-YaB"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="hep-SZ-ZRP">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="01C-jX-WzQ">
+                                <rect key="frame" x="50" y="220" width="240" height="128"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Is5-9q-Z9I" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1284" y="340"/>
         </scene>
         <!--Saved Memes Collection View Controller-->
         <scene sceneID="aZK-vT-E9q">
@@ -58,6 +85,9 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
+                                <connections>
+                                    <segue destination="zKy-bF-gx2" kind="showDetail" id="Yas-Di-UrO"/>
+                                </connections>
                             </collectionViewCell>
                         </cells>
                         <connections>
@@ -411,4 +441,7 @@
             <point key="canvasLocation" x="2251" y="147"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="Yas-Di-UrO"/>
+    </inferredMetricsTieBreakers>
 </document>

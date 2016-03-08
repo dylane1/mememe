@@ -33,6 +33,7 @@
 		A3BDD4A01C8E662D0069AAFD /* SavedMemesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BDD49F1C8E662D0069AAFD /* SavedMemesTableViewCell.swift */; };
 		A3BDD4A21C8E66500069AAFD /* SavedMemesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BDD4A11C8E66500069AAFD /* SavedMemesCollectionViewCell.swift */; };
 		A3BDD4A41C8E6E3F0069AAFD /* SavedMemesNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BDD4A31C8E6E3F0069AAFD /* SavedMemesNavigationController.swift */; };
+		A3BDD4A61C8E741B0069AAFD /* SavedMemeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BDD4A51C8E741B0069AAFD /* SavedMemeViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,6 +65,7 @@
 		A3BDD49F1C8E662D0069AAFD /* SavedMemesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedMemesTableViewCell.swift; sourceTree = "<group>"; };
 		A3BDD4A11C8E66500069AAFD /* SavedMemesCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedMemesCollectionViewCell.swift; sourceTree = "<group>"; };
 		A3BDD4A31C8E6E3F0069AAFD /* SavedMemesNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedMemesNavigationController.swift; sourceTree = "<group>"; };
+		A3BDD4A51C8E741B0069AAFD /* SavedMemeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedMemeViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,6 +173,7 @@
 				A3BDD49F1C8E662D0069AAFD /* SavedMemesTableViewCell.swift */,
 				A3BDD49D1C8E65D60069AAFD /* SavedMemesCollectionViewController.swift */,
 				A3BDD4A11C8E66500069AAFD /* SavedMemesCollectionViewCell.swift */,
+				A3BDD4A51C8E741B0069AAFD /* SavedMemeViewController.swift */,
 			);
 			name = "Saved Memes";
 			sourceTree = "<group>";
@@ -280,6 +283,7 @@
 				A324A2351C8787500037BA27 /* FontListTableViewController.swift in Sources */,
 				A383BF251C628A0C00D80668 /* Dynamic.swift in Sources */,
 				A37A2BBD1C7F713400D243A8 /* MemeStorage.swift in Sources */,
+				A3BDD4A61C8E741B0069AAFD /* SavedMemeViewController.swift in Sources */,
 				A3BDD49E1C8E65D60069AAFD /* SavedMemesCollectionViewController.swift in Sources */,
 				A39FB0771C8A2C19007E0B95 /* FontColorSelectionViewController.swift in Sources */,
 				A383BF1C1C627C1A00D80668 /* Constants.swift in Sources */,
