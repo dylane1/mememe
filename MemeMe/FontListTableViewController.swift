@@ -10,7 +10,7 @@ import UIKit
 
 class FontListTableViewController: UITableViewController {
 
-    private var viewModel: MainViewViewModel!
+    private var viewModel: MemeEditorViewModel!
     
     private var selectedFont = Constants.Fonts.impact
     private var selectedIndexPath = NSIndexPath(forRow: 0, inSection: 0)
@@ -70,7 +70,7 @@ class FontListTableViewController: UITableViewController {
         return cell
     }
     
-    internal func configure(withViewModel viewModel: MainViewViewModel) {
+    internal func configure(withViewModel viewModel: MemeEditorViewModel) {
         self.viewModel = viewModel
     }
 

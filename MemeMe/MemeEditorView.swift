@@ -8,11 +8,11 @@
 
 import UIKit
 
-protocol MainViewDataSource {
+protocol MemeEditorViewDataSource {
     var image: Dynamic<UIImage?> { get }
 }
 
-class MainView: UIView {
+class MemeEditorView: UIView {
     typealias BarButtonClosure = () -> Void
     private var albumButtonClosure: BarButtonClosure?
     private var cameraButtonClosure: BarButtonClosure?
@@ -92,7 +92,7 @@ class MainView: UIView {
         NSStrokeWidthAttributeName:     -5.0
     ]
     
-    private var dataSource: MainViewViewModel! {
+    private var dataSource: MemeEditorViewModel! {
         didSet {
             dataSource.image.bind { [unowned self] in
                 self.image = $0
@@ -106,7 +106,7 @@ class MainView: UIView {
         }
     }
     
-    private var stateMachine: StateMachine!
+    private var stateMachine: MemeEditorStateMachine!
     
     @IBOutlet weak var topField: UITextField!
     @IBOutlet weak var bottomField: UITextField!
@@ -122,17 +122,18 @@ class MainView: UIView {
     @IBOutlet weak var bottomFieldTrailingConstraint: NSLayoutConstraint!
     
     
+    deinit { magic("\(self.description) is being deinitialized   <----------------") }
     //MARK: - Internal funk(s)
     
     internal func configure(
-        withDataSource dataSource: MainViewViewModel,
+        withDataSource dataSource: MemeEditorViewModel,
         albumButtonClosure: BarButtonClosure,
         cameraButtonClosure: BarButtonClosure? = nil,
         fontButtonClosure: FontButtonClosure,
         fontColorButtonClosure: FontButtonClosure,
         memeTextUpdatedClosure: MemeTextUpdated,
         memeImageUpdatedClosure: MemeImageUpdated,
-        stateMachine: StateMachine)
+        stateMachine: MemeEditorStateMachine)
     {
         self.dataSource              = dataSource
         self.albumButtonClosure      = albumButtonClosure
@@ -366,7 +367,7 @@ class MainView: UIView {
 
 //MARK: - UITextFieldDelegate
 
-extension MainView: UITextFieldDelegate {
+extension MemeEditorView: UITextFieldDelegate {
     
     internal func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
         stateMachine.state.value = .IsEditingText

@@ -11,8 +11,8 @@
  * http://five.agency/solving-the-binding-problem-with-swift/
  * http://rasic.info/bindings-generics-swift-and-mvvm/
  *
- * Basically a simpler version of KVO...
  */
+//TODO: Can this cause retain cycles?
 
 class Dynamic<T> {
     
@@ -38,16 +38,3 @@ class Dynamic<T> {
         value = v
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-/** The End :] */

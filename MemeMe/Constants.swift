@@ -11,9 +11,12 @@ import UIKit
 struct Constants {
     /** Storyboard */
     struct StoryBoardIDs {
-        static let main                 = "Main"
-        static let fontListTableVC      = "sb_fontListTableVC"
-        static let fontColorSelectionVC = "sb_fontColorSelectionVC"
+        static let main                         = "Main"
+        static let fontListTableVC              = "sb_fontListTableVC"
+        static let fontColorSelectionVC         = "sb_fontColorSelectionVC"
+        static let sb_sentMemesVC               = "sb_sentMemesVC"
+        static let sb_memesEditorNavController  = "sb_memesEditorNavController"
+        static let sb_memesEditorVC             = "sb_memesEditorVC"
     }
     
     struct ReuseIDs {

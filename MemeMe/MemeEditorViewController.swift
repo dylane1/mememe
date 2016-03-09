@@ -10,7 +10,7 @@
 import UIKit
 import MobileCoreServices
 
-final class MainViewController: UIViewController {
+final class MemeEditorViewController: UIViewController {
     typealias ToolbarButtonClosure = () -> Void
     private var cameraButtonClosure: ToolbarButtonClosure?
     private var albumButtonClosure: ToolbarButtonClosure!
@@ -20,11 +20,11 @@ final class MainViewController: UIViewController {
     private var fontColorButtonClosure: FontButtonClosure!
     
     /** For keeping track of app state and enabling/disabling navbar buttons */
-    private var stateMachine = StateMachine()
-    private var navController: NavigationController!
+    private var stateMachine = MemeEditorStateMachine()
+    private var navController: MemeEditorNavigationController!
     
-    private var mainView: MainView!
-    private var mainViewViewModel: MainViewViewModel!
+    private var mainView: MemeEditorView!
+    private var mainViewViewModel: MemeEditorViewModel!
     
     private let imagePickerController = UIImagePickerController()
     
@@ -44,13 +44,15 @@ final class MainViewController: UIViewController {
      
      
   //MARK: - View Lifecycle
+    deinit { magic("\(self.description) is being deinitialized   <----------------") }
     
     override func viewDidLoad() {
+        magic("")
         super.viewDidLoad()
         title = LocalizedStrings.ViewControllerTitles.memeMe
         
-        mainView = view as! MainView
-        mainViewViewModel = MainViewViewModel()
+        mainView = view as! MemeEditorView
+        mainViewViewModel = MemeEditorViewModel()
         
         getFontFromDefaults()
         
@@ -181,7 +183,7 @@ final class MainViewController: UIViewController {
     }
     
     private func configureNavigationItems() {
-        navController = navigationController as! NavigationController
+        navController = navigationController as! MemeEditorNavigationController
         
         let shareButtonClosure = { [weak self] in
 
@@ -231,7 +233,7 @@ final class MainViewController: UIViewController {
             self!.presentViewController(activityVC, animated: true, completion: nil)
         }
         
-        let cancelButtonClosure = { [weak self] in
+        let clearButtonClosure = { [weak self] in
             //TODO: Probably should pop a warning alert if an image has been selected & text has been entered
             self!.mainViewViewModel.image.value = nil
             self!.mainView.resetTextFields()
@@ -239,7 +241,7 @@ final class MainViewController: UIViewController {
         
         navController.configure(
             withShareButtonClosure: shareButtonClosure,
-            cancelButtonClosure: cancelButtonClosure,
+            clearButtonClosure: clearButtonClosure,
             stateMachine: stateMachine)
     }
     
@@ -326,7 +328,7 @@ final class MainViewController: UIViewController {
 }
 
 //MARK: - UIImagePickerControllerDelegate
-extension MainViewController: UIImagePickerControllerDelegate {
+extension MemeEditorViewController: UIImagePickerControllerDelegate {
     internal func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         
         /** Update viewModel so view can update itself */
@@ -345,7 +347,7 @@ extension MainViewController: UIImagePickerControllerDelegate {
 }
 
 //MARK: - UINavigationControllerDelegate
-extension MainViewController: UINavigationControllerDelegate {
+extension MemeEditorViewController: UINavigationControllerDelegate {
     /**
     * Need this in order to set self as UIImagePikerController delegate
     * in configureImagePicker()
@@ -355,7 +357,7 @@ extension MainViewController: UINavigationControllerDelegate {
 enum DestinationOrientation {
     case Landscape, Portrait
 }
-extension MainViewController {
+extension MemeEditorViewController {
     /** Tell view to update constraints on text fields upon rotation */    
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         
@@ -368,7 +370,7 @@ extension MainViewController {
     }
 }
 
-extension MainViewController: UIPopoverPresentationControllerDelegate {
+extension MemeEditorViewController: UIPopoverPresentationControllerDelegate {
     /**
      * Needed to show the font list in popover in compact
      * environments (phone), otherwise it's a full screen modal
