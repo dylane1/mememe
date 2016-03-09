@@ -122,6 +122,7 @@ class MemeEditorView: UIView {
     @IBOutlet weak var bottomFieldTrailingConstraint: NSLayoutConstraint!
     
     
+    deinit { magic("\(self.description) is being deinitialized   <----------------") }
     //MARK: - Internal funk(s)
     
     internal func configure(

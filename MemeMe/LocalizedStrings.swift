@@ -20,7 +20,9 @@ struct LocalizedStrings {
     }
     
     struct NavigationControllerButtons {
-        static let cancel = NSLocalizedString("navButtons.cancel", value: "Cancel", comment: "")
+        static let save     = NSLocalizedString("navBarButtons.save",   value: "Save",  comment: "")
+        static let clear    = NSLocalizedString("navBarButtons.clear",  value: "Clear",  comment: "")
+        static let cancel   = NSLocalizedString("navBarButtons.cancel", value: "Cancel", comment: "")
     }
     
     struct ToolbarButtons {

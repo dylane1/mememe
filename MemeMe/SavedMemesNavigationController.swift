@@ -10,26 +10,59 @@ import UIKit
 
 class SavedMemesNavigationController: UINavigationController {
 
-    override func viewDidLoad() {
+    private var addClosure: NavbarButtonClosure?
+    
+    private var addButton: UIBarButtonItem?
+    
+    
+    //MARK: - View Lifecycle
+    
+    internal override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        setNavigationBarAttributes()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    internal func configure(withAddButtonClosure add: NavbarButtonClosure?){
+        magic("")
+        addClosure = add
+        
+        configureNavigationItems()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    internal func addButtonTapped() {
+        addClosure?()
     }
-    */
-
+    
+    private func configureNavigationItems() {
+        magic("")
+        if addClosure != nil {
+            addButton = UIBarButtonItem(
+                barButtonSystemItem: .Add,
+                target: self,
+                action: "addButtonTapped")
+            navigationBar.topItem?.rightBarButtonItem = addButton
+        }
+        
+        
+//        cancelButton = UIBarButtonItem(
+//            title: LocalizedStrings.NavigationControllerButtons.cancel,
+//            style: .Plain,
+//            target: self,
+//            action: "cancelButtonTapped")
+//        navigationBar.topItem?.rightBarButtonItem = cancelButton
+    }
+    
+//    private func updateButtonsEnabled() {
+//        switch state {
+//        case .NoImageYesText, .YesImageNoText:
+//            shareButton.enabled     = false
+//            cancelButton.enabled    = true
+//        case .YesImageYesText:
+//            shareButton.enabled     = true
+//            cancelButton.enabled    = true
+//        default:
+//            shareButton.enabled     = false
+//            cancelButton.enabled    = false
+//        }
+//    }
 }

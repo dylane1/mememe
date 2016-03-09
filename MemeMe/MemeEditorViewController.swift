@@ -44,8 +44,10 @@ final class MemeEditorViewController: UIViewController {
      
      
   //MARK: - View Lifecycle
+    deinit { magic("\(self.description) is being deinitialized   <----------------") }
     
     override func viewDidLoad() {
+        magic("")
         super.viewDidLoad()
         title = LocalizedStrings.ViewControllerTitles.memeMe
         
@@ -231,7 +233,7 @@ final class MemeEditorViewController: UIViewController {
             self!.presentViewController(activityVC, animated: true, completion: nil)
         }
         
-        let cancelButtonClosure = { [weak self] in
+        let clearButtonClosure = { [weak self] in
             //TODO: Probably should pop a warning alert if an image has been selected & text has been entered
             self!.mainViewViewModel.image.value = nil
             self!.mainView.resetTextFields()
@@ -239,7 +241,7 @@ final class MemeEditorViewController: UIViewController {
         
         navController.configure(
             withShareButtonClosure: shareButtonClosure,
-            cancelButtonClosure: cancelButtonClosure,
+            clearButtonClosure: clearButtonClosure,
             stateMachine: stateMachine)
     }
     

@@ -30,6 +30,7 @@ class MemeEditorStateMachine {
     init() {
         state = Dynamic(.NoImageNoText)
     }
+    deinit { magic("MemeEditorStateMachine is being deinitialized   <----------------") }
     
     //TODO: May need to add an .IsEditingText state to enable Cancel button while editing, even though "Done" works
     internal func changeState(withImage img: UIImage?, topText: String?, bottomText: String?) {

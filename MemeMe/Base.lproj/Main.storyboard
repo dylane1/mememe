@@ -102,15 +102,15 @@
             </objects>
             <point key="canvasLocation" x="693" y="668"/>
         </scene>
-        <!--Main View Controller-->
+        <!--Meme Editor View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="MainViewController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="sb_memesEditorVC" id="BYZ-38-t0r" customClass="MemeEditorViewController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC" customClass="MainView" customModule="MemeMe" customModuleProvider="target">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC" customClass="MemeEditorView" customModule="MemeMe" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -424,7 +424,7 @@
         <!--Meme Editor Navigation Controller-->
         <scene sceneID="UOd-j8-jrj">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="jZF-3N-A0k" customClass="MemeEditorNavigationController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="sb_memesEditorNavController" automaticallyAdjustsScrollViewInsets="NO" id="jZF-3N-A0k" customClass="MemeEditorNavigationController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="hxS-6d-bGv">

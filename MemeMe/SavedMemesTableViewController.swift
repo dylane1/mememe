@@ -8,23 +8,66 @@
 
 import UIKit
 
+//protocol SavedMemesNavigationAction {
+//    var addButtonClosure: (() -> Void)? { get }
+//}
+//
+//extension SavedMemesNavigationAction {
+//    var addButtonClosure = { [weak self] in
+//        
+//    }
+//}
+
 class SavedMemesTableViewController: UITableViewController {
+    private var navController: SavedMemesNavigationController!
+    private var memeEditorNavController: MemeEditorNavigationController?
+    
+    /** Storage */
+    private var storedMemesProvider = MemesProvider()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        
+//        self.clearsSelectionOnViewWillAppear = false
+        configureNavigationItems()
+        
     }
 
+    override func viewWillAppear(animated: Bool) {
+        //TODO: Make sure this is called when Meme Editor is dismissed
+        tableView.reloadData()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 
+    
+    private func configureNavigationItems() {
+        navController = navigationController as! SavedMemesNavigationController
+        
+        let addButtonClosure = { [weak self] in
+            
+            /** Open Meme Editor */
+            self!.memeEditorNavController = UIStoryboard(name: Constants.StoryBoardIDs.main, bundle: nil).instantiateViewControllerWithIdentifier(Constants.StoryBoardIDs.sb_memesEditorNavController) as? MemeEditorNavigationController
+            
+            self!.memeEditorNavController?.vcShouldBeDismissed = { [weak self] in
+                self!.dismissViewControllerAnimated(true) {
+                    magic("")
+                    self!.memeEditorNavController = nil
+                }
+            }
+            
+            self!.presentViewController(self!.memeEditorNavController!, animated: true, completion: nil)
+        }
+        
+        navController.configure(withAddButtonClosure: addButtonClosure)
+    }
+    
+    
+    
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {

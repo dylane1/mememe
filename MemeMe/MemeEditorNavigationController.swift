@@ -8,19 +8,17 @@
 
 import UIKit
 
-//protocol NavigationControllerDataSource {
-//    var shareButtonEnabled: Dynamic<Bool> { get }
-//    var cancelButtonEnabled: Dynamic<Bool> { get }
-//}
-
 class MemeEditorNavigationController: UINavigationController {
-    typealias NavbarButtonClosure = () -> Void
+    /** Set by presenting view controller */
+    var vcShouldBeDismissed: (() -> Void)?
+    
     private var shareClosure: NavbarButtonClosure?
     private var saveClosure: NavbarButtonClosure?
-    private var cancelClosure: NavbarButtonClosure?
+    private var clearClosure: NavbarButtonClosure?
     
     private var shareButton: UIBarButtonItem!
     private var saveButton: UIBarButtonItem!
+    private var clearButton: UIBarButtonItem!
     private var cancelButton: UIBarButtonItem!
     
     private var state: MemeEditorState = .NoImageNoText {
@@ -36,69 +34,96 @@ class MemeEditorNavigationController: UINavigationController {
         }
     }
     
+    deinit { magic("\(self.description) is being deinitialized   <----------------") }
+    
     internal override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setNavigationBarAttributes()
         configureNavigationItems()
-        
-        navigationBar.barTintColor = Constants.ColorScheme.white
-        navigationBar.tintColor    = Constants.ColorScheme.darkBlue
-        navigationBar.translucent  = true
-
-        let titleLabelAttributes = [
-            NSForegroundColorAttributeName : Constants.ColorScheme.black,
-            NSFontAttributeName: UIFont.systemFontOfSize(20, weight: UIFontWeightMedium)
-        ]
-        navigationBar.titleTextAttributes = titleLabelAttributes
     }
     
 
     //MARK: - Internal funk(s)
     
-    internal func configure(withShareButtonClosure share: NavbarButtonClosure, cancelButtonClosure cancel: NavbarButtonClosure, stateMachine state: MemeEditorStateMachine){
-        shareClosure    = share
-        cancelClosure   = cancel
-        stateMachine    = state
+    internal func configure(
+        withShareButtonClosure share: NavbarButtonClosure,
+        clearButtonClosure clear: NavbarButtonClosure,
+        stateMachine state: MemeEditorStateMachine) {
+            shareClosure    = share
+            clearClosure    = clear
+            stateMachine    = state
     }
     
     internal func shareButtonTapped() {
         shareClosure?()
     }
     
+    internal func saveButtonTapped() {
+        saveClosure?()
+    }
+    
+    internal func clearButtonTapped() {
+        clearClosure?()
+    }
+    
     internal func cancelButtonTapped() {
-        cancelClosure?()
+        vcShouldBeDismissed?()
     }
     
     
     //MARK: - Private funk(s)
     
     private func configureNavigationItems() {
+        var leftItemArray = [UIBarButtonItem]()
         
         shareButton = UIBarButtonItem(
             barButtonSystemItem: .Action,
             target: self,
             action: "shareButtonTapped")
-        navigationBar.topItem?.leftBarButtonItem = shareButton
+        leftItemArray.append(shareButton)
+        
+        saveButton = UIBarButtonItem(
+            title: LocalizedStrings.NavigationControllerButtons.save,
+            style: .Plain,
+            target: self,
+            action: "saveButtonTapped")
+        leftItemArray.append(saveButton)
+        
+        navigationBar.topItem?.leftBarButtonItems = leftItemArray
+        
+        var rightItemArray = [UIBarButtonItem]()
         
         cancelButton = UIBarButtonItem(
             title: LocalizedStrings.NavigationControllerButtons.cancel,
             style: .Plain,
             target: self,
             action: "cancelButtonTapped")
-        navigationBar.topItem?.rightBarButtonItem = cancelButton
+        rightItemArray.append(cancelButton)
+        
+        clearButton = UIBarButtonItem(
+            title: LocalizedStrings.NavigationControllerButtons.clear,
+            style: .Plain,
+            target: self,
+            action: "clearButtonTapped")
+        rightItemArray.append(clearButton)
+        
+        navigationBar.topItem?.rightBarButtonItems = rightItemArray
     }
     
     private func updateButtonsEnabled() {
         switch state {
         case .NoImageYesText, .YesImageNoText:
             shareButton.enabled     = false
-            cancelButton.enabled    = true
+            saveButton.enabled      = false
+            clearButton.enabled     = true
         case .YesImageYesText:
             shareButton.enabled     = true
-            cancelButton.enabled    = true
+            saveButton.enabled      = true
+            clearButton.enabled     = true
         default:
             shareButton.enabled     = false
-            cancelButton.enabled    = false
+            saveButton.enabled      = false
+            clearButton.enabled     = false
         }
     }
 }
