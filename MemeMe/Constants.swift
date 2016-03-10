@@ -20,7 +20,9 @@ struct Constants {
     }
     
     struct ReuseIDs {
-        static let fontListTableCell = "ruid_FontListTableCell"
+        static let fontListTableCell        = "ruid_fontListTableCell"
+        static let memeListTableCell        = "ruid_memeListTableCell"
+        static let memeListCollectionCell   = "ruid_memeListCollectionCell"
     }
     
     /** UI */

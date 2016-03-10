@@ -46,6 +46,7 @@ struct MemesProvider {
     
     private var _memeArray = [Meme]()
     internal var memeArray: [Meme] {
+        magic("\(_memeArray)")
         return _memeArray
     }
     
@@ -55,7 +56,7 @@ struct MemesProvider {
         loadMemesFromStorage()
     }
     
-    mutating internal func addNewMemeToStorage(meme: Meme) {
+    mutating internal func addNewMemeToStorage(meme: Meme, completion: (()->Void)?) {
         _memeArray.append(meme)
         
         var storedMeme = StoredMeme()
@@ -68,7 +69,7 @@ struct MemesProvider {
         storedMemeArray.append(storedMeme)
         
         /** Write storedMemesArray to archive file */
-        createJSONDataAndSave(withArray: storedMemeArray)
+        createJSONDataAndSave(withArray: storedMemeArray, completion: completion)
     }
     
     private func saveImageAndGetName(image: UIImage) -> String {
@@ -89,7 +90,7 @@ struct MemesProvider {
         return documentsDirectory
     }
     
-    private func createJSONDataAndSave(withArray array: [StoredMeme]) {
+    private func createJSONDataAndSave(withArray array: [StoredMeme], completion: (()->Void)?) {
         var jsonArray = [[String: String]]()
         
         for item in array {
@@ -108,6 +109,9 @@ struct MemesProvider {
         
         if !fileManager.createFileAtPath(Constants.ArchiveFiles.storedMemes, contents: jsonData, attributes: nil) {
             magic("Error creating archive json file! Error code: \(errno); message: \(strerror(errno))")
+        } else {
+            /** Success */
+            completion?()
         }
     }
     

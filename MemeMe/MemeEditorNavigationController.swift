@@ -47,9 +47,11 @@ class MemeEditorNavigationController: UINavigationController {
     
     internal func configure(
         withShareButtonClosure share: NavbarButtonClosure,
+        saveButtonClosure save: NavbarButtonClosure,
         clearButtonClosure clear: NavbarButtonClosure,
         stateMachine state: MemeEditorStateMachine) {
             shareClosure    = share
+            saveClosure     = save
             clearClosure    = clear
             stateMachine    = state
     }

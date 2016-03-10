@@ -219,7 +219,9 @@ final class MemeEditorViewController: UIViewController {
                     
                     /** Save the meme to storage */
                     self!.memeModel.memedImage = image
-                    self!.storedMemesProvider.addNewMemeToStorage(self!.memeModel)
+                    self!.storedMemesProvider.addNewMemeToStorage(self!.memeModel) {
+                        self!.dismissViewControllerAnimated(true, completion: nil)
+                    }
 
                     /** Reset everything */
                     self!.memeModel = Meme()
@@ -233,6 +235,15 @@ final class MemeEditorViewController: UIViewController {
             self!.presentViewController(activityVC, animated: true, completion: nil)
         }
         
+        let saveButtonClosure = { [weak self] in
+            guard let image = self!.createImage() as UIImage! else  { fatalError("error creating image") }
+            /** Save the meme to storage */
+            self!.memeModel.memedImage = image
+            self!.storedMemesProvider.addNewMemeToStorage(self!.memeModel) {
+                self!.dismissViewControllerAnimated(true, completion: nil)
+            }
+        }
+        
         let clearButtonClosure = { [weak self] in
             //TODO: Probably should pop a warning alert if an image has been selected & text has been entered
             self!.mainViewViewModel.image.value = nil
@@ -241,6 +252,7 @@ final class MemeEditorViewController: UIViewController {
         
         navController.configure(
             withShareButtonClosure: shareButtonClosure,
+            saveButtonClosure: saveButtonClosure,
             clearButtonClosure: clearButtonClosure,
             stateMachine: stateMachine)
     }
