@@ -23,7 +23,6 @@ class SavedMemesNavigationController: UINavigationController {
     }
 
     internal func configure(withAddButtonClosure add: NavbarButtonClosure?){
-        magic("")
         addClosure = add
         
         configureNavigationItems()
@@ -34,7 +33,6 @@ class SavedMemesNavigationController: UINavigationController {
     }
     
     private func configureNavigationItems() {
-        magic("")
         if addClosure != nil {
             addButton = UIBarButtonItem(
                 barButtonSystemItem: .Add,

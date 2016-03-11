@@ -46,7 +46,6 @@ struct MemesProvider {
     
     private var _memeArray = [Meme]()
     internal var memeArray: [Meme] {
-        magic("\(_memeArray)")
         return _memeArray
     }
     
@@ -61,9 +60,9 @@ struct MemesProvider {
         
         var storedMeme = StoredMeme()
         
-        storedMeme.topText          = meme.topText as String! ?? ""
-        storedMeme.bottomText       = meme.bottomText as String! ?? ""
-        storedMeme.imageName        = saveImageAndGetName(meme.image)
+        storedMeme.topText          = meme.topText
+        storedMeme.bottomText       = meme.bottomText
+        storedMeme.imageName        = saveImageAndGetName(meme.image!)
         storedMeme.memedImageName   = saveImageAndGetName(meme.memedImage!)
         
         storedMemeArray.append(storedMeme)
@@ -134,8 +133,8 @@ struct MemesProvider {
         for item in jsonArray {
             var meme = Meme()
             
-            meme.topText    = item["topText"]
-            meme.bottomText = item["bottomText"]
+            meme.topText    = item["topText"]!
+            meme.bottomText = item["bottomText"]!
             meme.image      = UIImage(contentsOfFile: getDocumentsDirectory().stringByAppendingPathComponent(item["imageName"]!))
             meme.memedImage = UIImage(contentsOfFile: getDocumentsDirectory().stringByAppendingPathComponent(item["memedImageName"]!))
             

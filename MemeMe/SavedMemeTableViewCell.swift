@@ -10,17 +10,30 @@ import UIKit
 
 class SavedMemesTableViewCell: UITableViewCell {
     @IBOutlet private weak var memeLabel: UILabel!
-    @IBOutlet private weak var memeImage: UIImageView!
+    @IBOutlet private weak var memeImageView: UIImageView!
+    
+    private var dataSource: SavedMemeCellDataSource!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    internal func configure(withDataSource dataSource: SavedMemeCellDataSource) {
+        self.dataSource = dataSource
+        configureImageView()
+        configureLabel()
     }
-
+    
+    private func configureImageView() {
+        memeImageView.backgroundColor = Constants.ColorScheme.lightGrey
+        memeImageView.image = dataSource.image
+    }
+    
+    private func configureLabel() {
+        let attributedString = NSMutableAttributedString(string: dataSource.title, attributes: dataSource.textAttributes)
+        
+        memeLabel.attributedText = attributedString
+    }
 }

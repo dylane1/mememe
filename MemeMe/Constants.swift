@@ -11,12 +11,12 @@ import UIKit
 struct Constants {
     /** Storyboard */
     struct StoryBoardIDs {
-        static let main                         = "Main"
-        static let fontListTableVC              = "sb_fontListTableVC"
-        static let fontColorSelectionVC         = "sb_fontColorSelectionVC"
-        static let sb_sentMemesVC               = "sb_sentMemesVC"
-        static let sb_memesEditorNavController  = "sb_memesEditorNavController"
-        static let sb_memesEditorVC             = "sb_memesEditorVC"
+        static let main                     = "Main"
+        static let fontListTableVC          = "sb_fontListTableVC"
+        static let fontColorSelectionVC     = "sb_fontColorSelectionVC"
+        static let sentMemesVC              = "sb_sentMemesVC"
+        static let memesEditorNavController = "sb_memesEditorNavController"
+        static let memesEditorVC            = "sb_memesEditorVC"
     }
     
     struct ReuseIDs {
@@ -24,6 +24,13 @@ struct Constants {
         static let memeListTableCell        = "ruid_memeListTableCell"
         static let memeListCollectionCell   = "ruid_memeListCollectionCell"
     }
+    
+    /** Segue */
+    
+    struct SegueIDs {
+        static let memeDetail = "seg_memeDetail"
+    }
+     
     
     /** UI */
     struct ColorScheme {

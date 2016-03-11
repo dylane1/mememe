@@ -219,9 +219,7 @@ final class MemeEditorViewController: UIViewController {
                     
                     /** Save the meme to storage */
                     self!.memeModel.memedImage = image
-                    self!.storedMemesProvider.addNewMemeToStorage(self!.memeModel) {
-                        self!.dismissViewControllerAnimated(true, completion: nil)
-                    }
+                    self!.storedMemesProvider.addNewMemeToStorage(self!.memeModel, completion: nil)
 
                     /** Reset everything */
                     self!.memeModel = Meme()
@@ -240,6 +238,9 @@ final class MemeEditorViewController: UIViewController {
             /** Save the meme to storage */
             self!.memeModel.memedImage = image
             self!.storedMemesProvider.addNewMemeToStorage(self!.memeModel) {
+                //TODO: Alert?
+                
+                /** close meme editor */
                 self!.dismissViewControllerAnimated(true, completion: nil)
             }
         }
