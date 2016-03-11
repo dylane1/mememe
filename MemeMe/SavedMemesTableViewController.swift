@@ -22,9 +22,12 @@ class SavedMemesTableViewController: UITableViewController {
     private var navController: SavedMemesNavigationController!
     private var memeEditorNavController: MemeEditorNavigationController?
     
+    private var selectedIndexPath = NSIndexPath(forRow: 0, inSection: 0)
+    
     /** Storage */
     private var storedMemesProvider = MemesProvider()
     
+    //MARK: - View Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,6 +51,7 @@ class SavedMemesTableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    //MARK: - Configuration
     
     private func configureNavigationItems() {
         navController = navigationController as! SavedMemesNavigationController
@@ -65,22 +69,22 @@ class SavedMemesTableViewController: UITableViewController {
             
             self!.presentViewController(self!.memeEditorNavController!, animated: true, completion: nil)
         }
-        
         navController.configure(withAddButtonClosure: addButtonClosure)
     }
     
 
-
-
-
     // MARK: - Navigation
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        
+        if segue.identifier == Constants.SegueIDs.memeDetail {
+            let savedMemeVC = segue.destinationViewController as! SavedMemeViewController
+            savedMemeVC.title = storedMemesProvider.memeArray[selectedIndexPath.row].topText
+            savedMemeVC.configure(withMemeImage: storedMemesProvider.memeArray[selectedIndexPath.row].memedImage!)
+        }
     }
 
 }
+
 //MARK: - Table View Data Source
 extension SavedMemesTableViewController {
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -146,9 +150,9 @@ extension SavedMemesTableViewController {
 
 //MARK: - Table View Delegate
 extension SavedMemesTableViewController {
-    
+
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
+        selectedIndexPath = indexPath
         performSegueWithIdentifier(Constants.SegueIDs.memeDetail, sender: self)
     }
     

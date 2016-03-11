@@ -36,6 +36,7 @@
 		A3BDD4A61C8E741B0069AAFD /* SavedMemeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BDD4A51C8E741B0069AAFD /* SavedMemeViewController.swift */; };
 		A3BDD4A81C8E76D10069AAFD /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BDD4A71C8E76D10069AAFD /* Extensions.swift */; };
 		A3BDD4AA1C8FBD7A0069AAFD /* SavedMemeCellDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BDD4A91C8FBD7A0069AAFD /* SavedMemeCellDataSource.swift */; };
+		A3BDD4AE1C925DD80069AAFD /* SavedMemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BDD4AD1C925DD80069AAFD /* SavedMemeView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +71,7 @@
 		A3BDD4A51C8E741B0069AAFD /* SavedMemeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedMemeViewController.swift; sourceTree = "<group>"; };
 		A3BDD4A71C8E76D10069AAFD /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		A3BDD4A91C8FBD7A0069AAFD /* SavedMemeCellDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedMemeCellDataSource.swift; sourceTree = "<group>"; };
+		A3BDD4AD1C925DD80069AAFD /* SavedMemeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedMemeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,6 +180,7 @@
 				A3BDD4AB1C8FBDF50069AAFD /* Table View */,
 				A3BDD4AC1C8FBE050069AAFD /* Collection View */,
 				A3BDD4A51C8E741B0069AAFD /* SavedMemeViewController.swift */,
+				A3BDD4AD1C925DD80069AAFD /* SavedMemeView.swift */,
 			);
 			name = "Saved Memes";
 			sourceTree = "<group>";
@@ -303,6 +306,7 @@
 				A383BF1D1C627C1A00D80668 /* LocalizedStrings.swift in Sources */,
 				A3BDD4A21C8E66500069AAFD /* SavedMemeCollectionViewCell.swift in Sources */,
 				A33DADE81C77CBA0005C0A85 /* Meme.swift in Sources */,
+				A3BDD4AE1C925DD80069AAFD /* SavedMemeView.swift in Sources */,
 				A324A2351C8787500037BA27 /* FontListTableViewController.swift in Sources */,
 				A3BDD4AA1C8FBD7A0069AAFD /* SavedMemeCellDataSource.swift in Sources */,
 				A383BF251C628A0C00D80668 /* Dynamic.swift in Sources */,
