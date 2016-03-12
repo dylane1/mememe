@@ -10,9 +10,7 @@ import UIKit
 
 private let reuseIdentifier = "Cell"
 
-class SavedMemesCollectionViewController: UICollectionViewController {
-    private var navController: SavedMemesNavigationController!
-    private var memeEditorNavController: MemeEditorNavigationController?
+class SavedMemesCollectionViewController: UICollectionViewController, SavedMemesNavigation {
     
     private var selectedIndexPath = NSIndexPath(forRow: 0, inSection: 0)
     
@@ -29,10 +27,7 @@ class SavedMemesCollectionViewController: UICollectionViewController {
         collectionView!.backgroundColor = Constants.ColorScheme.lightGrey
         collectionView!.delegate = self
 
-        // Register cell classes
-//        self.collectionView!.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-
-        // Do any additional setup after loading the view.
+        configureNavigationItems()
     }
 
     override func didReceiveMemoryWarning() {

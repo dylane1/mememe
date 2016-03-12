@@ -37,6 +37,7 @@
 		A3BDD4A81C8E76D10069AAFD /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BDD4A71C8E76D10069AAFD /* Extensions.swift */; };
 		A3BDD4AA1C8FBD7A0069AAFD /* SavedMemeCellDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BDD4A91C8FBD7A0069AAFD /* SavedMemeCellDataSource.swift */; };
 		A3BDD4AE1C925DD80069AAFD /* SavedMemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BDD4AD1C925DD80069AAFD /* SavedMemeView.swift */; };
+		A3BDD4B01C93B4B00069AAFD /* SavedMemesNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BDD4AF1C93B4AF0069AAFD /* SavedMemesNavigation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +73,7 @@
 		A3BDD4A71C8E76D10069AAFD /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		A3BDD4A91C8FBD7A0069AAFD /* SavedMemeCellDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedMemeCellDataSource.swift; sourceTree = "<group>"; };
 		A3BDD4AD1C925DD80069AAFD /* SavedMemeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedMemeView.swift; sourceTree = "<group>"; };
+		A3BDD4AF1C93B4AF0069AAFD /* SavedMemesNavigation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedMemesNavigation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,6 +179,7 @@
 			children = (
 				A3BDD4A31C8E6E3F0069AAFD /* SavedMemesNavigationController.swift */,
 				A3BDD4A91C8FBD7A0069AAFD /* SavedMemeCellDataSource.swift */,
+				A3BDD4AF1C93B4AF0069AAFD /* SavedMemesNavigation.swift */,
 				A3BDD4AB1C8FBDF50069AAFD /* Table View */,
 				A3BDD4AC1C8FBE050069AAFD /* Collection View */,
 				A3BDD4A51C8E741B0069AAFD /* SavedMemeViewController.swift */,
@@ -315,6 +318,7 @@
 				A3BDD49E1C8E65D60069AAFD /* SavedMemesCollectionViewController.swift in Sources */,
 				A39FB0771C8A2C19007E0B95 /* FontColorSelectionViewController.swift in Sources */,
 				A383BF1C1C627C1A00D80668 /* Constants.swift in Sources */,
+				A3BDD4B01C93B4B00069AAFD /* SavedMemesNavigation.swift in Sources */,
 				A3BDD4A41C8E6E3F0069AAFD /* SavedMemesNavigationController.swift in Sources */,
 				A39FB07A1C8A2C6D007E0B95 /* FontColorSelectionView.swift in Sources */,
 				A39FB07C1C8A2C84007E0B95 /* FontColorSelectionViewModel.swift in Sources */,

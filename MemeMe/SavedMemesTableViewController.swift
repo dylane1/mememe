@@ -8,28 +8,12 @@
 
 import UIKit
 
-//protocol SavedMemesNavigation: class {
-//    var navController: SavedMemesNavigationController! { get }
-//    var memeEditorNavController: MemeEditorNavigationController? { get }
-//    
-////    var addButtonClosure: (() -> Void)? { get }
-//}
-//
-//extension SavedMemesNavigation {
-//    var navController = SavedMemesNavigationController()
-////    var addButtonClosure = { [weak self] in
-////        
-////    }
-//}
-
-class SavedMemesTableViewController: UITableViewController {
-    private var navController: SavedMemesNavigationController!
-    private var memeEditorNavController: MemeEditorNavigationController?
+class SavedMemesTableViewController: UITableViewController, SavedMemesNavigation {
     
     private var selectedIndexPath = NSIndexPath(forRow: 0, inSection: 0)
     
     /** Storage */
-    private var storedMemesProvider = MemesProvider()
+    private var storedMemesProvider: MemesProvider!
     
     //MARK: - View Lifecycle
     
@@ -55,27 +39,6 @@ class SavedMemesTableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    //MARK: - Configuration
-    
-    private func configureNavigationItems() {
-        navController = navigationController as! SavedMemesNavigationController
-        
-        let addButtonClosure = { [weak self] in
-            
-            /** Open Meme Editor */
-            self!.memeEditorNavController = UIStoryboard(name: Constants.StoryBoardIDs.main, bundle: nil).instantiateViewControllerWithIdentifier(Constants.StoryBoardIDs.memesEditorNavController) as? MemeEditorNavigationController
-            
-            self!.memeEditorNavController?.vcShouldBeDismissed = { [weak self] in
-                self!.dismissViewControllerAnimated(true) {
-                    self!.memeEditorNavController = nil
-                }
-            }
-            
-            self!.presentViewController(self!.memeEditorNavController!, animated: true, completion: nil)
-        }
-        navController.configure(withAddButtonClosure: addButtonClosure)
-    }
-    
 
     // MARK: - Navigation
 
