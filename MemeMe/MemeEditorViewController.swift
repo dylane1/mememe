@@ -370,6 +370,8 @@ extension MemeEditorViewController: UINavigationControllerDelegate {
 enum DestinationOrientation {
     case Landscape, Portrait
 }
+
+//MARK: - UIContentContainer
 extension MemeEditorViewController {
     /** Tell view to update constraints on text fields upon rotation */    
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {

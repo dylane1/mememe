@@ -8,14 +8,18 @@
 
 import UIKit
 
-//protocol SavedMemesNavigationAction {
-//    var addButtonClosure: (() -> Void)? { get }
+//protocol SavedMemesNavigation: class {
+//    var navController: SavedMemesNavigationController! { get }
+//    var memeEditorNavController: MemeEditorNavigationController? { get }
+//    
+////    var addButtonClosure: (() -> Void)? { get }
 //}
 //
-//extension SavedMemesNavigationAction {
-//    var addButtonClosure = { [weak self] in
-//        
-//    }
+//extension SavedMemesNavigation {
+//    var navController = SavedMemesNavigationController()
+////    var addButtonClosure = { [weak self] in
+////        
+////    }
 //}
 
 class SavedMemesTableViewController: UITableViewController {
