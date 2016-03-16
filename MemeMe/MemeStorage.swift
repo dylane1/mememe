@@ -55,20 +55,20 @@ struct MemesProvider {
         loadMemesFromStorage()
     }
     
-    mutating internal func addNewMemeToStorage(meme: Meme) {
+    mutating internal func addNewMemeToStorage(meme: Meme, completion: (()->Void)?) {
         _memeArray.append(meme)
         
         var storedMeme = StoredMeme()
         
-        storedMeme.topText          = meme.topText as String! ?? ""
-        storedMeme.bottomText       = meme.bottomText as String! ?? ""
-        storedMeme.imageName        = saveImageAndGetName(meme.image)
+        storedMeme.topText          = meme.topText
+        storedMeme.bottomText       = meme.bottomText
+        storedMeme.imageName        = saveImageAndGetName(meme.image!)
         storedMeme.memedImageName   = saveImageAndGetName(meme.memedImage!)
         
         storedMemeArray.append(storedMeme)
         
         /** Write storedMemesArray to archive file */
-        createJSONDataAndSave(withArray: storedMemeArray)
+        createJSONDataAndSave(withArray: storedMemeArray, completion: completion)
     }
     
     private func saveImageAndGetName(image: UIImage) -> String {
@@ -89,7 +89,7 @@ struct MemesProvider {
         return documentsDirectory
     }
     
-    private func createJSONDataAndSave(withArray array: [StoredMeme]) {
+    private func createJSONDataAndSave(withArray array: [StoredMeme], completion: (()->Void)?) {
         var jsonArray = [[String: String]]()
         
         for item in array {
@@ -108,6 +108,9 @@ struct MemesProvider {
         
         if !fileManager.createFileAtPath(Constants.ArchiveFiles.storedMemes, contents: jsonData, attributes: nil) {
             magic("Error creating archive json file! Error code: \(errno); message: \(strerror(errno))")
+        } else {
+            /** Success */
+            completion?()
         }
     }
     
@@ -130,8 +133,8 @@ struct MemesProvider {
         for item in jsonArray {
             var meme = Meme()
             
-            meme.topText    = item["topText"]
-            meme.bottomText = item["bottomText"]
+            meme.topText    = item["topText"]!
+            meme.bottomText = item["bottomText"]!
             meme.image      = UIImage(contentsOfFile: getDocumentsDirectory().stringByAppendingPathComponent(item["imageName"]!))
             meme.memedImage = UIImage(contentsOfFile: getDocumentsDirectory().stringByAppendingPathComponent(item["memedImageName"]!))
             

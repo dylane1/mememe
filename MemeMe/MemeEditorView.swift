@@ -58,14 +58,14 @@ class MemeEditorView: UIView {
       * sure why anyone would want to set UITextField.text to nil, but I suppose
       * there's a reason.
      */
-    private var topText: String? = "" {
+    private var topText = "" {
         didSet {
             meme.topText = topText
             memeTextUpdatedClosure?(meme)
             stateMachine.changeState(withImage: image, topText: topText, bottomText: bottomText)
         }
     }
-    private var bottomText: String? = "" {
+    private var bottomText = "" {
         didSet {
             meme.bottomText = bottomText
             memeTextUpdatedClosure?(meme)
@@ -165,8 +165,8 @@ class MemeEditorView: UIView {
     }
     
     internal func resetTextFields() {
-        topText     = nil
-        bottomText  = nil
+        topText     = ""
+        bottomText  = ""
         
         topField.endEditing(true)
         bottomField.endEditing(true)
@@ -186,13 +186,13 @@ class MemeEditorView: UIView {
 
     internal func hidePlaceholderText() {
         /** Hide unedited field if taking snapshot of view to share */
-        topField.alpha      = (topText == "" || topText == nil) ? 0 : 1
-        bottomField.alpha   = (bottomText == "" || bottomText == nil) ? 0 : 1
+        topField.alpha      = (topText == "") ? 0 : 1
+        bottomField.alpha   = (bottomText == "") ? 0 : 1
     }
     
     internal func showPlaceholderText() {
-        topField.alpha      = (topText == "" || topText == nil) ? 0.5 : 1
-        bottomField.alpha   = (bottomText == "" || bottomText == nil) ? 0.5 : 1
+        topField.alpha      = (topText == "") ? 0.5 : 1
+        bottomField.alpha   = (bottomText == "") ? 0.5 : 1
     }
     
     //MARK: - Private funk(s)
@@ -412,8 +412,8 @@ extension MemeEditorView: UITextFieldDelegate {
     }
     
     internal func textFieldDidEndEditing(textField: UITextField) {
-        topText     = topField.text as String?
-        bottomText  = bottomField.text as String?
+        topText     = topField.text as String! ?? ""
+        bottomText  = bottomField.text as String! ?? ""
     }
     
     internal func textFieldShouldReturn(textField: UITextField) -> Bool {

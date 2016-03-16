@@ -9,8 +9,13 @@
 import UIKit
 
 struct Meme {
-    var topText: String?
-    var bottomText: String?
-    var image: UIImage!
+    var topText: String
+    var bottomText: String
+    var image: UIImage?
     var memedImage: UIImage?
+    
+    init() {
+        topText     = ""
+        bottomText  = ""
+    }
 }
