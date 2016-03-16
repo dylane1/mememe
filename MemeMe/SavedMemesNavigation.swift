@@ -32,5 +32,7 @@ extension SavedMemesNavigation where Self: UIViewController {
             self!.presentViewController(self!.memeEditorNavController, animated: true, completion: nil)
         }
         navController.configure(withAddButtonClosure: addButtonClosure)
+        
+        //TODO: Edit button
     }
 }

@@ -177,9 +177,9 @@
 		A3BDD49C1C8E65AB0069AAFD /* Saved Memes */ = {
 			isa = PBXGroup;
 			children = (
+				A3BDD4AF1C93B4AF0069AAFD /* SavedMemesNavigation.swift */,
 				A3BDD4A31C8E6E3F0069AAFD /* SavedMemesNavigationController.swift */,
 				A3BDD4A91C8FBD7A0069AAFD /* SavedMemeCellDataSource.swift */,
-				A3BDD4AF1C93B4AF0069AAFD /* SavedMemesNavigation.swift */,
 				A3BDD4AB1C8FBDF50069AAFD /* Table View */,
 				A3BDD4AC1C8FBE050069AAFD /* Collection View */,
 				A3BDD4A51C8E741B0069AAFD /* SavedMemeViewController.swift */,

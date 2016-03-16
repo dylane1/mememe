@@ -10,9 +10,11 @@ import UIKit
 
 class SavedMemesNavigationController: UINavigationController {
 
+    /** Table & Collection Views */
     private var addClosure: NavbarButtonClosure?
-    
     private var addButton: UIBarButtonItem?
+    
+    /** Detail View */
     
     
     //MARK: - View Lifecycle
