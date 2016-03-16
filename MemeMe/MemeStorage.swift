@@ -71,6 +71,14 @@ struct MemesProvider {
         createJSONDataAndSave(withArray: storedMemeArray, completion: completion)
     }
     
+    mutating internal func removeMemeFromStorage(atIndex index: Int) {
+        _memeArray.removeAtIndex(index)
+        storedMemeArray.removeAtIndex(index)
+        
+        /** Write storedMemesArray to archive file */
+        createJSONDataAndSave(withArray: storedMemeArray, completion: nil)
+    }
+    
     private func saveImageAndGetName(image: UIImage) -> String {
         let imageName = NSUUID().UUIDString + ".png"
         let filename = getDocumentsDirectory().stringByAppendingPathComponent(imageName)

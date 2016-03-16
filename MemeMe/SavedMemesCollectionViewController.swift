@@ -16,7 +16,7 @@ class SavedMemesCollectionViewController: UICollectionViewController, SavedMemes
     
     
     /** Storage */
-    private var storedMemesProvider = MemesProvider()
+    private var storedMemesProvider: MemesProvider!
     
     
     override func viewDidLoad() {
@@ -28,6 +28,12 @@ class SavedMemesCollectionViewController: UICollectionViewController, SavedMemes
         collectionView!.delegate = self
 
         configureNavigationItems()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        storedMemesProvider = MemesProvider()
+        collectionView!.reloadData()
     }
 
     override func didReceiveMemoryWarning() {

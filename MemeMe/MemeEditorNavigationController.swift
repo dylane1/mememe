@@ -76,7 +76,8 @@ class MemeEditorNavigationController: UINavigationController {
     //MARK: - Private funk(s)
     
     private func configureNavigationItems() {
-        var leftItemArray = [UIBarButtonItem]()
+        var leftItemArray   = [UIBarButtonItem]()
+        var rightItemArray  = [UIBarButtonItem]()
         
         shareButton = UIBarButtonItem(
             barButtonSystemItem: .Action,
@@ -93,7 +94,7 @@ class MemeEditorNavigationController: UINavigationController {
         
         navigationBar.topItem?.leftBarButtonItems = leftItemArray
         
-        var rightItemArray = [UIBarButtonItem]()
+        
         
         cancelButton = UIBarButtonItem(
             title: LocalizedStrings.NavigationControllerButtons.cancel,
