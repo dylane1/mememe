@@ -13,9 +13,11 @@ class SavedMemesNavigationController: UINavigationController {
     /** Table & Collection Views */
     private var addClosure: NavbarButtonClosure?
     private var addButton: UIBarButtonItem?
+//    private var editClosure: NavbarButtonClosure?
+//    private var editButton: UIBarButtonItem?
     
     /** Detail View */
-    
+    private var editMemeClosure: NavbarButtonClosure?
     
     //MARK: - View Lifecycle
     
@@ -35,6 +37,19 @@ class SavedMemesNavigationController: UINavigationController {
     }
     
     private func configureNavigationItems() {
+        var leftItemArray   = [UIBarButtonItem]()
+        var rightItemArray  = [UIBarButtonItem]()
+        
+        /** Table, Collection, & detail Views */
+//        if editClosure != nil || editMemeClosure != nil {
+//            let action = (editClosure != nil) ? "editButtonTapped" : "editMemeButtonTapped"
+//            editButton = UIBarButtonItem(
+//                title: LocalizedStrings.NavigationControllerButtons.edit,
+//                style: .Plain,
+//                target: self,
+//                action: action)
+//        }
+        
         if addClosure != nil {
             addButton = UIBarButtonItem(
                 barButtonSystemItem: .Add,

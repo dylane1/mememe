@@ -27,12 +27,16 @@ extension SavedMemesNavigation where Self: UIViewController {
         return editorNavController
     }
     
+//    let addButtonClosure = { [weak self] in
+//        self!.presentViewController(self!.memeEditorNavController, animated: true, completion: nil)
+//    }
+//    
     internal func configureNavigationItems() {
         let addButtonClosure = { [weak self] in
             self!.presentViewController(self!.memeEditorNavController, animated: true, completion: nil)
         }
         navController.configure(withAddButtonClosure: addButtonClosure)
         
-        //TODO: Edit button
+        //TODO:
     }
 }
