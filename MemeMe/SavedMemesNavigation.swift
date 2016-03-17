@@ -9,34 +9,28 @@
 import UIKit
 
 protocol SavedMemesNavigation {
-    var navController: SavedMemesNavigationController { get }
-    var memeEditorNavController: MemeEditorNavigationController { get }
+    var savedMemesNavController: SavedMemesNavigationController { get }
 }
 
 extension SavedMemesNavigation where Self: UIViewController {
-    var navController: SavedMemesNavigationController {
+    var savedMemesNavController: SavedMemesNavigationController {
         return navigationController as! SavedMemesNavigationController
     }
+
+    //MARK: - Configuration
     
-    var memeEditorNavController: MemeEditorNavigationController {
-        let editorNavController = UIStoryboard(name: Constants.StoryBoardIDs.main, bundle: nil).instantiateViewControllerWithIdentifier(Constants.StoryBoardIDs.memesEditorNavController) as! MemeEditorNavigationController
-        
-        editorNavController.vcShouldBeDismissed = { [weak self] in
-            self!.dismissViewControllerAnimated(true, completion: nil)
+    internal func configureNavigationItems(withMemeEditorNavController navController: MemeEditorNavigationController) {
+        let addButtonClosure = { [weak self] in
+            self!.presentViewController(navController, animated: true, completion: nil)
         }
-        return editorNavController
+        savedMemesNavController.configure(withAddClosure: addButtonClosure)
     }
     
-//    let addButtonClosure = { [weak self] in
-//        self!.presentViewController(self!.memeEditorNavController, animated: true, completion: nil)
-//    }
-//    
-    internal func configureNavigationItems() {
-        let addButtonClosure = { [weak self] in
-            self!.presentViewController(self!.memeEditorNavController, animated: true, completion: nil)
+    internal func configureDetailVC(forMeme meme: Meme, segue: UIStoryboardSegue) {
+        if segue.identifier == Constants.SegueIDs.memeDetail {
+            let savedMemeVC = segue.destinationViewController as! SavedMemeDetailViewController
+            savedMemeVC.title = meme.topText
+            savedMemeVC.configure(withMeme: meme)
         }
-        navController.configure(withAddButtonClosure: addButtonClosure)
-        
-        //TODO:
     }
 }

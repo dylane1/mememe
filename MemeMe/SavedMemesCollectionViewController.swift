@@ -8,14 +8,11 @@
 
 import UIKit
 
-private let reuseIdentifier = "Cell"
+//private let reuseIdentifier = "Cell"
 
-class SavedMemesCollectionViewController: UICollectionViewController, SavedMemesNavigation {
-    
+class SavedMemesCollectionViewController: UICollectionViewController, SavedMemesNavigation, MemeEditorOpener {
     private var selectedIndexPath = NSIndexPath(forRow: 0, inSection: 0)
-    
-    
-    /** Storage */
+
     private var storedMemesProvider: MemesProvider!
     
     
@@ -26,12 +23,12 @@ class SavedMemesCollectionViewController: UICollectionViewController, SavedMemes
         
         collectionView!.backgroundColor = Constants.ColorScheme.lightGrey
         collectionView!.delegate = self
-
-        configureNavigationItems()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+
+        configureNavigationItems(withMemeEditorNavController: memeEditorNavController)
         storedMemesProvider = MemesProvider()
         collectionView!.reloadData()
     }
@@ -45,11 +42,7 @@ class SavedMemesCollectionViewController: UICollectionViewController, SavedMemes
     // MARK: - Navigation
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == Constants.SegueIDs.memeDetail {
-            let savedMemeVC = segue.destinationViewController as! SavedMemeViewController
-            savedMemeVC.title = storedMemesProvider.memeArray[selectedIndexPath.row].topText
-            savedMemeVC.configure(withMemeImage: storedMemesProvider.memeArray[selectedIndexPath.row].memedImage!)
-        }
+        configureDetailVC(forMeme: storedMemesProvider.memeArray[selectedIndexPath.row], segue: segue)
     }
     
 
