@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SavedMemeDetailViewController: UIViewController/*, SavedMemesNavigation*/ {
+class SavedMemeDetailViewController: UIViewController, MemeEditorOpenable {
     @IBOutlet weak var navItem: UINavigationItem!
 
     private var savedMemeView: SavedMemeDetailView!
@@ -64,6 +64,10 @@ class SavedMemeDetailViewController: UIViewController/*, SavedMemesNavigation*/ 
         
         navItem.rightBarButtonItems = rightItemArray
     }
+ 
+    
+    //TODO: Probable want to make a MemeSharable protocol that this & MemeEditor conform to 
+    
     
     //MARK: - Actions
 

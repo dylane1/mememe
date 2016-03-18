@@ -8,11 +8,15 @@
 
 import UIKit
 
-protocol SavedMemesNavigation {
+/** 
+  Using the name SavedMemesNavigationProtocol because it makes more sense than
+  adding 'able' to make SavedMemesNavigationable or SavedMemesNavigable
+ */
+protocol SavedMemesNavigationProtocol {
     var savedMemesNavController: SavedMemesNavigationController { get }
 }
 
-extension SavedMemesNavigation where Self: UIViewController {
+extension SavedMemesNavigationProtocol where Self: UIViewController {
     var savedMemesNavController: SavedMemesNavigationController {
         return navigationController as! SavedMemesNavigationController
     }
