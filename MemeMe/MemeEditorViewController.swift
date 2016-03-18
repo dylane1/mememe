@@ -138,14 +138,14 @@ final class MemeEditorViewController: UIViewController {
             /** Set completion handler for Share */
             activityVC.completionWithItemsHandler = { [weak self] activityType, completed, returnedItems, activityError in
                 if !completed {
-                    var message = LocalizedStrings.ErrorAlerts.ShareError.message
+                    var message = LocalizedStrings.Alerts.ShareError.message
                     
                     if activityError != nil {
                         message += activityError!.localizedDescription
                     } else {
-                        message += LocalizedStrings.ErrorAlerts.ShareError.unknownError
+                        message += LocalizedStrings.Alerts.ShareError.unknownError
                     }
-                    let errorArray = [LocalizedStrings.ErrorAlerts.ShareError.title, message]
+                    let errorArray = [LocalizedStrings.Alerts.ShareError.title, message]
                     self!.errorQueue.insert(errorArray, atIndex: 0)
                     
                     /** Show unedited field if hidden */

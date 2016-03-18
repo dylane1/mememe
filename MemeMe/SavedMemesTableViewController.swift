@@ -41,7 +41,12 @@ class SavedMemesTableViewController: UITableViewController, SavedMemesNavigation
     // MARK: - Navigation
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        configureDetailVC(forMeme: storedMemesProvider.memeArray[selectedIndexPath.row], segue: segue)
+        let deletionClosure = {
+            self.storedMemesProvider.removeMemeFromStorage(atIndex: self.selectedIndexPath.row)
+            self.selectedIndexPath = NSIndexPath(forRow: 0, inSection: 0)
+            self.tableView.reloadData()
+        }
+        configureDetailVC(forMeme: storedMemesProvider.memeArray[selectedIndexPath.row], segue: segue, deletionClosure: deletionClosure)
     }
 
 }

@@ -30,11 +30,12 @@ extension SavedMemesNavigationProtocol where Self: UIViewController, Self: MemeE
         savedMemesNavController.configure(withAddClosure: addButtonClosure)
     }
     
-    internal func configureDetailVC(forMeme meme: Meme, segue: UIStoryboardSegue) {
+    internal func configureDetailVC(forMeme meme: Meme, segue: UIStoryboardSegue, deletionClosure: ()->Void) {
         if segue.identifier == Constants.SegueIDs.memeDetail {
             let savedMemeVC = segue.destinationViewController as! SavedMemeDetailViewController
             savedMemeVC.title = meme.topText
-            savedMemeVC.configure(withMeme: meme)
+            
+            savedMemeVC.configure(withMeme: meme, deletionClosure: deletionClosure)
         }
     }
 }
