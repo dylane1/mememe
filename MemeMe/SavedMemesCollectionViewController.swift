@@ -26,7 +26,7 @@ class SavedMemesCollectionViewController: UICollectionViewController, SavedMemes
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
-        configureNavigationItems(withMemeEditorNavController: memeEditorNavController)
+        configureNavigationItems()
         storedMemesProvider = MemesProvider()
         collectionView!.reloadData()
     }

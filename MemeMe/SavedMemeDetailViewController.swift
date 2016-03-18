@@ -37,7 +37,7 @@ class SavedMemeDetailViewController: UIViewController, MemeEditorOpenable {
     
 
     //MARK: - Configuration
-    
+    //TODO: add deleteClosure
     internal func configure(withMeme meme: Meme) {
         savedMemeView = view as! SavedMemeDetailView
         savedMemeView.configure(withImage: meme.memedImage!)
@@ -48,15 +48,23 @@ class SavedMemeDetailViewController: UIViewController, MemeEditorOpenable {
     
     private func configureClosures() {
         shareClosure = {
+            
+            /** 
+            
+            */
             magic("Share!")
         }
         
         deleteClosure = {
+            
+            /** 
+            
+            */
             magic("Delete!")
         }
         
-        editMemeClosure = {
-            magic("Edit!")
+        editMemeClosure = { [weak self] in
+            self!.presentViewController(self!.memeEditorNavController, animated: true, completion: nil)
         }
     }
     

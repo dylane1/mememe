@@ -89,68 +89,7 @@ final class MemeEditorViewController: UIViewController {
     }
     
 
-    
-    /** Toolbar Actions */
-    private func cameraButtonTapped() {
-        imagePickerController.sourceType = .Camera
-        presentImagePicker()
-    }
-    
-    private func albumButtonTapped() {
-        imagePickerController.sourceType = .PhotoLibrary
-        presentImagePicker()
-    }
-    
-    private func presentImagePicker() {
-        if presentedViewController == nil {
-            presentViewController(imagePickerController, animated: true, completion: nil)
-        } else {
-            dismissViewControllerAnimated(true) {
-                self.presentViewController(self.imagePickerController, animated: true, completion: nil)
-            }
-        }
-    }
-    
-    private func fontButtonTapped(button: UIBarButtonItem) {
-        /** Present a popover with available fonts */
-        let storyboard = UIStoryboard(name: Constants.StoryBoardIDs.main, bundle: nil)
-        
-        let fontListTableVC = storyboard.instantiateViewControllerWithIdentifier(Constants.StoryBoardIDs.fontListTableVC) as! FontListTableViewController
-        fontListTableVC.preferredContentSize = CGSizeMake(250, 300)
-        fontListTableVC.configure(withViewModel: mainViewViewModel)
-        fontListTableVC.modalPresentationStyle = UIModalPresentationStyle.Popover
-        
-        presentPopover(withViewController: fontListTableVC, fromButton: button)
-    }
-    
-    private func fontColorButtonTapped(button: UIBarButtonItem) {
-        /** Present a popover with available font colors */
-        let storyboard = UIStoryboard(name: Constants.StoryBoardIDs.main, bundle: nil)
-        
-        let fontColorsVC = storyboard.instantiateViewControllerWithIdentifier(Constants.StoryBoardIDs.fontColorSelectionVC) as! FontColorSelectionViewController
-        fontColorsVC.preferredContentSize = CGSizeMake(260, 116)
-        fontColorsVC.configure(withViewModel: mainViewViewModel)
-        fontColorsVC.modalPresentationStyle = UIModalPresentationStyle.Popover
-        
-        presentPopover(withViewController: fontColorsVC, fromButton: button)
-    }
-    
-    private func presentPopover(withViewController vc: UIViewController, fromButton button: UIBarButtonItem) {
-        let popoverController = vc.popoverPresentationController!
-        popoverController.barButtonItem = button
-        popoverController.permittedArrowDirections = .Any
-        popoverController.delegate = self
-        
-        if presentedViewController == nil {
-            presentViewController(vc, animated: true, completion: nil)
-        } else {
-            dismissViewControllerAnimated(true) {
-                self.presentViewController(vc, animated: true, completion: nil)
-            }
-        }
-    }
-     
-    //MARK: - Private funk(s)
+    //MARK: - Configuration
     
     private func getFontFromDefaults() {
         if let fontName = Constants.userDefaults.stringForKey(Constants.StorageKeys.fontName) as String! {
@@ -282,6 +221,69 @@ final class MemeEditorViewController: UIViewController {
         imagePickerController.mediaTypes = [kUTTypeImage as String]
     }
     
+    
+    //MARK: - Actions
+    
+    /** Toolbar Actions */
+    private func cameraButtonTapped() {
+        imagePickerController.sourceType = .Camera
+        presentImagePicker()
+    }
+    
+    private func albumButtonTapped() {
+        imagePickerController.sourceType = .PhotoLibrary
+        presentImagePicker()
+    }
+    
+    private func presentImagePicker() {
+        if presentedViewController == nil {
+            presentViewController(imagePickerController, animated: true, completion: nil)
+        } else {
+            dismissViewControllerAnimated(true) {
+                self.presentViewController(self.imagePickerController, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    private func fontButtonTapped(button: UIBarButtonItem) {
+        /** Present a popover with available fonts */
+        let storyboard = UIStoryboard(name: Constants.StoryBoardIDs.main, bundle: nil)
+        
+        let fontListTableVC = storyboard.instantiateViewControllerWithIdentifier(Constants.StoryBoardIDs.fontListTableVC) as! FontListTableViewController
+        fontListTableVC.preferredContentSize = CGSizeMake(250, 300)
+        fontListTableVC.configure(withViewModel: mainViewViewModel)
+        fontListTableVC.modalPresentationStyle = UIModalPresentationStyle.Popover
+        
+        presentPopover(withViewController: fontListTableVC, fromButton: button)
+    }
+    
+    private func fontColorButtonTapped(button: UIBarButtonItem) {
+        /** Present a popover with available font colors */
+        let storyboard = UIStoryboard(name: Constants.StoryBoardIDs.main, bundle: nil)
+        
+        let fontColorsVC = storyboard.instantiateViewControllerWithIdentifier(Constants.StoryBoardIDs.fontColorSelectionVC) as! FontColorSelectionViewController
+        fontColorsVC.preferredContentSize = CGSizeMake(260, 116)
+        fontColorsVC.configure(withViewModel: mainViewViewModel)
+        fontColorsVC.modalPresentationStyle = UIModalPresentationStyle.Popover
+        
+        presentPopover(withViewController: fontColorsVC, fromButton: button)
+    }
+    
+    private func presentPopover(withViewController vc: UIViewController, fromButton button: UIBarButtonItem) {
+        let popoverController = vc.popoverPresentationController!
+        popoverController.barButtonItem = button
+        popoverController.permittedArrowDirections = .Any
+        popoverController.delegate = self
+        
+        if presentedViewController == nil {
+            presentViewController(vc, animated: true, completion: nil)
+        } else {
+            dismissViewControllerAnimated(true) {
+                self.presentViewController(vc, animated: true, completion: nil)
+            }
+        }
+    }
+    
     private func createImage() -> UIImage {
         /** Hide unedited field before taking snapshot */
         mainView.hidePlaceholderText()
@@ -327,15 +329,6 @@ final class MemeEditorViewController: UIViewController {
         }))
         presentViewController(alert, animated: true, completion: nil)
     }
-    
-//    private func listFonts() {
-//        for family: String in UIFont.familyNames() {
-//            print("\(family)")
-//            for names: String in UIFont.fontNamesForFamilyName(family) {
-//                print("   \(names)")
-//            }
-//        }
-//    }
 }
 
 //MARK: - UIImagePickerControllerDelegate

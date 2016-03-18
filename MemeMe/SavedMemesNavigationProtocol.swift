@@ -16,16 +16,16 @@ protocol SavedMemesNavigationProtocol {
     var savedMemesNavController: SavedMemesNavigationController { get }
 }
 
-extension SavedMemesNavigationProtocol where Self: UIViewController {
+extension SavedMemesNavigationProtocol where Self: UIViewController, Self: MemeEditorOpenable {
     var savedMemesNavController: SavedMemesNavigationController {
         return navigationController as! SavedMemesNavigationController
     }
 
     //MARK: - Configuration
     
-    internal func configureNavigationItems(withMemeEditorNavController navController: MemeEditorNavigationController) {
+    internal func configureNavigationItems() {
         let addButtonClosure = { [weak self] in
-            self!.presentViewController(navController, animated: true, completion: nil)
+            self!.presentViewController(self!.memeEditorNavController, animated: true, completion: nil)
         }
         savedMemesNavController.configure(withAddClosure: addButtonClosure)
     }

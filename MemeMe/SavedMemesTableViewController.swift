@@ -27,7 +27,7 @@ class SavedMemesTableViewController: UITableViewController, SavedMemesNavigation
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
-        configureNavigationItems(withMemeEditorNavController: memeEditorNavController)
+        configureNavigationItems()
         storedMemesProvider = MemesProvider()
         tableView.reloadData()
     }

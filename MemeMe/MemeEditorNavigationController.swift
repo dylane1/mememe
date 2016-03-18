@@ -33,6 +33,11 @@ class MemeEditorNavigationController: UINavigationController {
             }
         }
     }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        magic("\(self.description) is being initialized   ----------------->")
+    }
     
     deinit { magic("\(self.description) is being deinitialized   <----------------") }
     
