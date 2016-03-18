@@ -11,9 +11,9 @@ import UIKit
 class SavedMemesNavigationController: UINavigationController {
 
     /** Table & Collection Views */
-    private var addClosure: NavbarButtonClosure?
+    private var addClosure: BarButtonClosure?
     private var addButton: UIBarButtonItem?
-//    private var editClosure: NavbarButtonClosure?
+//    private var editClosure: BarButtonClosure?
 //    private var editButton: UIBarButtonItem?
     
     
@@ -26,7 +26,7 @@ class SavedMemesNavigationController: UINavigationController {
 
     //MARK: - Configuration
     
-    internal func configure(withAddClosure add: NavbarButtonClosure) {
+    internal func configure(withAddClosure add: BarButtonClosure) {
             addClosure = add
             
             configureNavigationItems()

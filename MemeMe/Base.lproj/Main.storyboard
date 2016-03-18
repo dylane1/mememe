@@ -95,7 +95,7 @@
                             <outlet property="imageView" destination="01C-jX-WzQ" id="H8s-yo-mFh"/>
                         </connections>
                     </view>
-                    <navigationItem key="navigationItem" title="Title" id="PxZ-U7-I1p"/>
+                    <navigationItem key="navigationItem" title="Title" id="PxZ-U7-I1p" customClass="SavedMemeDetailNavigationItem" customModule="MemeMe" customModuleProvider="target"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="navItem" destination="PxZ-U7-I1p" id="sPI-ZT-ELf"/>

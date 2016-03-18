@@ -8,8 +8,6 @@
 
 import UIKit
 
-//private let reuseIdentifier = "Cell"
-
 class SavedMemesCollectionViewController: UICollectionViewController, SavedMemesNavigationProtocol, MemeEditorOpenable {
     private var selectedIndexPath = NSIndexPath(forRow: 0, inSection: 0)
 

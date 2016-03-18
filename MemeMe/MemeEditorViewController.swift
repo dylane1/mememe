@@ -11,13 +11,11 @@ import UIKit
 import MobileCoreServices
 
 final class MemeEditorViewController: UIViewController {
-    typealias ToolbarButtonClosure = () -> Void
-    private var cameraButtonClosure: ToolbarButtonClosure?
-    private var albumButtonClosure: ToolbarButtonClosure!
+    private var cameraButtonClosure: BarButtonClosure?
+    private var albumButtonClosure: BarButtonClosure!
     
-    typealias FontButtonClosure = (UIBarButtonItem) -> Void
-    private var fontButtonClosure: FontButtonClosure!
-    private var fontColorButtonClosure: FontButtonClosure!
+    private var fontButtonClosure: BarButtonClosureReturningButtonSource!
+    private var fontColorButtonClosure: BarButtonClosureReturningButtonSource!
     
     /** For keeping track of app state and enabling/disabling navbar buttons */
     private var stateMachine = MemeEditorStateMachine()

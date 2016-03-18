@@ -12,9 +12,9 @@ class MemeEditorNavigationController: UINavigationController {
     /** Set by presenting view controller */
     var vcShouldBeDismissed: (() -> Void)?
     
-    private var shareClosure: NavbarButtonClosure?
-    private var saveClosure: NavbarButtonClosure?
-    private var clearClosure: NavbarButtonClosure?
+    private var shareClosure: BarButtonClosure?
+    private var saveClosure: BarButtonClosure?
+    private var clearClosure: BarButtonClosure?
     
     private var shareButton: UIBarButtonItem!
     private var saveButton: UIBarButtonItem!
@@ -46,9 +46,9 @@ class MemeEditorNavigationController: UINavigationController {
     //MARK: - Internal funk(s)
     
     internal func configure(
-        withShareButtonClosure share: NavbarButtonClosure,
-        saveButtonClosure save: NavbarButtonClosure,
-        clearButtonClosure clear: NavbarButtonClosure,
+        withShareButtonClosure share: BarButtonClosure,
+        saveButtonClosure save: BarButtonClosure,
+        clearButtonClosure clear: BarButtonClosure,
         stateMachine state: MemeEditorStateMachine) {
             shareClosure    = share
             saveClosure     = save

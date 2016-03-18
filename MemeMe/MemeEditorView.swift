@@ -17,10 +17,9 @@ class MemeEditorView: UIView {
     private var albumButtonClosure: BarButtonClosure?
     private var cameraButtonClosure: BarButtonClosure?
     
-    typealias FontButtonClosure = (UIBarButtonItem) -> Void
-    private var fontButtonClosure: FontButtonClosure?
+    private var fontButtonClosure: BarButtonClosureReturningButtonSource?
     private var fontButton: UIBarButtonItem!
-    private var fontColorButtonClosure: FontButtonClosure?
+    private var fontColorButtonClosure: BarButtonClosureReturningButtonSource?
     private var fontColorButton: UIBarButtonItem!
     
     typealias MemeTextUpdated = (Meme) -> Void
@@ -129,8 +128,8 @@ class MemeEditorView: UIView {
         withDataSource dataSource: MemeEditorViewModel,
         albumButtonClosure: BarButtonClosure,
         cameraButtonClosure: BarButtonClosure? = nil,
-        fontButtonClosure: FontButtonClosure,
-        fontColorButtonClosure: FontButtonClosure,
+        fontButtonClosure: BarButtonClosureReturningButtonSource,
+        fontColorButtonClosure: BarButtonClosureReturningButtonSource,
         memeTextUpdatedClosure: MemeTextUpdated,
         memeImageUpdatedClosure: MemeImageUpdated,
         stateMachine: MemeEditorStateMachine)

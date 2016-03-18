@@ -9,14 +9,21 @@
 import UIKit
 
 class SavedMemeDetailViewController: UIViewController, MemeEditorOpenable {
-    @IBOutlet weak var navItem: UINavigationItem!
-
+    @IBOutlet weak var navItem: SavedMemeDetailNavigationItem!
+    private var shareClosure: BarButtonClosure!
+    private var deleteClosure: BarButtonClosure!
+    private var editMemeClosure: BarButtonClosure!
+    
     private var savedMemeView: SavedMemeDetailView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         hidesBottomBarWhenPushed = true
-        configureNavItems()
+        configureClosures()
+        navItem.configure(
+            withShareClosure: shareClosure,
+            deleteClosure: deleteClosure,
+            editMemeClosure: editMemeClosure)
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -36,48 +43,23 @@ class SavedMemeDetailViewController: UIViewController, MemeEditorOpenable {
         savedMemeView.configure(withImage: meme.memedImage!)
     }
     
-    private func configureNavItems() {
-        var rightItemArray  = [UIBarButtonItem]()
-
-        navItem.leftItemsSupplementBackButton = true
+    
+    //TODO: Probable want to make a MemeSharable protocol that this & MemeEditor conform to
+    
+    private func configureClosures() {
+        shareClosure = {
+            magic("Share!")
+        }
         
-        let shareButton = UIBarButtonItem(
-            barButtonSystemItem: .Action,
-            target: self,
-            action: "shareButtonTapped")
-
-        navItem.leftBarButtonItem = shareButton
+        deleteClosure = {
+            magic("Delete!")
+        }
         
-        let deleteButton = UIBarButtonItem(
-            barButtonSystemItem: .Trash,
-            target: self,
-            action: "deleteButtonTapped")
-        
-        rightItemArray.append(deleteButton)
-        
-        let editMemeButton = UIBarButtonItem(
-            barButtonSystemItem: .Edit,
-            target: self,
-            action: "editButtonTapped")
-        
-        rightItemArray.append(editMemeButton)
-        
-        navItem.rightBarButtonItems = rightItemArray
+        editMemeClosure = {
+            magic("Edit!")
+        }
     }
- 
-    
-    //TODO: Probable want to make a MemeSharable protocol that this & MemeEditor conform to 
-    
     
     //MARK: - Actions
 
-    internal func shareButtonTapped() {
-//        shareClosure?()
-    }
-    internal func deleteButtonTapped() {
-//        deleteClosure?()
-    }
-    internal func editButtonTapped() {
-//        editMemeClosure?()
-    }
 }
