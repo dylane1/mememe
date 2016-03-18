@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SavedMemesTableViewController: UITableViewController, SavedMemesNavigationProtocol, MemeEditorOpenable {
+class SavedMemesTableViewController: UITableViewController, SavedMemesNavigationProtocol, MemeEditorPresentable {
     private var selectedIndexPath = NSIndexPath(forRow: 0, inSection: 0)
     
     private var storedMemesProvider: MemesProvider!

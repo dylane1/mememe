@@ -8,13 +8,26 @@
 
 import UIKit
 
-class SavedMemeDetailViewController: UIViewController, MemeEditorOpenable {
+class SavedMemeDetailViewController: UIViewController, ActivityViewControllerPresentable, MemeEditorPresentable {
     @IBOutlet weak var navItem: SavedMemeDetailNavigationItem!
     private var shareClosure: BarButtonClosure!
     private var deleteClosure: BarButtonClosure!
     private var editMemeClosure: BarButtonClosure!
     
     private var savedMemeView: SavedMemeDetailView!
+    
+    /** ShareActivityOpenable */
+    internal var imageToShare = UIImage()
+    internal var activityViewControllerCompletion: UIActivityViewControllerCompletionWithItemsHandler = { activityType, completed, returnedItems, activityError in
+        if !completed {
+        //TODO: pop alert
+        fatalError(LocalizedStrings.ErrorAlerts.ShareError.message)
+        
+        } else {
+        /** Success! */
+        
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,9 +51,11 @@ class SavedMemeDetailViewController: UIViewController, MemeEditorOpenable {
 
     //MARK: - Configuration
     //TODO: add deleteClosure
+    //TODO: needs to be called again when coming back from edit
     internal func configure(withMeme meme: Meme) {
         savedMemeView = view as! SavedMemeDetailView
         savedMemeView.configure(withImage: meme.memedImage!)
+        imageToShare = meme.memedImage!
     }
     
     
@@ -48,11 +63,7 @@ class SavedMemeDetailViewController: UIViewController, MemeEditorOpenable {
     
     private func configureClosures() {
         shareClosure = {
-            
-            /** 
-            
-            */
-            magic("Share!")
+            self.presentViewController(self.activityViewController, animated: true, completion: nil)
         }
         
         deleteClosure = {

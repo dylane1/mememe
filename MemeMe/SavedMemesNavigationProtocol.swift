@@ -16,7 +16,7 @@ protocol SavedMemesNavigationProtocol {
     var savedMemesNavController: SavedMemesNavigationController { get }
 }
 
-extension SavedMemesNavigationProtocol where Self: UIViewController, Self: MemeEditorOpenable {
+extension SavedMemesNavigationProtocol where Self: UIViewController, Self: MemeEditorPresentable {
     var savedMemesNavController: SavedMemesNavigationController {
         return navigationController as! SavedMemesNavigationController
     }

@@ -8,11 +8,11 @@
 
 import UIKit
 
-protocol MemeEditorOpenable {
+protocol MemeEditorPresentable {
     var memeEditorNavController: MemeEditorNavigationController { get }
 }
 
-extension MemeEditorOpenable where Self: UIViewController {
+extension MemeEditorPresentable where Self: UIViewController {
     var memeEditorNavController: MemeEditorNavigationController {
         let editorNavController = UIStoryboard(name: Constants.StoryBoardIDs.main, bundle: nil).instantiateViewControllerWithIdentifier(Constants.StoryBoardIDs.memesEditorNavController) as! MemeEditorNavigationController
         
