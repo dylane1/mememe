@@ -9,24 +9,35 @@
 
 import UIKit
 import MobileCoreServices
-//TODO: conform to ActivityViewControllerPresentable
 
-final class MemeEditorViewController: UIViewController {
+final class MemeEditorViewController: UIViewController, ActivityViewControllerPresentable {
+    private var meme = Meme()
+    
+    /** View */
     private var mainView: MemeEditorView!
     private var mainViewViewModel: MemeEditorViewModel!
+    
+    /** Navigation */
     private var navController: MemeEditorNavigationController!
     
-    /** Toolbar button closures (passed to mainView & its toolbar */
+    /** For keeping track of app state and enabling/disabling navbar buttons */
+    private var stateMachine = MemeEditorStateMachine()
+    
+    /** Toolbar button closures (passed to mainView & its toolbar) */
     private var cameraButtonClosure: BarButtonClosure?
     private var albumButtonClosure: BarButtonClosure!
     private var fontButtonClosure: BarButtonClosureReturningButtonSource!
     private var fontColorButtonClosure: BarButtonClosureReturningButtonSource!
     
-    /** For keeping track of app state and enabling/disabling navbar buttons */
-    private var stateMachine = MemeEditorStateMachine()
+    /** Picking an image */
+    private lazy var imagePickerController = UIImagePickerController()
     
-    //FIXME: Set to optional & nil it after closing image picker
-    private let imagePickerController = UIImagePickerController()
+    /** ActivityViewControllerPresentable -- For Sharing */
+    internal lazy var imageToShare = UIImage()
+    internal var activitySuccessCompletion: (() -> Void)? = nil
+    
+    /** Saving to Storage */
+    private lazy var storedMemesProvider = MemesProvider()
     
     /** 
      * For keeping track of errors that occur when the imagePickerController is 
@@ -37,20 +48,17 @@ final class MemeEditorViewController: UIViewController {
     private var errorQueue = [[String]]()
     
     
-    
-    
-    
-    //TODO: ActivityViewControllerPresentable
-    private var imageToShare: UIImage?
-    
-    private var memeModel = Meme()
-    
-    /** Storage */
-    private var storedMemesProvider = MemesProvider()
-     
-     
     //MARK: - View Lifecycle
     
+//    required init(withMeme meme: Meme? = nil, atIndex index: Int? = nil) {
+//        super.init(nibName: nil, bundle: nil)
+//        
+//    }
+//
+//    required init?(coder aDecoder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+//    
     deinit { magic("\(self.description) is being deinitialized   <----------------") }
     
     override func viewDidLoad() {
@@ -66,32 +74,8 @@ final class MemeEditorViewController: UIViewController {
         
         configureNavigationItems()
         configureToolbarItems()
-        configureImagePicker()
         
-        let memeTextUpdatedClosure = { [weak self] (updatedMeme: Meme) -> Void in
-            self!.memeModel = updatedMeme
-        }
-        
-        let memeImageUpdatedClosure = { [weak self] (originalMeme: Meme, newImage: UIImage?) -> Meme in
-            /** Delete previous image from storage if needed (MemeMe v2)*/
-            
-            
-            /** Update meme model */
-            self!.memeModel.image = newImage
-            
-            return self!.memeModel
-        }
-        
-        mainView.configure(
-            withDataSource: mainViewViewModel,
-            albumButtonClosure: albumButtonClosure,
-            cameraButtonClosure: cameraButtonClosure,
-            fontButtonClosure: fontButtonClosure,
-            fontColorButtonClosure: fontColorButtonClosure,
-            memeTextUpdatedClosure: memeTextUpdatedClosure,
-            memeImageUpdatedClosure: memeImageUpdatedClosure,
-            stateMachine: stateMachine
-        )
+        configureMemeEditorView()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -105,9 +89,9 @@ final class MemeEditorViewController: UIViewController {
         If coming from Table or Collection view, meme will be nil. If coming
         from Meme Detail VC, we need to prepopulate the image & text fields
     */
-    internal func configure(withMeme meme: Meme?) {
-        
-    }
+//    internal func configure(withMeme meme: Meme? = nil, atIndex index: Int? = nil) {
+//        
+//    }
     
     
     
@@ -175,11 +159,11 @@ final class MemeEditorViewController: UIViewController {
                     
                     
                     /** Save the meme to storage */
-                    self!.memeModel.memedImage = image
-                    self!.storedMemesProvider.addNewMemeToStorage(self!.memeModel, completion: nil)
+                    self!.meme.memedImage = image
+                    self!.storedMemesProvider.addNewMemeToStorage(self!.meme, completion: nil)
 
                     /** Reset everything */
-                    self!.memeModel = Meme()
+                    self!.meme = Meme()
                     self!.mainViewViewModel.image.value = nil
                     self!.mainView.resetTextFields()
                 }
@@ -193,8 +177,8 @@ final class MemeEditorViewController: UIViewController {
         let saveButtonClosure = { [weak self] in
             guard let image = self!.createImage() as UIImage! else  { fatalError("error creating image") }
             /** Save the meme to storage */
-            self!.memeModel.memedImage = image
-            self!.storedMemesProvider.addNewMemeToStorage(self!.memeModel) {
+            self!.meme.memedImage = image
+            self!.storedMemesProvider.addNewMemeToStorage(self!.meme) {
                 //TODO: Alert?
                 
                 /** close meme editor */
@@ -235,22 +219,49 @@ final class MemeEditorViewController: UIViewController {
             self!.fontColorButtonTapped(button)
         }
     }
-    
+
     private func configureImagePicker() {
         imagePickerController.delegate = self
         imagePickerController.mediaTypes = [kUTTypeImage as String]
     }
     
+    private func configureMemeEditorView() {
+        let memeTextUpdatedClosure = { [weak self] (updatedMeme: Meme) -> Void in
+            self!.meme = updatedMeme
+        }
+        
+        let memeImageUpdatedClosure = { [weak self] (originalMeme: Meme, newImage: UIImage?) -> Meme in
+            /** Delete previous image from storage if needed (MemeMe v2)*/
+        
+        
+            /** Update meme */
+            self!.meme.image = newImage
+            
+            return self!.meme
+        }
+            
+        mainView.configure(
+            withDataSource: mainViewViewModel,
+            albumButtonClosure: albumButtonClosure,
+            cameraButtonClosure: cameraButtonClosure,
+            fontButtonClosure: fontButtonClosure,
+            fontColorButtonClosure: fontColorButtonClosure,
+            memeTextUpdatedClosure: memeTextUpdatedClosure,
+            memeImageUpdatedClosure: memeImageUpdatedClosure,
+            stateMachine: stateMachine)
+    }
     
     //MARK: - Actions
     
     /** Toolbar Actions */
     private func cameraButtonTapped() {
+        configureImagePicker()
         imagePickerController.sourceType = .Camera
         presentImagePicker()
     }
     
     private func albumButtonTapped() {
+        configureImagePicker()
         imagePickerController.sourceType = .PhotoLibrary
         presentImagePicker()
     }
@@ -359,7 +370,7 @@ extension MemeEditorViewController: UIImagePickerControllerDelegate {
         mainViewViewModel.image.value = image
         
         /** Set the image in the memeModel so it can be saved to storage */
-        memeModel.image = image
+        meme.image = image
         
         dismissViewControllerAnimated(true, completion: nil)
     }

@@ -26,7 +26,7 @@ class SavedMemeDetailViewController: UIViewController, ActivityViewControllerPre
     
 
     /** ActivityViewControllerPresentable */
-    internal var imageToShare = UIImage()
+    internal lazy var imageToShare = UIImage()
     internal var activitySuccessCompletion: (() -> Void)? = nil //no need to do anything after sharing
     
     

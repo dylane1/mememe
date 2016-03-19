@@ -55,7 +55,7 @@ struct MemesProvider {
         loadMemesFromStorage()
     }
     
-    mutating internal func addNewMemeToStorage(meme: Meme, completion: (()->Void)?) {
+    mutating internal func addNewMemeToStorage(meme: Meme, completion: (() -> Void)?) {
         _memeArray.append(meme)
         
         var storedMeme = StoredMeme()
@@ -77,6 +77,10 @@ struct MemesProvider {
         
         /** Write storedMemesArray to archive file */
         createJSONDataAndSave(withArray: storedMemeArray, completion: nil)
+    }
+    
+    mutating internal func updateMemeFromStorage(atIndex index: Int, withMeme meme: Meme, completion: (() -> Void)?) {
+        
     }
     
     private func saveImageAndGetName(image: UIImage) -> String {
