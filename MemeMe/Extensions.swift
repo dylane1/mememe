@@ -9,8 +9,6 @@
 import UIKit
 
 extension UINavigationController {
-    typealias NavbarButtonClosure = () -> Void
-    
     internal func setNavigationBarAttributes() {
         navigationBar.barTintColor = Constants.ColorScheme.white
         navigationBar.tintColor    = Constants.ColorScheme.darkBlue

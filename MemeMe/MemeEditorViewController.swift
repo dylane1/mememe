@@ -9,23 +9,23 @@
 
 import UIKit
 import MobileCoreServices
+//TODO: conform to ActivityViewControllerPresentable
 
 final class MemeEditorViewController: UIViewController {
-    typealias ToolbarButtonClosure = () -> Void
-    private var cameraButtonClosure: ToolbarButtonClosure?
-    private var albumButtonClosure: ToolbarButtonClosure!
+    private var mainView: MemeEditorView!
+    private var mainViewViewModel: MemeEditorViewModel!
+    private var navController: MemeEditorNavigationController!
     
-    typealias FontButtonClosure = (UIBarButtonItem) -> Void
-    private var fontButtonClosure: FontButtonClosure!
-    private var fontColorButtonClosure: FontButtonClosure!
+    /** Toolbar button closures (passed to mainView & its toolbar */
+    private var cameraButtonClosure: BarButtonClosure?
+    private var albumButtonClosure: BarButtonClosure!
+    private var fontButtonClosure: BarButtonClosureReturningButtonSource!
+    private var fontColorButtonClosure: BarButtonClosureReturningButtonSource!
     
     /** For keeping track of app state and enabling/disabling navbar buttons */
     private var stateMachine = MemeEditorStateMachine()
-    private var navController: MemeEditorNavigationController!
     
-    private var mainView: MemeEditorView!
-    private var mainViewViewModel: MemeEditorViewModel!
-    
+    //FIXME: Set to optional & nil it after closing image picker
     private let imagePickerController = UIImagePickerController()
     
     /** 
@@ -33,8 +33,14 @@ final class MemeEditorViewController: UIViewController {
      * open, then popping an error alert after imagePickerController has been
      * dismissed
      */
+     //TODO: Remove errorQueue (not saving image to photo library)
     private var errorQueue = [[String]]()
     
+    
+    
+    
+    
+    //TODO: ActivityViewControllerPresentable
     private var imageToShare: UIImage?
     
     private var memeModel = Meme()
@@ -43,12 +49,14 @@ final class MemeEditorViewController: UIViewController {
     private var storedMemesProvider = MemesProvider()
      
      
-  //MARK: - View Lifecycle
+    //MARK: - View Lifecycle
+    
     deinit { magic("\(self.description) is being deinitialized   <----------------") }
     
     override func viewDidLoad() {
-        magic("")
         super.viewDidLoad()
+        magic("\(self.description) is loaded   ---------------->")
+        
         title = LocalizedStrings.ViewControllerTitles.memeMe
         
         mainView = view as! MemeEditorView
@@ -91,68 +99,17 @@ final class MemeEditorViewController: UIViewController {
     }
     
 
+    //MARK: - Configuration
     
-    /** Toolbar Actions */
-    private func cameraButtonTapped() {
-        imagePickerController.sourceType = .Camera
-        presentImagePicker()
-    }
-    
-    private func albumButtonTapped() {
-        imagePickerController.sourceType = .PhotoLibrary
-        presentImagePicker()
-    }
-    
-    private func presentImagePicker() {
-        if presentedViewController == nil {
-            presentViewController(imagePickerController, animated: true, completion: nil)
-        } else {
-            dismissViewControllerAnimated(true) {
-                self.presentViewController(self.imagePickerController, animated: true, completion: nil)
-            }
-        }
-    }
-    
-    private func fontButtonTapped(button: UIBarButtonItem) {
-        /** Present a popover with available fonts */
-        let storyboard = UIStoryboard(name: Constants.StoryBoardIDs.main, bundle: nil)
+    /** 
+        If coming from Table or Collection view, meme will be nil. If coming
+        from Meme Detail VC, we need to prepopulate the image & text fields
+    */
+    internal func configure(withMeme meme: Meme?) {
         
-        let fontListTableVC = storyboard.instantiateViewControllerWithIdentifier(Constants.StoryBoardIDs.fontListTableVC) as! FontListTableViewController
-        fontListTableVC.preferredContentSize = CGSizeMake(250, 300)
-        fontListTableVC.configure(withViewModel: mainViewViewModel)
-        fontListTableVC.modalPresentationStyle = UIModalPresentationStyle.Popover
-        
-        presentPopover(withViewController: fontListTableVC, fromButton: button)
     }
     
-    private func fontColorButtonTapped(button: UIBarButtonItem) {
-        /** Present a popover with available font colors */
-        let storyboard = UIStoryboard(name: Constants.StoryBoardIDs.main, bundle: nil)
-        
-        let fontColorsVC = storyboard.instantiateViewControllerWithIdentifier(Constants.StoryBoardIDs.fontColorSelectionVC) as! FontColorSelectionViewController
-        fontColorsVC.preferredContentSize = CGSizeMake(260, 116)
-        fontColorsVC.configure(withViewModel: mainViewViewModel)
-        fontColorsVC.modalPresentationStyle = UIModalPresentationStyle.Popover
-        
-        presentPopover(withViewController: fontColorsVC, fromButton: button)
-    }
     
-    private func presentPopover(withViewController vc: UIViewController, fromButton button: UIBarButtonItem) {
-        let popoverController = vc.popoverPresentationController!
-        popoverController.barButtonItem = button
-        popoverController.permittedArrowDirections = .Any
-        popoverController.delegate = self
-        
-        if presentedViewController == nil {
-            presentViewController(vc, animated: true, completion: nil)
-        } else {
-            dismissViewControllerAnimated(true) {
-                self.presentViewController(vc, animated: true, completion: nil)
-            }
-        }
-    }
-     
-    //MARK: - Private funk(s)
     
     private func getFontFromDefaults() {
         if let fontName = Constants.userDefaults.stringForKey(Constants.StorageKeys.fontName) as String! {
@@ -201,14 +158,14 @@ final class MemeEditorViewController: UIViewController {
             /** Set completion handler for Share */
             activityVC.completionWithItemsHandler = { [weak self] activityType, completed, returnedItems, activityError in
                 if !completed {
-                    var message = LocalizedStrings.ErrorAlerts.ShareError.message
+                    var message = LocalizedStrings.Alerts.ShareError.message
                     
                     if activityError != nil {
                         message += activityError!.localizedDescription
                     } else {
-                        message += LocalizedStrings.ErrorAlerts.ShareError.unknownError
+                        message += LocalizedStrings.Alerts.ShareError.unknownError
                     }
-                    let errorArray = [LocalizedStrings.ErrorAlerts.ShareError.title, message]
+                    let errorArray = [LocalizedStrings.Alerts.ShareError.title, message]
                     self!.errorQueue.insert(errorArray, atIndex: 0)
                     
                     /** Show unedited field if hidden */
@@ -284,6 +241,69 @@ final class MemeEditorViewController: UIViewController {
         imagePickerController.mediaTypes = [kUTTypeImage as String]
     }
     
+    
+    //MARK: - Actions
+    
+    /** Toolbar Actions */
+    private func cameraButtonTapped() {
+        imagePickerController.sourceType = .Camera
+        presentImagePicker()
+    }
+    
+    private func albumButtonTapped() {
+        imagePickerController.sourceType = .PhotoLibrary
+        presentImagePicker()
+    }
+    
+    private func presentImagePicker() {
+        if presentedViewController == nil {
+            presentViewController(imagePickerController, animated: true, completion: nil)
+        } else {
+            dismissViewControllerAnimated(true) {
+                self.presentViewController(self.imagePickerController, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    private func fontButtonTapped(button: UIBarButtonItem) {
+        /** Present a popover with available fonts */
+        let storyboard = UIStoryboard(name: Constants.StoryBoardIDs.main, bundle: nil)
+        
+        let fontListTableVC = storyboard.instantiateViewControllerWithIdentifier(Constants.StoryBoardIDs.fontListTableVC) as! FontListTableViewController
+        fontListTableVC.preferredContentSize = CGSizeMake(250, 300)
+        fontListTableVC.configure(withViewModel: mainViewViewModel)
+        fontListTableVC.modalPresentationStyle = UIModalPresentationStyle.Popover
+        
+        presentPopover(withViewController: fontListTableVC, fromButton: button)
+    }
+    
+    private func fontColorButtonTapped(button: UIBarButtonItem) {
+        /** Present a popover with available font colors */
+        let storyboard = UIStoryboard(name: Constants.StoryBoardIDs.main, bundle: nil)
+        
+        let fontColorsVC = storyboard.instantiateViewControllerWithIdentifier(Constants.StoryBoardIDs.fontColorSelectionVC) as! FontColorSelectionViewController
+        fontColorsVC.preferredContentSize = CGSizeMake(260, 116)
+        fontColorsVC.configure(withViewModel: mainViewViewModel)
+        fontColorsVC.modalPresentationStyle = UIModalPresentationStyle.Popover
+        
+        presentPopover(withViewController: fontColorsVC, fromButton: button)
+    }
+    
+    private func presentPopover(withViewController vc: UIViewController, fromButton button: UIBarButtonItem) {
+        let popoverController = vc.popoverPresentationController!
+        popoverController.barButtonItem = button
+        popoverController.permittedArrowDirections = .Any
+        popoverController.delegate = self
+        
+        if presentedViewController == nil {
+            presentViewController(vc, animated: true, completion: nil)
+        } else {
+            dismissViewControllerAnimated(true) {
+                self.presentViewController(vc, animated: true, completion: nil)
+            }
+        }
+    }
+    
     private func createImage() -> UIImage {
         /** Hide unedited field before taking snapshot */
         mainView.hidePlaceholderText()
@@ -329,15 +349,6 @@ final class MemeEditorViewController: UIViewController {
         }))
         presentViewController(alert, animated: true, completion: nil)
     }
-    
-//    private func listFonts() {
-//        for family: String in UIFont.familyNames() {
-//            print("\(family)")
-//            for names: String in UIFont.fontNamesForFamilyName(family) {
-//                print("   \(names)")
-//            }
-//        }
-//    }
 }
 
 //MARK: - UIImagePickerControllerDelegate

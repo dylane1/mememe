@@ -8,11 +8,9 @@
 
 import UIKit
 
-class SavedMemesTableViewController: UITableViewController, SavedMemesNavigation {
-    
+class SavedMemesTableViewController: UITableViewController, SavedMemesNavigationProtocol, MemeEditorPresentable {
     private var selectedIndexPath = NSIndexPath(forRow: 0, inSection: 0)
     
-    /** Storage */
     private var storedMemesProvider: MemesProvider!
     
     //MARK: - View Lifecycle
@@ -24,12 +22,12 @@ class SavedMemesTableViewController: UITableViewController, SavedMemesNavigation
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.delegate = self
-
-        configureNavigationItems()
-        
     }
 
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+
+        configureNavigationItems()
         storedMemesProvider = MemesProvider()
         tableView.reloadData()
     }
@@ -43,16 +41,16 @@ class SavedMemesTableViewController: UITableViewController, SavedMemesNavigation
     // MARK: - Navigation
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == Constants.SegueIDs.memeDetail {
-            let savedMemeVC = segue.destinationViewController as! SavedMemeViewController
-            savedMemeVC.title = storedMemesProvider.memeArray[selectedIndexPath.row].topText
-            //TODO: pass meme instead so it can be edited
-            //TODO: pass a deleteClosure to reset selectedIndex
-            savedMemeVC.configure(withMemeImage: storedMemesProvider.memeArray[selectedIndexPath.row].memedImage!)
+        let deletionClosure = {
+            self.storedMemesProvider.removeMemeFromStorage(atIndex: self.selectedIndexPath.row)
+            self.selectedIndexPath = NSIndexPath(forRow: 0, inSection: 0)
+            self.tableView.reloadData()
         }
+        configureDetailVC(forMeme: storedMemesProvider.memeArray[selectedIndexPath.row], segue: segue, deletionClosure: deletionClosure)
     }
 
 }
+
 
 //MARK: - Table View Data Source
 extension SavedMemesTableViewController {
@@ -80,36 +78,16 @@ extension SavedMemesTableViewController {
         return cell
     }
     
-    
-    // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
     }
    
-    
-   
-    // Override to support editing the table view.
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             storedMemesProvider.removeMemeFromStorage(atIndex: indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }
     }
-    
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-    
-    }
-    */
-    
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-    // Return false if you do not want the item to be re-orderable.
-    return true
-    }
-    */
 }
 
 
@@ -132,29 +110,4 @@ extension SavedMemesTableViewController {
         footerView.backgroundColor = UIColor.clearColor()
         return footerView
     }
-    
-//    override func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath:NSIndexPath) -> UITableViewCellEditingStyle
-//    {
-//        if ((!editing)){
-//            return UITableViewCellEditingStyle.None;
-//        }
-//        
-//        if (editing && indexPath.row == intervalArray.count){
-//            return UITableViewCellEditingStyle.Insert;
-//        }
-//        else{
-//            return UITableViewCellEditingStyle.Delete;
-//        }
-//    }
-//    
-//    override func tableView(tableView: UITableView, targetIndexPathForMoveFromRowAtIndexPath sourceIndexPath: NSIndexPath, toProposedIndexPath proposedDestinationIndexPath: NSIndexPath) -> NSIndexPath {
-//        let proposedInterval = intervalArray[proposedDestinationIndexPath.row]
-//        
-//        if proposedInterval.isWarmUp {
-//            return NSIndexPath(forItem: proposedDestinationIndexPath.row + 1, inSection: 0)
-//        } else if proposedInterval.isCoolDown {
-//            return NSIndexPath(forItem: proposedDestinationIndexPath.row - 1, inSection: 0)
-//        }
-//        return proposedDestinationIndexPath
-//    }
 }

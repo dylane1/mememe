@@ -20,9 +20,10 @@ struct LocalizedStrings {
     }
     
     struct NavigationControllerButtons {
-        static let save     = NSLocalizedString("navBarButtons.save",   value: "Save",  comment: "")
-        static let clear    = NSLocalizedString("navBarButtons.clear",  value: "Clear",  comment: "")
-        static let cancel   = NSLocalizedString("navBarButtons.cancel", value: "Cancel", comment: "")
+        static let save     = NSLocalizedString("navBarButtons.save",   value: "Save",      comment: "")
+        static let clear    = NSLocalizedString("navBarButtons.clear",  value: "Clear",     comment: "")
+        static let cancel   = NSLocalizedString("navBarButtons.cancel", value: "Cancel",    comment: "")
+        static let back     = NSLocalizedString("navBarButtons.back",   value: "Back",      comment: "")
     }
     
     struct ToolbarButtons {
@@ -31,7 +32,7 @@ struct LocalizedStrings {
         static let color    = NSLocalizedString("toolbarButtons.color", value: "Color", comment: "")
     }
     
-    struct ErrorAlerts {
+    struct Alerts {
         struct ImageSaveError {
             static let title    = NSLocalizedString("imageSaveError.title",   value: "Save Error", comment: "")
             static let message  = NSLocalizedString("imageSaveError.message", value: "Sorry, image was not saved because: ", comment: "")
@@ -42,9 +43,15 @@ struct LocalizedStrings {
             static let message      = NSLocalizedString("shareError.message",       value: "Sorry, sharing meme was not successful because: ", comment: "")
             static let unknownError = NSLocalizedString("shareError.unknownError",  value: "Unknown Error", comment: "")
         }
+        
+        struct DeleteMemeConfirm {
+            static let title    = NSLocalizedString("deleteMemeConfirm.title",   value: "Delete Meme", comment: "")
+            static let message  = NSLocalizedString("deleteMemeConfirm.message", value: "Are you sure you want to permanently remove this meme?", comment: "")
+        }
     }
     
     struct ButtonTitles {
-        static let ok = NSLocalizedString("buttonTitles.ok", value: "OK", comment: "")
+        static let ok       = NSLocalizedString("buttonTitles.ok",      value: "OK",     comment: "")
+        static let cancel   = NSLocalizedString("buttonTitles.cancel",  value: "Cancel", comment: "")
     }
 }
