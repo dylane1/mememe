@@ -10,27 +10,27 @@ import UIKit
 
 class SavedMemeDetailViewController: UIViewController, ActivityViewControllerPresentable, MemeEditorPresentable {
     @IBOutlet weak var navItem: SavedMemeDetailNavigationItem!
+    private var savedMemeView: SavedMemeDetailView!
+    
+    /** Closures passed to navItem */
     private var shareButtonClosure: BarButtonClosure!
     private var deleteButtonClosure: BarButtonClosure!
     private var editMemeButtonClosure: BarButtonClosure!
     
-    /** Sent from Table or Collection View to reset */
+    //TODO: Comment where everything is being sent from in all the files! 
+    /** 
+      Sent from TableVC or CollectionVC via SavedMemesNavigationProtocol
+      extension to reset the table or collection view
+    */
     private var deleteClosure: (()->Void)?
     
-    private var savedMemeView: SavedMemeDetailView!
-    
-    /** ShareActivityOpenable */
+
+    /** ActivityViewControllerPresentable */
     internal var imageToShare = UIImage()
-    internal var activityViewControllerCompletion: UIActivityViewControllerCompletionWithItemsHandler = { activityType, completed, returnedItems, activityError in
-        if !completed {
-        //TODO: pop alert if there is an actual error (this gets called if user taps cancel also)
-        magic(LocalizedStrings.Alerts.ShareError.message)
-        
-        } else {
-        /** Success! */
-        
-        }
-    }
+    internal var activitySuccessCompletion: (() -> Void)? = nil //no need to do anything after sharing
+    
+    
+    //MARK: - View Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,7 +64,7 @@ class SavedMemeDetailViewController: UIViewController, ActivityViewControllerPre
             editMemeClosure: editMemeButtonClosure)
     }
 
-    
+
     private func configureClosures() {
         shareButtonClosure = {
             self.presentViewController(self.activityViewController, animated: true, completion: nil)

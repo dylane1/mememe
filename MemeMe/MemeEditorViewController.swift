@@ -11,19 +11,20 @@ import UIKit
 import MobileCoreServices
 
 final class MemeEditorViewController: UIViewController {
+    private var mainView: MemeEditorView!
+    private var mainViewViewModel: MemeEditorViewModel!
+    private var navController: MemeEditorNavigationController!
+    
+    /** Toolbar button closures (passed to mainView & its toolbar */
     private var cameraButtonClosure: BarButtonClosure?
     private var albumButtonClosure: BarButtonClosure!
-    
     private var fontButtonClosure: BarButtonClosureReturningButtonSource!
     private var fontColorButtonClosure: BarButtonClosureReturningButtonSource!
     
     /** For keeping track of app state and enabling/disabling navbar buttons */
     private var stateMachine = MemeEditorStateMachine()
-    private var navController: MemeEditorNavigationController!
     
-    private var mainView: MemeEditorView!
-    private var mainViewViewModel: MemeEditorViewModel!
-    
+    //FIXME: Set to optional & nil it after closing image picker
     private let imagePickerController = UIImagePickerController()
     
     /** 
@@ -31,8 +32,14 @@ final class MemeEditorViewController: UIViewController {
      * open, then popping an error alert after imagePickerController has been
      * dismissed
      */
+     //TODO: Remove errorQueue (not saving image to photo library)
     private var errorQueue = [[String]]()
     
+    
+    
+    
+    
+    //TODO: ActivityViewControllerPresentable
     private var imageToShare: UIImage?
     
     private var memeModel = Meme()
@@ -41,12 +48,14 @@ final class MemeEditorViewController: UIViewController {
     private var storedMemesProvider = MemesProvider()
      
      
-  //MARK: - View Lifecycle
+    //MARK: - View Lifecycle
+    
     deinit { magic("\(self.description) is being deinitialized   <----------------") }
     
     override func viewDidLoad() {
-        magic("")
         super.viewDidLoad()
+        magic("\(self.description) is loaded   ---------------->")
+        
         title = LocalizedStrings.ViewControllerTitles.memeMe
         
         mainView = view as! MemeEditorView
@@ -90,6 +99,12 @@ final class MemeEditorViewController: UIViewController {
     
 
     //MARK: - Configuration
+    
+    internal func configure(withMeme meme: Meme?) {
+        
+    }
+    
+    
     
     private func getFontFromDefaults() {
         if let fontName = Constants.userDefaults.stringForKey(Constants.StorageKeys.fontName) as String! {
