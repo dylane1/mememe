@@ -9,6 +9,7 @@
 
 import UIKit
 import MobileCoreServices
+//TODO: conform to ActivityViewControllerPresentable
 
 final class MemeEditorViewController: UIViewController {
     private var mainView: MemeEditorView!
@@ -100,6 +101,10 @@ final class MemeEditorViewController: UIViewController {
 
     //MARK: - Configuration
     
+    /** 
+        If coming from Table or Collection view, meme will be nil. If coming
+        from Meme Detail VC, we need to prepopulate the image & text fields
+    */
     internal func configure(withMeme meme: Meme?) {
         
     }
