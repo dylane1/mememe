@@ -8,10 +8,11 @@
 
 import UIKit
 
-class SavedMemeDetailNavigationItem: UINavigationItem {
+final class SavedMemeDetailNavigationItem: UINavigationItem {
     private var shareClosure: BarButtonClosure!
     private var deleteClosure: BarButtonClosure!
     private var editMemeClosure: BarButtonClosure!
+    
     //MARK: - Configuration
     
     internal func configure(
@@ -33,21 +34,21 @@ class SavedMemeDetailNavigationItem: UINavigationItem {
         let shareButton = UIBarButtonItem(
             barButtonSystemItem: .Action,
             target: self,
-            action: "shareButtonTapped")
+            action: #selector(shareButtonTapped))
         
         leftBarButtonItem = shareButton
         
         let deleteButton = UIBarButtonItem(
             barButtonSystemItem: .Trash,
             target: self,
-            action: "deleteButtonTapped")
+            action: #selector(deleteButtonTapped))
         
         rightItemArray.append(deleteButton)
         
         let editMemeButton = UIBarButtonItem(
             barButtonSystemItem: .Edit,
             target: self,
-            action: "editButtonTapped")
+            action: #selector(editButtonTapped))
         
         rightItemArray.append(editMemeButton)
         

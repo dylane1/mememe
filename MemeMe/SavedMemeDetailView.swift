@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SavedMemeDetailView: UIView {
+final class SavedMemeDetailView: UIView {
 
     private var image: UIImage? = nil {
         didSet {

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SavedMemesCollectionViewCell: UICollectionViewCell {
+final class SavedMemesCollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var memeImageView: UIImageView!
     
     private var dataSource: SavedMemeCellDataSource!

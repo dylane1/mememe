@@ -9,6 +9,9 @@
 import UIKit
 
 extension UINavigationController {
+    /** Set by presenting view controller */
+    internal var vcShouldBeDismissed: (() -> Void)?
+    
     internal func setNavigationBarAttributes() {
         navigationBar.barTintColor = Constants.ColorScheme.white
         navigationBar.tintColor    = Constants.ColorScheme.darkBlue

@@ -20,7 +20,7 @@ enum MemeEditorState {
  Adapted (sort of) from this article: http://www.figure.ink/blog/2015/2/1/swift-state-machines-part-2
  */
 
-class MemeEditorStateMachine {
+final class MemeEditorStateMachine {
     /** 
      * NavigationController is listening for changes in this var & enables/disables
      * bar buttons based on current app state
@@ -29,6 +29,7 @@ class MemeEditorStateMachine {
     
     init() {
         state = Dynamic(.NoImageNoText)
+        magic("MemeEditorStateMachine is initialized   ---------------->")
     }
     deinit { magic("MemeEditorStateMachine is being deinitialized   <----------------") }
     
