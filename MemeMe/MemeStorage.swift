@@ -71,6 +71,7 @@ struct MemesProvider {
         storedMeme.topText          = meme.topText
         storedMeme.bottomText       = meme.bottomText
         storedMeme.fontName         = getFontName(meme.font)
+        magic("stored fontName: \(storedMeme.fontName)")
         storedMeme.fontColorName    = getFontColorName(meme.fontColor)
         storedMeme.memedImageName   = saveImageAndGetName(meme.memedImage!)
         

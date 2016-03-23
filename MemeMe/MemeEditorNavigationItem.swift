@@ -1,22 +1,20 @@
 //
-//  NavigationController.swift
-//  Pitch Perfect
+//  MemeEditorNavigationItem.swift
+//  MemeMe
 //
-//  Created by Dylan Edwards on 1/26/16.
+//  Created by Dylan Edwards on 3/18/16.
 //  Copyright © 2016 Slinging Pixels Media. All rights reserved.
 //
 
 import UIKit
 
-class MemeEditorNavigationController: UINavigationController {
-    /** Set by presenting view controller */
-    var vcShouldBeDismissed: (() -> Void)?
-    
+final class MemeEditorNavigationItem: UINavigationItem {
     private var shareClosure: BarButtonClosure?
     private var saveClosure: BarButtonClosure?
     private var clearClosure: BarButtonClosure?
+    private var cancelClosure: BarButtonClosure?
     
-    private var shareButton: UIBarButtonItem!
+    private var shareButton: UIBarButtonItem?
     private var saveButton: UIBarButtonItem!
     private var clearButton: UIBarButtonItem!
     private var cancelButton: UIBarButtonItem!
@@ -33,33 +31,70 @@ class MemeEditorNavigationController: UINavigationController {
             }
         }
     }
-
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        magic("\(self.description) is being initialized   ----------------->")
-    }
     
-    deinit { magic("\(self.description) is being deinitialized   <----------------") }
-    
-    internal override func viewDidLoad() {
-        super.viewDidLoad()
-        setNavigationBarAttributes()
-        configureNavigationItems()
-    }
-    
-
-    //MARK: - Internal funk(s)
+    //MARK: - Configuration
     
     internal func configure(
-        withShareButtonClosure share: BarButtonClosure,
+        withShareButtonClosure share: BarButtonClosure?,
         saveButtonClosure save: BarButtonClosure,
         clearButtonClosure clear: BarButtonClosure,
+        cancelButtonClosure cancel: BarButtonClosure,
         stateMachine state: MemeEditorStateMachine) {
+        
             shareClosure    = share
             saveClosure     = save
             clearClosure    = clear
+            cancelClosure   = cancel
+        
+            configureNavigationItems()
+        
             stateMachine    = state
     }
+    
+    private func configureNavigationItems() {
+        
+        var leftItemArray   = [UIBarButtonItem]()
+        var rightItemArray  = [UIBarButtonItem]()
+        
+        /** 
+         * Only add share button to new meme beging created. Already existing
+         * memes can be shared from the SavedMemeDetail screen.
+         */
+        if shareClosure != nil {
+            shareButton = UIBarButtonItem(
+                barButtonSystemItem: .Action,
+                target: self,
+                action: #selector(shareButtonTapped))
+            leftItemArray.append(shareButton!)
+        }
+        
+        saveButton = UIBarButtonItem(
+            title: LocalizedStrings.NavigationControllerButtons.save,
+            style: .Plain,
+            target: self,
+            action: #selector(saveButtonTapped))
+        leftItemArray.append(saveButton)
+        
+        leftBarButtonItems = leftItemArray
+        
+        cancelButton = UIBarButtonItem(
+            title: LocalizedStrings.NavigationControllerButtons.cancel,
+            style: .Plain,
+            target: self,
+            action: #selector(cancelButtonTapped))
+        rightItemArray.append(cancelButton)
+        
+        clearButton = UIBarButtonItem(
+            title: LocalizedStrings.NavigationControllerButtons.clear,
+            style: .Plain,
+            target: self,
+            action: #selector(clearButtonTapped))
+        rightItemArray.append(clearButton)
+        
+        rightBarButtonItems = rightItemArray
+    }
+    
+    //MARK: - Actions
     
     internal func shareButtonTapped() {
         shareClosure?()
@@ -74,62 +109,21 @@ class MemeEditorNavigationController: UINavigationController {
     }
     
     internal func cancelButtonTapped() {
-        vcShouldBeDismissed?()
-    }
-    
-    
-    //MARK: - Private funk(s)
-    
-    private func configureNavigationItems() {
-        var leftItemArray   = [UIBarButtonItem]()
-        var rightItemArray  = [UIBarButtonItem]()
-        
-        shareButton = UIBarButtonItem(
-            barButtonSystemItem: .Action,
-            target: self,
-            action: "shareButtonTapped")
-        leftItemArray.append(shareButton)
-        
-        saveButton = UIBarButtonItem(
-            title: LocalizedStrings.NavigationControllerButtons.save,
-            style: .Plain,
-            target: self,
-            action: "saveButtonTapped")
-        leftItemArray.append(saveButton)
-        
-        navigationBar.topItem?.leftBarButtonItems = leftItemArray
-        
-        
-        
-        cancelButton = UIBarButtonItem(
-            title: LocalizedStrings.NavigationControllerButtons.cancel,
-            style: .Plain,
-            target: self,
-            action: "cancelButtonTapped")
-        rightItemArray.append(cancelButton)
-        
-        clearButton = UIBarButtonItem(
-            title: LocalizedStrings.NavigationControllerButtons.clear,
-            style: .Plain,
-            target: self,
-            action: "clearButtonTapped")
-        rightItemArray.append(clearButton)
-        
-        navigationBar.topItem?.rightBarButtonItems = rightItemArray
+        cancelClosure?()
     }
     
     private func updateButtonsEnabled() {
         switch state {
         case .NoImageYesText, .YesImageNoText:
-            shareButton.enabled     = false
+            if shareButton != nil { shareButton!.enabled = false }
             saveButton.enabled      = false
             clearButton.enabled     = true
         case .YesImageYesText:
-            shareButton.enabled     = true
+            if shareButton != nil { shareButton!.enabled = true }
             saveButton.enabled      = true
             clearButton.enabled     = true
         default:
-            shareButton.enabled     = false
+            if shareButton != nil { shareButton!.enabled = false }
             saveButton.enabled      = false
             clearButton.enabled     = false
         }

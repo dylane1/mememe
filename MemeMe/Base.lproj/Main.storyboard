@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="P3N-HC-PvD">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="P3N-HC-PvD">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -188,6 +188,9 @@
                             </textField>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="O5O-Lm-pak">
                                 <rect key="frame" x="0.0" y="524" width="320" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="Ply-d1-Vp9"/>
+                                </constraints>
                                 <items>
                                     <barButtonItem title="Item" id="xBg-ru-4H1"/>
                                 </items>
@@ -196,7 +199,6 @@
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="lDJ-6o-SZU" secondAttribute="trailing" id="DBU-kL-sJM"/>
-                            <constraint firstItem="O5O-Lm-pak" firstAttribute="top" secondItem="Uk3-37-oVi" secondAttribute="bottom" id="ECr-L0-Yj0"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="O5O-Lm-pak" secondAttribute="bottom" id="HWl-D3-Exo"/>
                             <constraint firstItem="ElJ-y3-uEI" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="J06-sq-nji"/>
                             <constraint firstAttribute="trailing" secondItem="O5O-Lm-pak" secondAttribute="trailing" id="K2d-Uj-mvO"/>
@@ -207,6 +209,7 @@
                             <constraint firstAttribute="trailingMargin" secondItem="ElJ-y3-uEI" secondAttribute="trailing" id="pQn-79-KKp"/>
                             <constraint firstItem="O5O-Lm-pak" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="qmZ-pb-Rhb"/>
                             <constraint firstItem="Uk3-37-oVi" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="tnq-8A-OAD"/>
+                            <constraint firstItem="O5O-Lm-pak" firstAttribute="top" secondItem="Uk3-37-oVi" secondAttribute="bottom" id="wPf-cJ-rza"/>
                             <constraint firstItem="lDJ-6o-SZU" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="xTW-Qr-dpd"/>
                         </constraints>
                         <connections>
@@ -222,12 +225,15 @@
                             <outlet property="topFieldTrailingConstraint" destination="pQn-79-KKp" id="3Ai-LH-sQ8"/>
                         </connections>
                     </view>
-                    <navigationItem key="navigationItem" id="1RZ-Ak-Y7f"/>
+                    <navigationItem key="navigationItem" id="1RZ-Ak-Y7f" customClass="MemeEditorNavigationItem" customModule="MemeMe" customModuleProvider="target"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="navItem" destination="1RZ-Ak-Y7f" id="Ibw-B0-UGH"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2678" y="147"/>
+            <point key="canvasLocation" x="3490" y="147"/>
         </scene>
         <!--Font List Table View Controller-->
         <scene sceneID="ugl-q5-sgp">
@@ -277,7 +283,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7fg-YX-VKO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3982" y="109"/>
+            <point key="canvasLocation" x="4794" y="109"/>
         </scene>
         <!--Font Color Selection View Controller-->
         <scene sceneID="8X2-22-4wX">
@@ -418,7 +424,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Wp-xX-eeV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3609" y="115"/>
+            <point key="canvasLocation" x="4421" y="115"/>
         </scene>
         <!--Item-->
         <scene sceneID="cuz-15-Vf2">
@@ -479,24 +485,24 @@
             </objects>
             <point key="canvasLocation" x="-250" y="340"/>
         </scene>
-        <!--Meme Editor Navigation Controller-->
-        <scene sceneID="UOd-j8-jrj">
+        <!--Navigation Controller-->
+        <scene sceneID="XUU-xb-iM3">
             <objects>
-                <navigationController storyboardIdentifier="sb_memesEditorNavController" automaticallyAdjustsScrollViewInsets="NO" id="jZF-3N-A0k" customClass="MemeEditorNavigationController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="sb_memesEditorNavController" automaticallyAdjustsScrollViewInsets="NO" id="hkh-Ui-3yh" customClass="NavigationController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="hxS-6d-bGv">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="eUI-ZW-DUp">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="hy4-tj-pbZ"/>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="KM7-en-cbM"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="QMK-qJ-dEO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fCl-AA-9c7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2251" y="147"/>
+            <point key="canvasLocation" x="3071" y="147"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>

@@ -22,20 +22,18 @@ enum MemeEditorState {
 
 final class MemeEditorStateMachine {
     /** 
-     * NavigationController is listening for changes in this var & enables/disables
-     * bar buttons based on current app state
+     * MemeEditorNavigationItem is listening for changes in this var & 
+     * enables/disables bar buttons based on current app state
      */
     internal var state: Dynamic<MemeEditorState>
     
     init() {
         state = Dynamic(.NoImageNoText)
-        magic("MemeEditorStateMachine is initialized   ---------------->")
+//        magic("MemeEditorStateMachine is initialized   ---------------->")
     }
-    deinit { magic("MemeEditorStateMachine is being deinitialized   <----------------") }
+//    deinit { magic("MemeEditorStateMachine is being deinitialized   <----------------") }
     
-    //TODO: May need to add an .IsEditingText state to enable Cancel button while editing, even though "Done" works
     internal func changeState(withImage img: UIImage?, topText: String?, bottomText: String?) {
-        
         let image = (img == nil)                            ? false : true
         let tText = (topText == nil || topText == "")       ? false : true
         let bText = (bottomText == nil || bottomText == "") ? false : true

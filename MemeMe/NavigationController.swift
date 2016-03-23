@@ -8,11 +8,21 @@
 
 import UIKit
 
-extension UINavigationController {
+class NavigationController: UINavigationController {
+    
     /** Set by presenting view controller */
     internal var vcShouldBeDismissed: (() -> Void)?
     
-    internal func setNavigationBarAttributes() {
+//    deinit { magic("\(self.description) is being deinitialized   <----------------") }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+//        magic("\(self.description) has been loaded   ---------------->")
+        setNavigationBarAttributes()
+    }
+    
+    private func setNavigationBarAttributes() {
+        
         navigationBar.barTintColor = Constants.ColorScheme.white
         navigationBar.tintColor    = Constants.ColorScheme.darkBlue
         navigationBar.translucent  = true

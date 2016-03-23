@@ -8,11 +8,12 @@
 
 import UIKit
 
-class SavedMemesCollectionViewController: UICollectionViewController, SavedMemesNavigationProtocol, MemeEditorPresentable {
+final class SavedMemesCollectionViewController: UICollectionViewController, SavedMemesNavigationProtocol, MemeEditorPresentable {
     private var selectedIndexPath = NSIndexPath(forRow: 0, inSection: 0)
 
     private var storedMemesProvider: MemesProvider!
     
+    internal var memeEditorNavController: NavigationController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,14 +46,8 @@ class SavedMemesCollectionViewController: UICollectionViewController, SavedMemes
             self.selectedIndexPath = NSIndexPath(forRow: 0, inSection: 0)
             self.collectionView!.reloadData()
         }
-        configureDetailVC(forMeme: storedMemesProvider.memeArray[selectedIndexPath.row], segue: segue, deletionClosure: deletionClosure)
+        configureDetailViewController(forMeme: storedMemesProvider.memeArray[selectedIndexPath.row], selectedIndex: selectedIndexPath.row, segue: segue, deletionClosure: deletionClosure)
     }
-    
-
-    
-
-    
-
 }
 
 // MARK: - UICollectionViewDataSource
@@ -68,7 +63,7 @@ extension SavedMemesCollectionViewController {
     }
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(Constants.ReuseIDs.memeListCollectionCell, forIndexPath: indexPath) as! SavedMemesCollectionViewCell
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(Constants.ReuseID.memeListCollectionCell, forIndexPath: indexPath) as! SavedMemesCollectionViewCell
         
         let title = (storedMemesProvider.memeArray[indexPath.row].topText != "") ? storedMemesProvider.memeArray[indexPath.row].topText : storedMemesProvider.memeArray[indexPath.row].bottomText
         
@@ -85,7 +80,7 @@ extension SavedMemesCollectionViewController {
     
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         selectedIndexPath = indexPath
-        performSegueWithIdentifier(Constants.SegueIDs.memeDetail, sender: self)
+        performSegueWithIdentifier(Constants.SegueID.memeDetail, sender: self)
     }
     
     /*
