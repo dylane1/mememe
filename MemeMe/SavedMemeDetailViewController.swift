@@ -12,6 +12,8 @@ final class SavedMemeDetailViewController: UIViewController, ActivityViewControl
     @IBOutlet weak var navItem: SavedMemeDetailNavigationItem!
     private var savedMemeView: SavedMemeDetailView!
     
+    private var storedMemesProvider: MemesProvider!
+    
     /** Closures passed to navItem */
     private var shareButtonClosure: BarButtonClosure!
     private var deleteButtonClosure: BarButtonClosure!
@@ -38,10 +40,18 @@ final class SavedMemeDetailViewController: UIViewController, ActivityViewControl
     override func viewDidLoad() {
         super.viewDidLoad()
         hidesBottomBarWhenPushed = true
+        savedMemeView = view as! SavedMemeDetailView
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
+        /** Meme may have been changed in Editor, so load on viewWillAppear */
+        storedMemesProvider = MemesProvider()
+        
+        meme = storedMemesProvider.memeArray[selectedIndex]
+        magic("top: \(meme.topText)")
+        savedMemeView.configure(withImage: meme.memedImage!)
     }
     
     override func didReceiveMemoryWarning() {
@@ -51,14 +61,8 @@ final class SavedMemeDetailViewController: UIViewController, ActivityViewControl
     
     //MARK: - Configuration
 
-    //TODO: memedImage/imageToShare need to be changed when coming back from edit
-    internal func configure(withMeme meme: Meme, selectedIndex: Int, deletionClosure delete: BarButtonClosure) {
-        self.meme           = meme
-        self.selectedIndex  = selectedIndex
-        
-        savedMemeView = view as! SavedMemeDetailView
-        savedMemeView.configure(withImage: meme.memedImage!)
-        
+    internal func configure(withSelectedIndex index: Int, deletionClosure delete: BarButtonClosure) {
+        selectedIndex  = index
         deleteClosure   = delete
         
         configureClosures()

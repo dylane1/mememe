@@ -8,10 +8,6 @@
 
 import UIKit
 
-/** 
-  Using the name SavedMemesNavigationProtocol because it makes more sense than
-  adding 'able' to make SavedMemesNavigationable or SavedMemesNavigable
- */
 protocol SavedMemesNavigationProtocol {
     var savedMemesNavController: SavedMemesNavigationController { get }
 }
@@ -39,7 +35,7 @@ extension SavedMemesNavigationProtocol where Self: UIViewController, Self: MemeE
             
             savedMemeVC.title = (meme.topText != "") ? meme.topText : meme.bottomText
             
-            savedMemeVC.configure(withMeme: meme, selectedIndex: selectedIndex, deletionClosure: deletionClosure)
+            savedMemeVC.configure(withSelectedIndex: selectedIndex, deletionClosure: deletionClosure)
         }
     }
 }
