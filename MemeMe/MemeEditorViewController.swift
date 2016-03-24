@@ -39,7 +39,6 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
     private lazy var imagePickerController = UIImagePickerController()
     
     /** ActivityViewControllerPresentable -- For Sharing */
-//    internal var imageToShare: UIImage?
     internal var activityViewController: UIActivityViewController?
     internal var activitySuccessCompletion: (() -> Void)? = nil
     
@@ -209,22 +208,42 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
         let memeImageUpdatedClosure = { [unowned self] (newImage: UIImage?) -> Void in
             /** Update image */
             self.meme.image = newImage
+            
+            /**
+             * If editing an existing meme, need to set that image as well so it
+             * doesn't get reset back to old image in viewWillAppear()
+             */
+            if self.memeToUpdate != nil {
+                self.memeToUpdate!.image = newImage
+            }
         }
         
         let memeTextUpdatedClosure = { [unowned self] (topText: String, bottomText: String) -> Void in
             self.meme.topText      = topText
             self.meme.bottomText   = bottomText
+            
+            if self.memeToUpdate != nil {
+                self.memeToUpdate!.topText      = topText
+                self.memeToUpdate!.bottomText   = bottomText
+            }
         }
         
         let memeFontUpdatedClosure = { [unowned self] (newFont: UIFont) -> Void in
             /** Update image */
             self.meme.font = newFont
             
+            if self.memeToUpdate != nil {
+                self.memeToUpdate!.font = newFont
+            }
         }
         
         let memeFontColorUpdatedClosure = { [unowned self] (newColor: UIColor) -> Void in
             /** Update image */
             self.meme.fontColor = newColor
+            
+            if self.memeToUpdate != nil {
+                self.memeToUpdate!.fontColor = newColor
+            }
         }
         
         mainView.configure(
@@ -366,12 +385,9 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
 //MARK: - UIImagePickerControllerDelegate
 extension MemeEditorViewController: UIImagePickerControllerDelegate {
     internal func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-        
+
         /** Update viewModel so view can update itself */
         mainViewViewModel.image.value = image
-        
-        /** Set the image in the memeModel so it can be saved to storage */
-        meme.image = image
         
         dismissViewControllerAnimated(true, completion: nil)
     }

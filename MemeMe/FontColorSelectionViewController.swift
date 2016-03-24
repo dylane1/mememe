@@ -24,6 +24,7 @@ class FontColorSelectionViewController: UIViewController {
         selectionView = view as! FontColorSelectionView
         
         let colorSelectedClosure = { [weak self] (index: Int) in
+            
             self!.mainViewViewModel.fontColor.value = Constants.FontColorArray[index]
             
             /** Save selection to NSUserDefaults */
