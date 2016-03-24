@@ -65,15 +65,7 @@ struct MemesProvider {
     mutating internal func addNewMemeToStorage(meme: Meme, completion: (() -> Void)?) {
         _memeArray.append(meme)
         
-        var storedMeme = StoredMeme()
-        
-        storedMeme.imageName        = saveImageAndGetName(meme.image!)
-        storedMeme.topText          = meme.topText
-        storedMeme.bottomText       = meme.bottomText
-        storedMeme.fontName         = getFontName(meme.font)
-        magic("stored fontName: \(storedMeme.fontName)")
-        storedMeme.fontColorName    = getFontColorName(meme.fontColor)
-        storedMeme.memedImageName   = saveImageAndGetName(meme.memedImage!)
+        let storedMeme = createStoredMeme(fromMeme: meme) // StoredMeme()
         
         storedMemeArray.append(storedMeme)
         
@@ -90,7 +82,27 @@ struct MemesProvider {
     }
     
     mutating internal func updateMemeFromStorage(atIndex index: Int, withMeme meme: Meme, completion: (() -> Void)?) {
+        _memeArray[index] = meme
         
+        let storedMeme = createStoredMeme(fromMeme: meme)
+        
+        storedMemeArray[index] = storedMeme
+        
+        /** Write storedMemesArray to archive file */
+        createJSONDataAndSave(withArray: storedMemeArray, completion: completion)
+    }
+    
+    private func createStoredMeme(fromMeme meme: Meme) -> StoredMeme {
+        var storedMeme = StoredMeme()
+        
+        storedMeme.imageName        = saveImageAndGetName(meme.image!)
+        storedMeme.topText          = meme.topText
+        storedMeme.bottomText       = meme.bottomText
+        storedMeme.fontName         = getFontName(meme.font)
+        storedMeme.fontColorName    = getFontColorName(meme.fontColor)
+        storedMeme.memedImageName   = saveImageAndGetName(meme.memedImage!)
+        
+        return storedMeme
     }
     
     private func saveImageAndGetName(image: UIImage) -> String {
