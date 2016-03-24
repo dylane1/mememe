@@ -62,29 +62,31 @@ final class MemeEditorView: UIView {
     
     private var topText = "" {
         didSet {
-//            meme.topText = topText
-//            memeTextUpdatedClosure?(meme)
-//            topField.text = topText
-//            topField.alpha = 1.0
+            if topText != "" {
+                prepareTextFieldForAttributedText(topField)
+            }
+            
+            topField.text = topText
+            
             memeTextUpdatedClosure?(topText, bottomText)
             stateMachine.changeState(withImage: image, topText: topText, bottomText: bottomText)
         }
     }
     private var bottomText = "" {
         didSet {
-//            meme.bottomText = bottomText
-//            memeTextUpdatedClosure?(meme)
-//            bottomField.text = bottomText
-//            bottomField.alpha = 1.0
+            if bottomText != "" {
+                prepareTextFieldForAttributedText(bottomField)
+            }
+            
+            bottomField.text = bottomText
+            
             memeTextUpdatedClosure?(topText, bottomText)
             stateMachine.changeState(withImage: image, topText: topText, bottomText: bottomText)
-//            setNeedsDisplay()
         }
     }
     
     private var font: UIFont = Constants.Font.impact {
         didSet {
-            magic("set font & about to call closure: \(font)")
             memeFontUpdatedClosure?(font)
             
             /** Update text field fonts */
@@ -109,23 +111,22 @@ final class MemeEditorView: UIView {
     private var dataSource: MemeEditorViewModel! {
         didSet {
             dataSource.image.bind { [unowned self] in
-//                magic("image: \($0)")
                 self.image = $0
             }
             dataSource.topText.bind { [unowned self] in
-//                magic("topText: \($0)")
                 self.topText = $0
             }
             dataSource.bottomText.bind { [unowned self] in
-//                magic("bottomText: \($0)")
                 self.bottomText = $0
             }
+            /** 
+             * Using bindAndFire for these because the font & fontColor are
+             * loaded from NSUserDefaults and passed when view is configured.
+             */
             dataSource.font.bindAndFire { [unowned self] in
-//                magic("font: \($0)")
                 self.font = $0
             }
             dataSource.fontColor.bindAndFire { [unowned self] in
-//                magic("fontColor: \($0)")
                 self.fontColor = $0
             }
         }
@@ -146,7 +147,7 @@ final class MemeEditorView: UIView {
     @IBOutlet weak var bottomFieldLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var bottomFieldTrailingConstraint: NSLayoutConstraint!
     
-    deinit { magic("\(self.description) is being deinitialized   <----------------") }
+//    deinit { magic("\(self.description) is being deinitialized   <----------------") }
     
     //MARK: - Configuration
     
@@ -248,9 +249,10 @@ final class MemeEditorView: UIView {
         bottomField.autocapitalizationType      = .AllCharacters
         bottomField.adjustsFontSizeToFitWidth   = true
         
+        //TODO: may not need now?
         /** For resetting when 'Cancel' is tapped */
-        topField.attributedText     = nil
-        bottomField.attributedText  = nil
+//        topField.attributedText     = nil
+//        bottomField.attributedText  = nil
         
         configureTextFieldAttributes()
         showPlaceholderText()
@@ -294,6 +296,7 @@ final class MemeEditorView: UIView {
         fontColorButtonClosure?(fontColorButton)
     }
     
+    
     internal func resetTextFields() {
         topText     = ""
         bottomText  = ""
@@ -326,6 +329,12 @@ final class MemeEditorView: UIView {
     }
     
 
+    private func prepareTextFieldForAttributedText(textField: UITextField) {
+        textField.defaultTextAttributes  = textFieldAttributes
+        textField.textAlignment          = .Center
+        textField.placeholder = nil
+        textField.alpha = 1.0
+    }
     
     
     internal func updateTextFieldContstraints(withNewOrientation orientation: DestinationOrientation) {
@@ -410,10 +419,7 @@ extension MemeEditorView: UITextFieldDelegate {
          * the field, don't type anything, then tap 'Done' on the keyboard. This
          * fixes that scenario.
         */
-        textField.defaultTextAttributes  = textFieldAttributes
-        textField.textAlignment          = .Center
-        textField.placeholder = nil
-        textField.alpha = 1.0
+        prepareTextFieldForAttributedText(textField)
         
         /** Set up observers */
         NSNotificationCenter.defaultCenter().addObserver(

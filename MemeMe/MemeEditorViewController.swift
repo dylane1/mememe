@@ -218,7 +218,6 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
         
         let memeFontUpdatedClosure = { [unowned self] (newFont: UIFont) -> Void in
             /** Update image */
-            magic("font returned in closure: \(newFont)")
             self.meme.font = newFont
             
         }
