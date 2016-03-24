@@ -9,20 +9,25 @@
 import UIKit
 
 protocol ActivityViewControllerPresentable {
+    
     /** Implemented by View Controllers that conform to this protocol */
-    var imageToShare: UIImage { get set }
     var activitySuccessCompletion: (() -> Void)? { get set }
+    var activityViewController: UIActivityViewController? { get set }
     
     /** Implemented in the protocol extension */
-    var activityViewController: UIActivityViewController { get }
     var activityViewControllerCompletion: UIActivityViewControllerCompletionWithItemsHandler { get }
 }
 
 extension ActivityViewControllerPresentable where Self: UIViewController {
+    
+    /** Completion handler for the Activity View Controller */
     var activityViewControllerCompletion: UIActivityViewControllerCompletionWithItemsHandler {
-        return { activityType, completed, returnedItems, activityError in
+        
+        return { [weak self] activityType, completed, returnedItems, activityError in
+            
             if !completed && activityError != nil {
-                /** Activity Failed */
+                
+                /** Activity Failed, present an alert to user */
                 let alert = UIAlertController(
                     title: LocalizedStrings.Alerts.ShareError.title,
                     message: LocalizedStrings.Alerts.ShareError.message + activityError!.localizedDescription,
@@ -30,19 +35,22 @@ extension ActivityViewControllerPresentable where Self: UIViewController {
                 
                 alert.addAction(UIAlertAction(title: LocalizedStrings.ButtonTitles.ok, style: .Default, handler: nil))
                 
-                self.presentViewController(alert, animated: true, completion: nil)
+                self!.presentViewController(alert, animated: true, completion: nil)
             } else {
                 /** Success! */
-                self.activitySuccessCompletion?()
+                self!.activitySuccessCompletion?()
             }
+            self!.activityViewController = nil
         }
     }
     
-    var activityViewController: UIActivityViewController {
-        let activityVC = UIActivityViewController(activityItems: [imageToShare], applicationActivities: nil)
+    internal func getActivityViewController(withImage image: UIImage) -> UIActivityViewController {
+
+        let activityViewController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
         
         /** Set completion handler for Share */
-        activityVC.completionWithItemsHandler = activityViewControllerCompletion
-        return activityVC
+        activityViewController.completionWithItemsHandler = activityViewControllerCompletion
+        
+        return activityViewController
     }
 }

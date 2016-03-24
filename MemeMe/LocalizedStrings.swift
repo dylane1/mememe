@@ -9,7 +9,9 @@ import Foundation
 
 struct LocalizedStrings {
     struct ViewControllerTitles {
-        static let memeMe = NSLocalizedString("vcTitles.memeMe", value: "MemeMe", comment: "")
+        static let memeMe   = NSLocalizedString("vcTitles.memeMe",      value: "MemeMe",    comment: "")
+        static let newMeme  = NSLocalizedString("vcTitles.newMeme",     value: "New Meme",  comment: "")
+        static let editMeme = NSLocalizedString("vcTitles.editMeme",    value: "Edit Meme", comment: "")
     }
     
     struct PlaceholderText {

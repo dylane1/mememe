@@ -9,15 +9,19 @@
 import UIKit
 
 protocol MemeEditorPresentable {
-    var memeEditorNavController: MemeEditorNavigationController { get }
+    var memeEditorNavController: NavigationController? { get set }
 }
 
 extension MemeEditorPresentable where Self: UIViewController {
-    var memeEditorNavController: MemeEditorNavigationController {
-        let editorNavController = UIStoryboard(name: Constants.StoryBoardIDs.main, bundle: nil).instantiateViewControllerWithIdentifier(Constants.StoryBoardIDs.memesEditorNavController) as! MemeEditorNavigationController
+    
+    internal func getMemeEditorNavigationController() -> NavigationController {
+        
+        let editorNavController = UIStoryboard(name: Constants.StoryBoardID.main, bundle: nil).instantiateViewControllerWithIdentifier(Constants.StoryBoardID.memesEditorNavController) as! NavigationController
         
         editorNavController.vcShouldBeDismissed = { [weak self] in
-            self!.dismissViewControllerAnimated(true, completion: nil)
+            self!.dismissViewControllerAnimated(true) {
+                self!.memeEditorNavController = nil
+            }
         }
         return editorNavController
     }

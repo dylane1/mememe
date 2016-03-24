@@ -8,34 +8,34 @@
 
 import UIKit
 
-/** 
-  Using the name SavedMemesNavigationProtocol because it makes more sense than
-  adding 'able' to make SavedMemesNavigationable or SavedMemesNavigable
- */
 protocol SavedMemesNavigationProtocol {
     var savedMemesNavController: SavedMemesNavigationController { get }
 }
 
 extension SavedMemesNavigationProtocol where Self: UIViewController, Self: MemeEditorPresentable {
+    
     var savedMemesNavController: SavedMemesNavigationController {
         return navigationController as! SavedMemesNavigationController
     }
 
-    //MARK: - Configuration
-    
     internal func configureNavigationItems() {
+        
         let addButtonClosure = { [weak self] in
-            self!.presentViewController(self!.memeEditorNavController, animated: true, completion: nil)
+            self!.memeEditorNavController = self!.getMemeEditorNavigationController()
+            self!.presentViewController(self!.memeEditorNavController!, animated: true, completion: nil)
         }
         savedMemesNavController.configure(withAddClosure: addButtonClosure)
     }
     
-    internal func configureDetailVC(forMeme meme: Meme, segue: UIStoryboardSegue, deletionClosure: ()->Void) {
-        if segue.identifier == Constants.SegueIDs.memeDetail {
-            let savedMemeVC = segue.destinationViewController as! SavedMemeDetailViewController
-            savedMemeVC.title = meme.topText
+    internal func configureDetailViewController(forMeme meme: Meme, selectedIndex: Int, segue: UIStoryboardSegue, deletionClosure: ()->Void) {
+        
+        if segue.identifier == Constants.SegueID.memeDetail {
             
-            savedMemeVC.configure(withMeme: meme, deletionClosure: deletionClosure)
+            let savedMemeVC = segue.destinationViewController as! SavedMemeDetailViewController
+            
+            savedMemeVC.title = (meme.topText != "") ? meme.topText : meme.bottomText
+            
+            savedMemeVC.configure(withSelectedIndex: selectedIndex, deletionClosure: deletionClosure)
         }
     }
 }

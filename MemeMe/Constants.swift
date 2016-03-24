@@ -10,7 +10,7 @@ import UIKit
 
 struct Constants {
     /** Storyboard */
-    struct StoryBoardIDs {
+    struct StoryBoardID {
         static let main                     = "Main"
         static let fontListTableVC          = "sb_fontListTableVC"
         static let fontColorSelectionVC     = "sb_fontColorSelectionVC"
@@ -19,7 +19,7 @@ struct Constants {
         static let memesEditorVC            = "sb_memesEditorVC"
     }
     
-    struct ReuseIDs {
+    struct ReuseID {
         static let fontListTableCell        = "ruid_fontListTableCell"
         static let memeListTableCell        = "ruid_memeListTableCell"
         static let memeListCollectionCell   = "ruid_memeListCollectionCell"
@@ -27,7 +27,7 @@ struct Constants {
     
     /** Segue */
     
-    struct SegueIDs {
+    struct SegueID {
         static let memeDetail = "seg_memeDetail"
     }
      
@@ -72,7 +72,7 @@ struct Constants {
     
     static let fontSize: CGFloat = 32.0
 
-    struct FontFamilyNames {
+    struct FontFamilyName {
         static let americanTypewriter   = "American Typewriter"
         static let arial                = "Arial"
         static let avenir               = "Avenir"
@@ -86,7 +86,7 @@ struct Constants {
         static let markerFelt           = "Marker Felt"
     }
     
-    struct FontNames {
+    struct FontName {
         static let americanTypewriter   = "AmericanTypewriter-Bold"
         static let arial                = "Arial-BoldMT"
         static let avenir               = "Avenir-Black"
@@ -100,46 +100,46 @@ struct Constants {
         static let markerFelt           = "MarkerFelt-Wide"
     }
     
-    struct Fonts {
-        static let americanTypewriter   = UIFont(name: Constants.FontNames.americanTypewriter, size: Constants.fontSize)!
-        static let arial                = UIFont(name: Constants.FontNames.arial, size: Constants.fontSize)!
-        static let avenir               = UIFont(name: Constants.FontNames.avenir, size: Constants.fontSize)!
-        static let avenirNext           = UIFont(name: Constants.FontNames.avenirNext, size: Constants.fontSize)!
-        static let avenirNextCondensed  = UIFont(name: Constants.FontNames.avenirNextCondensed, size: Constants.fontSize)!
-        static let copperplate          = UIFont(name: Constants.FontNames.copperplate, size: Constants.fontSize)!
-        static let futura               = UIFont(name: Constants.FontNames.futura, size: Constants.fontSize)!
-        static let gillSans             = UIFont(name: Constants.FontNames.gillSans, size: Constants.fontSize)!
-        static let hoeflerText          = UIFont(name: Constants.FontNames.hoeflerText, size: Constants.fontSize)!
-        static let impact               = UIFont(name: Constants.FontNames.impact, size: Constants.fontSize)!
-        static let markerFelt           = UIFont(name: Constants.FontNames.markerFelt, size: Constants.fontSize)!
+    struct Font {
+        static let americanTypewriter   = UIFont(name: Constants.FontName.americanTypewriter, size: Constants.fontSize)!
+        static let arial                = UIFont(name: Constants.FontName.arial, size: Constants.fontSize)!
+        static let avenir               = UIFont(name: Constants.FontName.avenir, size: Constants.fontSize)!
+        static let avenirNext           = UIFont(name: Constants.FontName.avenirNext, size: Constants.fontSize)!
+        static let avenirNextCondensed  = UIFont(name: Constants.FontName.avenirNextCondensed, size: Constants.fontSize)!
+        static let copperplate          = UIFont(name: Constants.FontName.copperplate, size: Constants.fontSize)!
+        static let futura               = UIFont(name: Constants.FontName.futura, size: Constants.fontSize)!
+        static let gillSans             = UIFont(name: Constants.FontName.gillSans, size: Constants.fontSize)!
+        static let hoeflerText          = UIFont(name: Constants.FontName.hoeflerText, size: Constants.fontSize)!
+        static let impact               = UIFont(name: Constants.FontName.impact, size: Constants.fontSize)!
+        static let markerFelt           = UIFont(name: Constants.FontName.markerFelt, size: Constants.fontSize)!
     }
     
     static let FontArray = [
-        Constants.Fonts.americanTypewriter,
-        Constants.Fonts.arial,
-        Constants.Fonts.avenir,
-        Constants.Fonts.avenirNext,
-        Constants.Fonts.avenirNextCondensed,
-        Constants.Fonts.copperplate,
-        Constants.Fonts.futura,
-        Constants.Fonts.gillSans,
-        Constants.Fonts.hoeflerText,
-        Constants.Fonts.impact,
-        Constants.Fonts.markerFelt
+        Constants.Font.americanTypewriter,
+        Constants.Font.arial,
+        Constants.Font.avenir,
+        Constants.Font.avenirNext,
+        Constants.Font.avenirNextCondensed,
+        Constants.Font.copperplate,
+        Constants.Font.futura,
+        Constants.Font.gillSans,
+        Constants.Font.hoeflerText,
+        Constants.Font.impact,
+        Constants.Font.markerFelt
     ]
     
     static let FontFamilyNameArray = [
-        Constants.FontFamilyNames.americanTypewriter,
-        Constants.FontFamilyNames.arial,
-        Constants.FontFamilyNames.avenir,
-        Constants.FontFamilyNames.avenirNext,
-        Constants.FontFamilyNames.avenirNextCondensed,
-        Constants.FontFamilyNames.copperplate,
-        Constants.FontFamilyNames.futura,
-        Constants.FontFamilyNames.gillSans,
-        Constants.FontFamilyNames.hoeflerText,
-        Constants.FontFamilyNames.impact,
-        Constants.FontFamilyNames.markerFelt
+        Constants.FontFamilyName.americanTypewriter,
+        Constants.FontFamilyName.arial,
+        Constants.FontFamilyName.avenir,
+        Constants.FontFamilyName.avenirNext,
+        Constants.FontFamilyName.avenirNextCondensed,
+        Constants.FontFamilyName.copperplate,
+        Constants.FontFamilyName.futura,
+        Constants.FontFamilyName.gillSans,
+        Constants.FontFamilyName.hoeflerText,
+        Constants.FontFamilyName.impact,
+        Constants.FontFamilyName.markerFelt
     ]
     
     
@@ -157,7 +157,7 @@ struct Constants {
         static let applicationSupport = NSSearchPathForDirectoriesInDomains(.ApplicationSupportDirectory, .UserDomainMask, true)[0]
     }
     
-    struct ArchiveFiles {
+    struct ArchiveFile {
         static let storedMemes = FileSystem.applicationSupport + "/storedMemes.json"
     }
 }

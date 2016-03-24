@@ -16,22 +16,29 @@
 import UIKit
 
 struct StoredMeme {
+    internal var imageName: String
     internal var topText: String
     internal var bottomText: String
-    internal var imageName: String
+    internal var fontName: String
+    internal var fontColorName: String
     internal var memedImageName: String
     
     internal var jsonDictionary: [String: String] {
-        return ["topText": topText,
-                "bottomText": bottomText,
-                "imageName": imageName,
-                "memedImageName": memedImageName]
+        return [
+            "imageName": imageName,
+            "topText": topText,
+            "bottomText": bottomText,
+            "fontName": fontName,
+            "fontColorName": fontColorName,
+            "memedImageName": memedImageName]
     }
     
     init(){
+        imageName       = ""
         topText         = ""
         bottomText      = ""
-        imageName       = ""
+        fontName        = ""
+        fontColorName   = ""
         memedImageName  = ""
     }
 }
@@ -55,15 +62,10 @@ struct MemesProvider {
         loadMemesFromStorage()
     }
     
-    mutating internal func addNewMemeToStorage(meme: Meme, completion: (()->Void)?) {
+    mutating internal func addNewMemeToStorage(meme: Meme, completion: (() -> Void)?) {
         _memeArray.append(meme)
         
-        var storedMeme = StoredMeme()
-        
-        storedMeme.topText          = meme.topText
-        storedMeme.bottomText       = meme.bottomText
-        storedMeme.imageName        = saveImageAndGetName(meme.image!)
-        storedMeme.memedImageName   = saveImageAndGetName(meme.memedImage!)
+        let storedMeme = createStoredMeme(fromMeme: meme) // StoredMeme()
         
         storedMemeArray.append(storedMeme)
         
@@ -79,6 +81,30 @@ struct MemesProvider {
         createJSONDataAndSave(withArray: storedMemeArray, completion: nil)
     }
     
+    mutating internal func updateMemeFromStorage(atIndex index: Int, withMeme meme: Meme, completion: (() -> Void)?) {
+        _memeArray[index] = meme
+        
+        let storedMeme = createStoredMeme(fromMeme: meme)
+        
+        storedMemeArray[index] = storedMeme
+        
+        /** Write storedMemesArray to archive file */
+        createJSONDataAndSave(withArray: storedMemeArray, completion: completion)
+    }
+    
+    private func createStoredMeme(fromMeme meme: Meme) -> StoredMeme {
+        var storedMeme = StoredMeme()
+        
+        storedMeme.imageName        = saveImageAndGetName(meme.image!)
+        storedMeme.topText          = meme.topText
+        storedMeme.bottomText       = meme.bottomText
+        storedMeme.fontName         = getFontName(meme.font)
+        storedMeme.fontColorName    = getFontColorName(meme.fontColor)
+        storedMeme.memedImageName   = saveImageAndGetName(meme.memedImage!)
+        
+        return storedMeme
+    }
+    
     private func saveImageAndGetName(image: UIImage) -> String {
         let imageName = NSUUID().UUIDString + ".png"
         let filename = getDocumentsDirectory().stringByAppendingPathComponent(imageName)
@@ -88,6 +114,42 @@ struct MemesProvider {
         }
         
         return imageName
+    }
+    
+    private func getFontName(font: UIFont) -> String {
+        for i in 0..<Constants.FontArray.count {
+            if font == Constants.FontArray[i] {
+                return Constants.FontFamilyNameArray[i]
+            }
+        }
+        return Constants.FontName.impact
+    }
+    
+    private func getFontFromFontName(name: String) -> UIFont {
+        for i in 0..<Constants.FontFamilyNameArray.count {
+            if name == Constants.FontFamilyNameArray[i] {
+                return Constants.FontArray[i]
+            }
+        }
+        return Constants.Font.impact
+    }
+    
+    private func getFontColorName(color: UIColor) -> String {
+        for i in 0..<Constants.FontColorArray.count {
+            if color == Constants.FontColorArray[i] {
+                return Constants.FontColorStringArray[i]
+            }
+        }
+        return Constants.FontColorStringArray[0]
+    }
+    
+    private func getColorFromColorName(name: String) -> UIColor {
+        for i in 0..<Constants.FontColorStringArray.count {
+            if name == Constants.FontColorStringArray[i] {
+                return Constants.FontColorArray[i]
+            }
+        }
+        return Constants.FontColorArray[0]
     }
     
     private func getDocumentsDirectory() -> NSString {
@@ -114,7 +176,7 @@ struct MemesProvider {
         /** Write (or overrite existing) json file */
         let fileManager = NSFileManager.defaultManager()
         
-        if !fileManager.createFileAtPath(Constants.ArchiveFiles.storedMemes, contents: jsonData, attributes: nil) {
+        if !fileManager.createFileAtPath(Constants.ArchiveFile.storedMemes, contents: jsonData, attributes: nil) {
             magic("Error creating archive json file! Error code: \(errno); message: \(strerror(errno))")
         } else {
             /** Success */
@@ -124,7 +186,7 @@ struct MemesProvider {
     
     mutating private func loadMemesFromStorage() {
         
-        guard let jsonData = NSData(contentsOfFile: Constants.ArchiveFiles.storedMemes) as NSData! else { return }
+        guard let jsonData = NSData(contentsOfFile: Constants.ArchiveFile.storedMemes) as NSData! else { return }
         
         var jsonArray: [[String:String]]!
         do {
@@ -141,19 +203,23 @@ struct MemesProvider {
         for item in jsonArray {
             var meme = Meme()
             
+            meme.image      = UIImage(contentsOfFile: getDocumentsDirectory().stringByAppendingPathComponent(item["imageName"]!))
             meme.topText    = item["topText"]!
             meme.bottomText = item["bottomText"]!
-            meme.image      = UIImage(contentsOfFile: getDocumentsDirectory().stringByAppendingPathComponent(item["imageName"]!))
+            meme.font       = getFontFromFontName(item["fontName"]!)
+            meme.fontColor  = getColorFromColorName(item["fontColorName"]!)
             meme.memedImage = UIImage(contentsOfFile: getDocumentsDirectory().stringByAppendingPathComponent(item["memedImageName"]!))
             
             memes.append(meme)
             
             var storedMeme = StoredMeme()
             
-            storedMeme.topText        = item["topText"]!
-            storedMeme.bottomText     = item["bottomText"]!
-            storedMeme.imageName      = item["imageName"]!
-            storedMeme.memedImageName = item["memedImageName"]!
+            storedMeme.imageName        = item["imageName"]!
+            storedMeme.topText          = item["topText"]!
+            storedMeme.bottomText       = item["bottomText"]!
+            storedMeme.fontName         = item["fontName"]!
+            storedMeme.fontColorName    = item["fontColorName"]!
+            storedMeme.memedImageName   = item["memedImageName"]!
             
             storedMemes.append(storedMeme)
         }

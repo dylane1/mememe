@@ -10,9 +10,13 @@ import UIKit
 
 protocol MemeEditorViewDataSource {
     var image: Dynamic<UIImage?> { get }
+    var topText: Dynamic<String> { get }
+    var bottomText: Dynamic<String> { get }
+    var font: Dynamic<UIFont> { get }
+    var fontColor: Dynamic<UIColor> { get }
 }
 
-class MemeEditorView: UIView {
+final class MemeEditorView: UIView {
     typealias BarButtonClosure = () -> Void
     private var albumButtonClosure: BarButtonClosure?
     private var cameraButtonClosure: BarButtonClosure?
@@ -22,13 +26,18 @@ class MemeEditorView: UIView {
     private var fontColorButtonClosure: BarButtonClosureReturningButtonSource?
     private var fontColorButton: UIBarButtonItem!
     
-    typealias MemeTextUpdated = (Meme) -> Void
+    typealias MemeTextUpdated = (String, String) -> Void
     private var memeTextUpdatedClosure: MemeTextUpdated?
     
-    typealias MemeImageUpdated = (Meme, UIImage?) -> Meme
+    typealias MemeImageUpdated = (UIImage?) -> Void
     private var memeImageUpdatedClosure: MemeImageUpdated?
     
-    private var meme = Meme()
+    typealias MemeFontUpdated = (UIFont) -> Void
+    private var memeFontUpdatedClosure: MemeFontUpdated?
+    
+    typealias MemeFontColorUpdated = (UIColor) -> Void
+    private var memeFontColorUpdatedClosure: MemeFontColorUpdated?
+    
     
     private var image: UIImage? = nil {
         didSet {
@@ -46,34 +55,40 @@ class MemeEditorView: UIView {
             }
             updateTextFieldContstraints(withNewOrientation: orientation)
             
-            meme = memeImageUpdatedClosure!(meme, image)
-            
+            memeImageUpdatedClosure?(image)
             stateMachine.changeState(withImage: image, topText: topText, bottomText: bottomText)
         }
     }
-    /** 
-      * Setting this to String? to be consistent with UITextField.text, even
-      * though the documentation says that it's set to @"" by default. Not
-      * sure why anyone would want to set UITextField.text to nil, but I suppose
-      * there's a reason.
-     */
+    
     private var topText = "" {
         didSet {
-            meme.topText = topText
-            memeTextUpdatedClosure?(meme)
+            if topText != "" {
+                prepareTextFieldForAttributedText(topField)
+            }
+            
+            topField.text = topText
+            
+            memeTextUpdatedClosure?(topText, bottomText)
             stateMachine.changeState(withImage: image, topText: topText, bottomText: bottomText)
         }
     }
     private var bottomText = "" {
         didSet {
-            meme.bottomText = bottomText
-            memeTextUpdatedClosure?(meme)
+            if bottomText != "" {
+                prepareTextFieldForAttributedText(bottomField)
+            }
+            
+            bottomField.text = bottomText
+            
+            memeTextUpdatedClosure?(topText, bottomText)
             stateMachine.changeState(withImage: image, topText: topText, bottomText: bottomText)
         }
     }
     
-    private var font: UIFont = Constants.Fonts.impact {
+    private var font: UIFont = Constants.Font.impact {
         didSet {
+            memeFontUpdatedClosure?(font)
+            
             /** Update text field fonts */
             configureTextFieldAttributes()
         }
@@ -81,6 +96,8 @@ class MemeEditorView: UIView {
     
     private var fontColor: UIColor = Constants.ColorScheme.white {
         didSet {
+            memeFontColorUpdatedClosure?(fontColor)
+            
             /** Update text field fonts */
             configureTextFieldAttributes()
         }
@@ -96,6 +113,16 @@ class MemeEditorView: UIView {
             dataSource.image.bind { [unowned self] in
                 self.image = $0
             }
+            dataSource.topText.bind { [unowned self] in
+                self.topText = $0
+            }
+            dataSource.bottomText.bind { [unowned self] in
+                self.bottomText = $0
+            }
+            /** 
+             * Using bindAndFire for these because the font & fontColor are
+             * loaded from NSUserDefaults and passed when view is configured.
+             */
             dataSource.font.bindAndFire { [unowned self] in
                 self.font = $0
             }
@@ -120,33 +147,139 @@ class MemeEditorView: UIView {
     @IBOutlet weak var bottomFieldLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var bottomFieldTrailingConstraint: NSLayoutConstraint!
     
+//    deinit { magic("\(self.description) is being deinitialized   <----------------") }
     
-    deinit { magic("\(self.description) is being deinitialized   <----------------") }
-    //MARK: - Internal funk(s)
+    //MARK: - Configuration
     
     internal func configure(
-        withDataSource dataSource: MemeEditorViewModel,
+        withStateMachine stateMachine: MemeEditorStateMachine,
+        dataSource: MemeEditorViewModel,
         albumButtonClosure: BarButtonClosure,
         cameraButtonClosure: BarButtonClosure? = nil,
         fontButtonClosure: BarButtonClosureReturningButtonSource,
         fontColorButtonClosure: BarButtonClosureReturningButtonSource,
-        memeTextUpdatedClosure: MemeTextUpdated,
         memeImageUpdatedClosure: MemeImageUpdated,
-        stateMachine: MemeEditorStateMachine)
+        memeTextUpdatedClosure: MemeTextUpdated,
+        memeFontUpdatedClosure: MemeFontUpdated,
+        memeFontColorUpdatedClosure: MemeFontColorUpdated)
     {
-        self.dataSource              = dataSource
-        self.albumButtonClosure      = albumButtonClosure
-        self.cameraButtonClosure     = cameraButtonClosure
-        self.fontButtonClosure       = fontButtonClosure
-        self.fontColorButtonClosure  = fontColorButtonClosure
-        self.memeTextUpdatedClosure  = memeTextUpdatedClosure
-        self.memeImageUpdatedClosure = memeImageUpdatedClosure
-        self.stateMachine            = stateMachine
+        self.stateMachine                   = stateMachine
+        self.dataSource                     = dataSource
+        self.albumButtonClosure             = albumButtonClosure
+        self.cameraButtonClosure            = cameraButtonClosure
+        self.fontButtonClosure              = fontButtonClosure
+        self.fontColorButtonClosure         = fontColorButtonClosure
+        self.memeImageUpdatedClosure        = memeImageUpdatedClosure
+        self.memeTextUpdatedClosure         = memeTextUpdatedClosure
+        self.memeFontUpdatedClosure         = memeFontUpdatedClosure
+        self.memeFontColorUpdatedClosure    = memeFontColorUpdatedClosure
         
         configureToolbarItems()
         configureTextFields()
     }
 
+    private func configureToolbarItems() {
+        var toolbarItemArray = [UIBarButtonItem]()
+        
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
+        
+        toolbarItemArray.append(flexSpace)
+        
+        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil, action: nil)
+        fixedSpace.width = 20
+        
+        let cameraButton = UIBarButtonItem(
+            barButtonSystemItem: .Camera,
+            target: self,
+            action: #selector(cameraButtonTapped))
+        
+        cameraButton.enabled = false
+        
+        toolbarItemArray.append(cameraButton)
+        toolbarItemArray.append(fixedSpace)
+        
+        if UIImagePickerController.isSourceTypeAvailable(.Camera) { cameraButton.enabled = true }
+        
+        let albumButton = UIBarButtonItem(
+            title: LocalizedStrings.ToolbarButtons.album,
+            style: .Plain,
+            target: self,
+            action: #selector(albumButtonTapped))
+        
+        toolbarItemArray.append(albumButton)
+        toolbarItemArray.append(fixedSpace)
+        
+        fontButton = UIBarButtonItem(
+            title: LocalizedStrings.ToolbarButtons.font,
+            style: .Plain,
+            target: self,
+            action: #selector(fontButtonTapped))
+        
+        toolbarItemArray.append(fontButton)
+        toolbarItemArray.append(fixedSpace)
+        
+        fontColorButton = UIBarButtonItem(
+            title: LocalizedStrings.ToolbarButtons.color,
+            style: .Plain,
+            target: self,
+            action: #selector(fontColorButtonTapped))
+        
+        toolbarItemArray.append(fontColorButton)
+        toolbarItemArray.append(flexSpace)
+        
+        toolbar.setItems(toolbarItemArray, animated: false)
+        
+        toolbar.barTintColor = Constants.ColorScheme.white
+        toolbar.tintColor    = Constants.ColorScheme.darkBlue
+        toolbar.translucent  = true
+    }
+    
+    private func configureTextFields() {
+        topField.delegate                   = self
+        topField.borderStyle                = .None
+        topField.backgroundColor            = UIColor.clearColor()
+        topField.returnKeyType              = .Done
+        topField.autocapitalizationType     = .AllCharacters
+        topField.adjustsFontSizeToFitWidth  = true
+        
+        bottomField.delegate                    = self
+        bottomField.borderStyle                 = .None
+        bottomField.backgroundColor             = UIColor.clearColor()
+        bottomField.returnKeyType               = .Done
+        bottomField.autocapitalizationType      = .AllCharacters
+        bottomField.adjustsFontSizeToFitWidth   = true
+        
+        //TODO: may not need now?
+        /** For resetting when 'Cancel' is tapped */
+//        topField.attributedText     = nil
+//        bottomField.attributedText  = nil
+        
+        configureTextFieldAttributes()
+        showPlaceholderText()
+    }
+    
+    internal func configureTextFieldAttributes() {
+        
+        textFieldAttributes[NSFontAttributeName] = font
+        textFieldAttributes[NSForegroundColorAttributeName] = fontColor
+        
+        let placeholderAttributes = [
+            NSForegroundColorAttributeName: fontColor,
+            NSFontAttributeName:            font
+        ]
+        
+        topField.defaultTextAttributes  = textFieldAttributes
+        topField.attributedPlaceholder  = NSAttributedString(string: LocalizedStrings.PlaceholderText.MainView.top, attributes: placeholderAttributes)
+        topField.textAlignment          = .Center //Must be set after the string is set in order to work...
+        
+        bottomField.defaultTextAttributes   = textFieldAttributes
+        bottomField.attributedPlaceholder   = NSAttributedString(string: LocalizedStrings.PlaceholderText.MainView.bottom, attributes: placeholderAttributes)
+        bottomField.textAlignment           = .Center
+    }
+    
+    
+    //MARK: - Actions
+    
     internal func cameraButtonTapped() {
         cameraButtonClosure?()
     }
@@ -162,6 +295,7 @@ class MemeEditorView: UIView {
     internal func fontColorButtonTapped() {
         fontColorButtonClosure?(fontColorButton)
     }
+    
     
     internal func resetTextFields() {
         topText     = ""
@@ -194,105 +328,14 @@ class MemeEditorView: UIView {
         bottomField.alpha   = (bottomText == "") ? 0.5 : 1
     }
     
-    //MARK: - Private funk(s)
 
-    private func configureToolbarItems() {
-        var toolbarItemArray = [UIBarButtonItem]()
-        
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
-        
-        toolbarItemArray.append(flexSpace)
-        
-        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil, action: nil)
-        fixedSpace.width = 20
-        
-        let cameraButton = UIBarButtonItem(
-            barButtonSystemItem: .Camera,
-            target: self,
-            action: "cameraButtonTapped")
-        
-        cameraButton.enabled = false
-
-        toolbarItemArray.append(cameraButton)
-        toolbarItemArray.append(fixedSpace)
-
-        if UIImagePickerController.isSourceTypeAvailable(.Camera) { cameraButton.enabled = true }
-        
-        let albumButton = UIBarButtonItem(
-            title: LocalizedStrings.ToolbarButtons.album,
-            style: .Plain,
-            target: self,
-            action: "albumButtonTapped")
-        
-        toolbarItemArray.append(albumButton)
-        toolbarItemArray.append(fixedSpace)
-        
-        fontButton = UIBarButtonItem(
-            title: LocalizedStrings.ToolbarButtons.font,
-            style: .Plain,
-            target: self,
-            action: "fontButtonTapped")
-        
-        toolbarItemArray.append(fontButton)
-        toolbarItemArray.append(fixedSpace)
-        
-        fontColorButton = UIBarButtonItem(
-            title: LocalizedStrings.ToolbarButtons.color,
-            style: .Plain,
-            target: self,
-            action: "fontColorButtonTapped")
-        
-        toolbarItemArray.append(fontColorButton)
-        toolbarItemArray.append(flexSpace)
-        
-        toolbar.setItems(toolbarItemArray, animated: false)
-        
-        toolbar.barTintColor = Constants.ColorScheme.white
-        toolbar.tintColor    = Constants.ColorScheme.darkBlue
-        toolbar.translucent  = true
+    private func prepareTextFieldForAttributedText(textField: UITextField) {
+        textField.defaultTextAttributes  = textFieldAttributes
+        textField.textAlignment          = .Center
+        textField.placeholder = nil
+        textField.alpha = 1.0
     }
     
-    private func configureTextFields() {
-        topField.delegate                   = self
-        topField.borderStyle                = .None
-        topField.backgroundColor            = UIColor.clearColor()
-        topField.returnKeyType              = .Done
-        topField.autocapitalizationType     = .AllCharacters
-        topField.adjustsFontSizeToFitWidth  = true
-        
-        bottomField.delegate                    = self
-        bottomField.borderStyle                 = .None
-        bottomField.backgroundColor             = UIColor.clearColor()
-        bottomField.returnKeyType               = .Done
-        bottomField.autocapitalizationType      = .AllCharacters
-        bottomField.adjustsFontSizeToFitWidth   = true
-        
-        /** For resetting when 'Cancel' is tapped */
-        topField.attributedText     = nil
-        bottomField.attributedText  = nil
-        
-        configureTextFieldAttributes()
-        showPlaceholderText()
-    }
-    
-    internal func configureTextFieldAttributes() {
-
-        textFieldAttributes[NSFontAttributeName] = font
-        textFieldAttributes[NSForegroundColorAttributeName] = fontColor
-        
-        let placeholderAttributes = [
-            NSForegroundColorAttributeName: fontColor,
-            NSFontAttributeName:            font
-        ]
-        
-        topField.defaultTextAttributes  = textFieldAttributes
-        topField.attributedPlaceholder  = NSAttributedString(string: LocalizedStrings.PlaceholderText.MainView.top, attributes: placeholderAttributes)
-        topField.textAlignment          = .Center //Must be set after the string is set in order to work...
-        
-        bottomField.defaultTextAttributes   = textFieldAttributes
-        bottomField.attributedPlaceholder   = NSAttributedString(string: LocalizedStrings.PlaceholderText.MainView.bottom, attributes: placeholderAttributes)
-        bottomField.textAlignment           = .Center
-    }
     
     internal func updateTextFieldContstraints(withNewOrientation orientation: DestinationOrientation) {
         //FIXME: Find a better solution to text field location on rotation issue: http://smnh.me/synchronizing-rotation-animation-between-the-keyboard-and-the-attached-view-part-2/
@@ -376,21 +419,18 @@ extension MemeEditorView: UITextFieldDelegate {
          * the field, don't type anything, then tap 'Done' on the keyboard. This
          * fixes that scenario.
         */
-        textField.defaultTextAttributes  = textFieldAttributes
-        textField.textAlignment          = .Center
-        textField.placeholder = nil
-        textField.alpha = 1.0
+        prepareTextFieldForAttributedText(textField)
         
         /** Set up observers */
         NSNotificationCenter.defaultCenter().addObserver(
             self,
-            selector: Selector("keyboardWillShow:"),
+            selector: #selector(keyboardWillShow(_:)),
             name: UIKeyboardWillShowNotification,
             object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(
             self,
-            selector: Selector("keyboardWillHide:"),
+            selector: #selector(keyboardWillHide(_:)),
             name: UIKeyboardWillHideNotification,
             object: nil)
         

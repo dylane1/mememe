@@ -12,7 +12,7 @@ class FontListTableViewController: UITableViewController {
 
     private var viewModel: MemeEditorViewModel!
     
-    private var selectedFont = Constants.Fonts.impact
+    private var selectedFont = Constants.Font.impact
     private var selectedIndexPath = NSIndexPath(forRow: 0, inSection: 0)
     
     override func viewDidLoad() {
@@ -53,7 +53,7 @@ class FontListTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(Constants.ReuseIDs.fontListTableCell, forIndexPath: indexPath) as! FontListTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(Constants.ReuseID.fontListTableCell, forIndexPath: indexPath) as! FontListTableViewCell
         
         let model = FontListTableViewCellModel(
             title: Constants.FontFamilyNameArray[indexPath.row],

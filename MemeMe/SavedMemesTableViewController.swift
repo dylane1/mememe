@@ -8,15 +8,18 @@
 
 import UIKit
 
-class SavedMemesTableViewController: UITableViewController, SavedMemesNavigationProtocol, MemeEditorPresentable {
+final class SavedMemesTableViewController: UITableViewController, SavedMemesNavigationProtocol, MemeEditorPresentable {
     private var selectedIndexPath = NSIndexPath(forRow: 0, inSection: 0)
     
     private var storedMemesProvider: MemesProvider!
+    
+    internal var memeEditorNavController: NavigationController?
     
     //MARK: - View Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         title = LocalizedStrings.ViewControllerTitles.memeMe
         
         tableView.estimatedRowHeight = 100
@@ -26,9 +29,11 @@ class SavedMemesTableViewController: UITableViewController, SavedMemesNavigation
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-
-        configureNavigationItems()
+        
         storedMemesProvider = MemesProvider()
+        
+        configureNavigationItems()
+        
         tableView.reloadData()
     }
     
@@ -37,18 +42,16 @@ class SavedMemesTableViewController: UITableViewController, SavedMemesNavigation
         // Dispose of any resources that can be recreated.
     }
 
-
     // MARK: - Navigation
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let deletionClosure = {
+        
+        let deletionClosure = { [unowned self] in
             self.storedMemesProvider.removeMemeFromStorage(atIndex: self.selectedIndexPath.row)
             self.selectedIndexPath = NSIndexPath(forRow: 0, inSection: 0)
-            self.tableView.reloadData()
         }
-        configureDetailVC(forMeme: storedMemesProvider.memeArray[selectedIndexPath.row], segue: segue, deletionClosure: deletionClosure)
+        configureDetailViewController(forMeme: storedMemesProvider.memeArray[selectedIndexPath.row], selectedIndex: selectedIndexPath.row, segue: segue, deletionClosure: deletionClosure)
     }
-
 }
 
 
@@ -63,7 +66,8 @@ extension SavedMemesTableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(Constants.ReuseIDs.memeListTableCell, forIndexPath: indexPath) as! SavedMemesTableViewCell
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier(Constants.ReuseID.memeListTableCell, forIndexPath: indexPath) as! SavedMemesTableViewCell
         
         let topText = storedMemesProvider.memeArray[indexPath.row].topText
         let bottomText = storedMemesProvider.memeArray[indexPath.row].bottomText
@@ -96,7 +100,7 @@ extension SavedMemesTableViewController {
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         selectedIndexPath = indexPath
-        performSegueWithIdentifier(Constants.SegueIDs.memeDetail, sender: self)
+        performSegueWithIdentifier(Constants.SegueID.memeDetail, sender: self)
     }
     
     override func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {

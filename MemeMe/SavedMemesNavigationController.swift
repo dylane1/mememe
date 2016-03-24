@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SavedMemesNavigationController: UINavigationController {
+final class SavedMemesNavigationController: NavigationController {
 
     /** Table & Collection Views */
     private var addClosure: BarButtonClosure?
@@ -21,25 +21,23 @@ class SavedMemesNavigationController: UINavigationController {
     
     internal override func viewDidLoad() {
         super.viewDidLoad()
-        setNavigationBarAttributes()
     }
 
     //MARK: - Configuration
     
     internal func configure(withAddClosure add: BarButtonClosure) {
-            addClosure = add
-            
-            configureNavigationItems()
+        addClosure = add
+        
+        configureNavigationItems()
     }
     
     private func configureNavigationItems() {
         addButton = UIBarButtonItem(
             barButtonSystemItem: .Add,
             target: self,
-            action: "addButtonTapped")
+            action: #selector(addButtonTapped))
         navigationBar.topItem?.rightBarButtonItem = addButton
     }
-    
     
     //MARK: - Actions
     

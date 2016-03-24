@@ -9,24 +9,44 @@
 
 import UIKit
 import MobileCoreServices
-//TODO: conform to ActivityViewControllerPresentable
 
-final class MemeEditorViewController: UIViewController {
+final class MemeEditorViewController: UIViewController, ActivityViewControllerPresentable {
+    //TODO: make private & passed in configure
+    /** Passed by presenting view controller */
+    var vcShouldBeDismissed: BarButtonClosure!
+    
+    private var meme = Meme()
+    
+    
+    /** View */
     private var mainView: MemeEditorView!
     private var mainViewViewModel: MemeEditorViewModel!
-    private var navController: MemeEditorNavigationController!
     
-    /** Toolbar button closures (passed to mainView & its toolbar */
+    /** Navigation */
+//    private var navController: MemeEditorNavigationController!
+    @IBOutlet weak var navItem: MemeEditorNavigationItem!
+    
+    /** For keeping track of app state and enabling/disabling navbar buttons */
+    private var stateMachine = MemeEditorStateMachine()
+    
+    /** Toolbar button closures (passed to mainView & its toolbar) */
     private var cameraButtonClosure: BarButtonClosure?
     private var albumButtonClosure: BarButtonClosure!
     private var fontButtonClosure: BarButtonClosureReturningButtonSource!
     private var fontColorButtonClosure: BarButtonClosureReturningButtonSource!
     
-    /** For keeping track of app state and enabling/disabling navbar buttons */
-    private var stateMachine = MemeEditorStateMachine()
+    /** Picking an image */
+    private lazy var imagePickerController = UIImagePickerController()
     
-    //FIXME: Set to optional & nil it after closing image picker
-    private let imagePickerController = UIImagePickerController()
+    /** ActivityViewControllerPresentable -- For Sharing */
+//    internal var imageToShare: UIImage?
+    internal var activityViewController: UIActivityViewController?
+    internal var activitySuccessCompletion: (() -> Void)? = nil
+    
+    /** Saving to storage & editing */
+    private lazy var storedMemesProvider = MemesProvider()
+    private var storedIndex: Int?
+    private var memeToUpdate: Meme?
     
     /** 
      * For keeping track of errors that occur when the imagePickerController is 
@@ -37,27 +57,15 @@ final class MemeEditorViewController: UIViewController {
     private var errorQueue = [[String]]()
     
     
-    
-    
-    
-    //TODO: ActivityViewControllerPresentable
-    private var imageToShare: UIImage?
-    
-    private var memeModel = Meme()
-    
-    /** Storage */
-    private var storedMemesProvider = MemesProvider()
-     
-     
     //MARK: - View Lifecycle
     
-    deinit { magic("\(self.description) is being deinitialized   <----------------") }
+//    deinit { magic("\(self.description) is being deinitialized   <----------------") }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        magic("\(self.description) is loaded   ---------------->")
+//        magic("\(self.description).view is loaded   ---------------->")
         
-        title = LocalizedStrings.ViewControllerTitles.memeMe
+        title = LocalizedStrings.ViewControllerTitles.newMeme
         
         mainView = view as! MemeEditorView
         mainViewViewModel = MemeEditorViewModel()
@@ -66,38 +74,24 @@ final class MemeEditorViewController: UIViewController {
         
         configureNavigationItems()
         configureToolbarItems()
-        configureImagePicker()
-        
-        let memeTextUpdatedClosure = { [weak self] (updatedMeme: Meme) -> Void in
-            self!.memeModel = updatedMeme
-        }
-        
-        let memeImageUpdatedClosure = { [weak self] (originalMeme: Meme, newImage: UIImage?) -> Meme in
-            /** Delete previous image from storage if needed (MemeMe v2)*/
-            
-            
-            /** Update meme model */
-            self!.memeModel.image = newImage
-            
-            return self!.memeModel
-        }
-        
-        mainView.configure(
-            withDataSource: mainViewViewModel,
-            albumButtonClosure: albumButtonClosure,
-            cameraButtonClosure: cameraButtonClosure,
-            fontButtonClosure: fontButtonClosure,
-            fontColorButtonClosure: fontColorButtonClosure,
-            memeTextUpdatedClosure: memeTextUpdatedClosure,
-            memeImageUpdatedClosure: memeImageUpdatedClosure,
-            stateMachine: stateMachine
-        )
+        configureMemeEditorView()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        /** Will be set if coming from Detail VC */
+        if memeToUpdate != nil {
+            title = LocalizedStrings.ViewControllerTitles.editMeme
+            
+            mainViewViewModel.image.value       = memeToUpdate!.image
+            mainViewViewModel.topText.value     = memeToUpdate!.topText
+            mainViewViewModel.bottomText.value  = memeToUpdate!.bottomText
+            mainViewViewModel.font.value        = memeToUpdate!.font
+            mainViewViewModel.fontColor.value   = memeToUpdate!.fontColor
+            
+            meme = memeToUpdate!
+        }
     }
-    
 
     //MARK: - Configuration
     
@@ -105,152 +99,159 @@ final class MemeEditorViewController: UIViewController {
         If coming from Table or Collection view, meme will be nil. If coming
         from Meme Detail VC, we need to prepopulate the image & text fields
     */
-    internal func configure(withMeme meme: Meme?) {
-        
-    }
-    
-    
-    
-    private func getFontFromDefaults() {
-        if let fontName = Constants.userDefaults.stringForKey(Constants.StorageKeys.fontName) as String! {
-            var i = 0
-            for name in Constants.FontFamilyNameArray {
-                if name == fontName {
-                    mainViewViewModel.font.value = Constants.FontArray[i]
-                }
-                i++
-            }
-        } else {
-            /** Default font */
-            mainViewViewModel.font.value =  Constants.Fonts.impact
-        }
-        
-        if let fontColor = Constants.userDefaults.stringForKey(Constants.StorageKeys.fontColor) as String! {
-            var i = 0
-            for color in Constants.FontColorStringArray {
-                if color == fontColor {
-                    mainViewViewModel.fontColor.value = Constants.FontColorArray[i]
-                }
-                i++
-            }
-        } else {
-            /** Default color */
-            mainViewViewModel.fontColor.value =  Constants.ColorScheme.white
-        }
+    internal func configure(withMeme meme: Meme, atIndex index: Int) {
+        memeToUpdate    = meme
+        storedIndex     = index
     }
     
     private func configureNavigationItems() {
-        navController = navigationController as! MemeEditorNavigationController
         
-        let shareButtonClosure = { [weak self] in
+        var shareButtonClosure: BarButtonClosure?
+        
+        if memeToUpdate == nil {
+            /** This is a new meme, so add a share button */
+            shareButtonClosure = { [unowned self] in
+                
+                guard let image = self.createImage() as UIImage! else  { fatalError("error creating image") }
+                
+                /** If share is successful */
+                self.activitySuccessCompletion = {
+                    
+                    /** Save new meme to storage */
+                    self.meme.memedImage = image
+                
+                    self.storedMemesProvider.addNewMemeToStorage(self.meme, completion: nil)
 
-            self!.imageToShare = self!.createImage()
-            
-            /** Save the meme image to photos album */
-//            UIImageWriteToSavedPhotosAlbum(self!.imageToShare!, self, "image:didFinishSavingWithError:contextInfo:", nil)
-            
-            /** Open Activity View Controller */
-
-            guard let image = self!.imageToShare as UIImage! else  { fatalError("error creating image") }
-            
-            let activityVC = UIActivityViewController(activityItems: [image], applicationActivities: nil)
-            
-            /** Set completion handler for Share */
-            activityVC.completionWithItemsHandler = { [weak self] activityType, completed, returnedItems, activityError in
-                if !completed {
-                    var message = LocalizedStrings.Alerts.ShareError.message
-                    
-                    if activityError != nil {
-                        message += activityError!.localizedDescription
-                    } else {
-                        message += LocalizedStrings.Alerts.ShareError.unknownError
-                    }
-                    let errorArray = [LocalizedStrings.Alerts.ShareError.title, message]
-                    self!.errorQueue.insert(errorArray, atIndex: 0)
-                    
-                    /** Show unedited field if hidden */
-                    self!.mainView.showPlaceholderText()
-                } else {
-                    /** Success! */
-                    
-                    
-                    /** Save the meme to storage */
-                    self!.memeModel.memedImage = image
-                    self!.storedMemesProvider.addNewMemeToStorage(self!.memeModel, completion: nil)
-
-                    /** Reset everything */
-                    self!.memeModel = Meme()
-                    self!.mainViewViewModel.image.value = nil
-                    self!.mainView.resetTextFields()
+                    /** close meme editor */
+                    self.dismissViewControllerAnimated(true, completion: nil)
                 }
                 
-                self!.checkForErrors()
-            }
-
-            self!.presentViewController(activityVC, animated: true, completion: nil)
-        }
-        
-        let saveButtonClosure = { [weak self] in
-            guard let image = self!.createImage() as UIImage! else  { fatalError("error creating image") }
-            /** Save the meme to storage */
-            self!.memeModel.memedImage = image
-            self!.storedMemesProvider.addNewMemeToStorage(self!.memeModel) {
-                //TODO: Alert?
+                /** Open Activity View Controller */
+                self.activityViewController = self.getActivityViewController(withImage: image)
                 
-                /** close meme editor */
-                self!.dismissViewControllerAnimated(true, completion: nil)
+                self.presentViewController(self.activityViewController!, animated: true, completion: nil)
             }
         }
         
-        let clearButtonClosure = { [weak self] in
-            //TODO: Probably should pop a warning alert if an image has been selected & text has been entered
-            self!.mainViewViewModel.image.value = nil
-            self!.mainView.resetTextFields()
+        
+        let saveButtonClosure = { [unowned self] in
+            guard let image = self.createImage() as UIImage! else  { fatalError("error creating image") }
+           
+            self.meme.memedImage = image
+            
+            /** Save the meme to storage */
+            if self.memeToUpdate == nil {
+                
+                /** It's a new meme */
+               
+                self.storedMemesProvider.addNewMemeToStorage(self.meme) {
+                    
+                    /** close meme editor when finished */
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                }
+            } else {
+                /** Ist's an update */
+                self.storedMemesProvider.updateMemeFromStorage(atIndex: self.storedIndex!, withMeme: self.meme) {
+                    
+                    /** close meme editor when finished */
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                }
+            }
         }
         
-        navController.configure(
+        let clearButtonClosure = { [unowned self] in
+            //TODO: Probably should pop a warning alert if an image has been selected & text has been entered
+            self.mainViewViewModel.image.value = nil
+            self.mainView.resetTextFields()
+        }
+        
+        let cancelButtonClosure = { [unowned self] in
+            let navController = self.navigationController as! NavigationController
+            navController.vcShouldBeDismissed?()
+        }
+        
+        navItem.configure(
             withShareButtonClosure: shareButtonClosure,
             saveButtonClosure: saveButtonClosure,
             clearButtonClosure: clearButtonClosure,
+            cancelButtonClosure: cancelButtonClosure,
             stateMachine: stateMachine)
     }
     
     private func configureToolbarItems() {
         
         if UIImagePickerController.isSourceTypeAvailable(.Camera) {
-            cameraButtonClosure = { [weak self] in
-                self!.cameraButtonTapped()
+            cameraButtonClosure = { [unowned self] in
+                self.cameraButtonTapped()
             }
         }
         
-        albumButtonClosure = { [weak self] in
-            self!.albumButtonTapped()
+        albumButtonClosure = { [unowned self] in
+            self.albumButtonTapped()
         }
         
-        fontButtonClosure = { [weak self] (button: UIBarButtonItem) in
-            self!.fontButtonTapped(button)
+        fontButtonClosure = { [unowned self] (button: UIBarButtonItem) in
+            self.fontButtonTapped(button)
         }
         
-        fontColorButtonClosure = { [weak self] (button: UIBarButtonItem) in
-            self!.fontColorButtonTapped(button)
+        fontColorButtonClosure = { [unowned self] (button: UIBarButtonItem) in
+            self.fontColorButtonTapped(button)
         }
     }
-    
+
     private func configureImagePicker() {
         imagePickerController.delegate = self
         imagePickerController.mediaTypes = [kUTTypeImage as String]
     }
     
+    private func configureMemeEditorView() {
+        
+        let memeImageUpdatedClosure = { [unowned self] (newImage: UIImage?) -> Void in
+            /** Update image */
+            self.meme.image = newImage
+        }
+        
+        let memeTextUpdatedClosure = { [unowned self] (topText: String, bottomText: String) -> Void in
+            self.meme.topText      = topText
+            self.meme.bottomText   = bottomText
+        }
+        
+        let memeFontUpdatedClosure = { [unowned self] (newFont: UIFont) -> Void in
+            /** Update image */
+            self.meme.font = newFont
+            
+        }
+        
+        let memeFontColorUpdatedClosure = { [unowned self] (newColor: UIColor) -> Void in
+            /** Update image */
+            self.meme.fontColor = newColor
+        }
+        
+        mainView.configure(
+            withStateMachine: stateMachine,
+            dataSource: mainViewViewModel,
+            albumButtonClosure: albumButtonClosure,
+            cameraButtonClosure: cameraButtonClosure,
+            fontButtonClosure: fontButtonClosure,
+            fontColorButtonClosure: fontColorButtonClosure,
+            memeImageUpdatedClosure: memeImageUpdatedClosure,
+            memeTextUpdatedClosure: memeTextUpdatedClosure,
+            memeFontUpdatedClosure: memeFontUpdatedClosure,
+            memeFontColorUpdatedClosure: memeFontColorUpdatedClosure)
+    }
     
     //MARK: - Actions
     
+    
     /** Toolbar Actions */
     private func cameraButtonTapped() {
+        configureImagePicker()
         imagePickerController.sourceType = .Camera
         presentImagePicker()
     }
     
     private func albumButtonTapped() {
+        configureImagePicker()
         imagePickerController.sourceType = .PhotoLibrary
         presentImagePicker()
     }
@@ -267,9 +268,9 @@ final class MemeEditorViewController: UIViewController {
     
     private func fontButtonTapped(button: UIBarButtonItem) {
         /** Present a popover with available fonts */
-        let storyboard = UIStoryboard(name: Constants.StoryBoardIDs.main, bundle: nil)
+        let storyboard = UIStoryboard(name: Constants.StoryBoardID.main, bundle: nil)
         
-        let fontListTableVC = storyboard.instantiateViewControllerWithIdentifier(Constants.StoryBoardIDs.fontListTableVC) as! FontListTableViewController
+        let fontListTableVC = storyboard.instantiateViewControllerWithIdentifier(Constants.StoryBoardID.fontListTableVC) as! FontListTableViewController
         fontListTableVC.preferredContentSize = CGSizeMake(250, 300)
         fontListTableVC.configure(withViewModel: mainViewViewModel)
         fontListTableVC.modalPresentationStyle = UIModalPresentationStyle.Popover
@@ -279,9 +280,9 @@ final class MemeEditorViewController: UIViewController {
     
     private func fontColorButtonTapped(button: UIBarButtonItem) {
         /** Present a popover with available font colors */
-        let storyboard = UIStoryboard(name: Constants.StoryBoardIDs.main, bundle: nil)
+        let storyboard = UIStoryboard(name: Constants.StoryBoardID.main, bundle: nil)
         
-        let fontColorsVC = storyboard.instantiateViewControllerWithIdentifier(Constants.StoryBoardIDs.fontColorSelectionVC) as! FontColorSelectionViewController
+        let fontColorsVC = storyboard.instantiateViewControllerWithIdentifier(Constants.StoryBoardID.fontColorSelectionVC) as! FontColorSelectionViewController
         fontColorsVC.preferredContentSize = CGSizeMake(260, 116)
         fontColorsVC.configure(withViewModel: mainViewViewModel)
         fontColorsVC.modalPresentationStyle = UIModalPresentationStyle.Popover
@@ -304,6 +305,34 @@ final class MemeEditorViewController: UIViewController {
         }
     }
     
+    private func getFontFromDefaults() {
+        if let fontName = Constants.userDefaults.stringForKey(Constants.StorageKeys.fontName) as String! {
+            var i = 0
+            for name in Constants.FontFamilyNameArray {
+                if name == fontName {
+                    mainViewViewModel.font.value = Constants.FontArray[i]
+                }
+                i += 1
+            }
+        } else {
+            /** Default font */
+            mainViewViewModel.font.value =  Constants.Font.impact
+        }
+        
+        if let fontColor = Constants.userDefaults.stringForKey(Constants.StorageKeys.fontColor) as String! {
+            var i = 0
+            for color in Constants.FontColorStringArray {
+                if color == fontColor {
+                    mainViewViewModel.fontColor.value = Constants.FontColorArray[i]
+                }
+                i += 1
+            }
+        } else {
+            /** Default color */
+            mainViewViewModel.fontColor.value =  Constants.ColorScheme.white
+        }
+    }
+    
     private func createImage() -> UIImage {
         /** Hide unedited field before taking snapshot */
         mainView.hidePlaceholderText()
@@ -311,7 +340,7 @@ final class MemeEditorViewController: UIViewController {
         let info = mainView.getInfoForImageContext()
         
         /** Correct for height of navigationBar */
-        var correctedY = info.y + CGFloat(navController.navigationBar.frame.size.height)
+        var correctedY = info.y + CGFloat(navigationController!.navigationBar.frame.size.height)
         
         /** 
          * If portrait, also correct for status bar
@@ -332,23 +361,6 @@ final class MemeEditorViewController: UIViewController {
         
         return screenShot
     }
-    
-    private func checkForErrors() {
-        if errorQueue.count > 0 {
-            presentError(withErrorArray: errorQueue.removeLast())
-        }
-    }
-    
-    private func presentError(withErrorArray error: [String]) {
-        
-        let alert = UIAlertController(title: error[0], message: error[1], preferredStyle: .Alert)
-       
-        alert.addAction(UIAlertAction(title: LocalizedStrings.ButtonTitles.ok, style: .Default, handler: { [weak self] (alert: UIAlertAction!) in
-            /** There may be more errors in the queue */
-            self!.checkForErrors()
-        }))
-        presentViewController(alert, animated: true, completion: nil)
-    }
 }
 
 //MARK: - UIImagePickerControllerDelegate
@@ -359,7 +371,7 @@ extension MemeEditorViewController: UIImagePickerControllerDelegate {
         mainViewViewModel.image.value = image
         
         /** Set the image in the memeModel so it can be saved to storage */
-        memeModel.image = image
+        meme.image = image
         
         dismissViewControllerAnimated(true, completion: nil)
     }
@@ -389,10 +401,10 @@ extension MemeEditorViewController {
         
         let newOrientation: DestinationOrientation = (size.width > size.height) ? .Landscape : .Portrait
 
-        coordinator.animateAlongsideTransition({ (context: UIViewControllerTransitionCoordinatorContext!) in
-                self.mainView.updateTextFieldContstraints(withNewOrientation: newOrientation)
-                self.mainView.setNeedsLayout()
-            }, completion: nil)
+        coordinator.animateAlongsideTransition({ [unowned self] (context: UIViewControllerTransitionCoordinatorContext!) in
+            self.mainView.updateTextFieldContstraints(withNewOrientation: newOrientation)
+            self.mainView.setNeedsLayout()
+        }, completion: nil)
     }
 }
 
@@ -405,38 +417,3 @@ extension MemeEditorViewController: UIPopoverPresentationControllerDelegate {
         return .None
     }
 }
-
-/** Save Image completion */
-/*******************************************************************************
-* Not currently saving to the Photo Album, but will be an option in MemeMe v2
-*
-*******************************************************************************/
-//    internal func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Void>) {
-/** NSError for testing errorQueue */
-//        let testErrorUserInfo = [
-//            NSLocalizedDescriptionKey : "Operation was unsuccessful."
-//        ]
-//        let NSTestErrorDomain = "foo"
-//
-//        var testError: NSError? = NSError(domain: NSTestErrorDomain, code: 42, userInfo: testErrorUserInfo)
-
-//        if error == nil {
-//            /** Reset everything */
-//            mainViewViewModel.image.value = nil
-//            mainView.resetTextFields()
-//        } else {
-//            magic("error: \(error?.localizedDescription)")
-//
-//            /**
-//             Unable to present an error alert because activityVC is already open
-//
-//             Add error to errorQueue & display after activityVC is dismissed.
-//            */
-//            let message     = LocalizedStrings.ErrorAlerts.ImageSaveError.message + error!.localizedDescription
-//            let errorArray  = [LocalizedStrings.ErrorAlerts.ImageSaveError.title, message]
-//            errorQueue.insert(errorArray, atIndex: 0)
-//        }
-//    }
-
-
-
