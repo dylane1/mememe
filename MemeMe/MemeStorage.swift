@@ -106,10 +106,10 @@ struct MemesProvider {
     }
     
     private func saveImageAndGetName(image: UIImage) -> String {
-        let imageName = NSUUID().UUIDString + ".png"
+        let imageName = NSUUID().UUIDString + ".jpeg"
         let filename = getDocumentsDirectory().stringByAppendingPathComponent(imageName)
         
-        if let imageData = UIImagePNGRepresentation(image) {
+        if let imageData = UIImageJPEGRepresentation(image, 1.0) {
             imageData.writeToFile(filename, atomically: true)
         }
         

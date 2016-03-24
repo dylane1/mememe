@@ -37,9 +37,13 @@ final class SavedMemeDetailViewController: UIViewController, ActivityViewControl
     
     //MARK: - View Lifecycle
     
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+         hidesBottomBarWhenPushed = true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        hidesBottomBarWhenPushed = true
         savedMemeView = view as! SavedMemeDetailView
     }
 
@@ -50,7 +54,6 @@ final class SavedMemeDetailViewController: UIViewController, ActivityViewControl
         storedMemesProvider = MemesProvider()
         
         meme = storedMemesProvider.memeArray[selectedIndex]
-        magic("top: \(meme.topText)")
         savedMemeView.configure(withImage: meme.memedImage!)
     }
     
