@@ -221,29 +221,16 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
         let memeTextUpdatedClosure = { [unowned self] (topText: String, bottomText: String) -> Void in
             self.meme.topText      = topText
             self.meme.bottomText   = bottomText
-            
-            if self.memeToUpdate != nil {
-                self.memeToUpdate!.topText      = topText
-                self.memeToUpdate!.bottomText   = bottomText
-            }
         }
         
         let memeFontUpdatedClosure = { [unowned self] (newFont: UIFont) -> Void in
             /** Update image */
             self.meme.font = newFont
-            
-            if self.memeToUpdate != nil {
-                self.memeToUpdate!.font = newFont
-            }
         }
         
         let memeFontColorUpdatedClosure = { [unowned self] (newColor: UIColor) -> Void in
             /** Update image */
             self.meme.fontColor = newColor
-            
-            if self.memeToUpdate != nil {
-                self.memeToUpdate!.fontColor = newColor
-            }
         }
         
         mainView.configure(

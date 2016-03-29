@@ -54,6 +54,7 @@ final class SavedMemeDetailViewController: UIViewController, ActivityViewControl
         storedMemesProvider = MemesProvider()
         
         meme = storedMemesProvider.memeArray[selectedIndex]
+        
         savedMemeView.configure(withImage: meme.memedImage!)
     }
     
