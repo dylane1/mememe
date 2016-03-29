@@ -233,7 +233,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3490" y="147"/>
+            <point key="canvasLocation" x="18" y="1499"/>
         </scene>
         <!--Font List Table View Controller-->
         <scene sceneID="ugl-q5-sgp">
@@ -283,7 +283,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7fg-YX-VKO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4794" y="109"/>
+            <point key="canvasLocation" x="1322" y="1461"/>
         </scene>
         <!--Font Color Selection View Controller-->
         <scene sceneID="8X2-22-4wX">
@@ -424,7 +424,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Wp-xX-eeV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4421" y="115"/>
+            <point key="canvasLocation" x="949" y="1467"/>
         </scene>
         <!--Item-->
         <scene sceneID="cuz-15-Vf2">
@@ -502,7 +502,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fCl-AA-9c7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3071" y="147"/>
+            <point key="canvasLocation" x="-401" y="1499"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>

@@ -366,15 +366,16 @@ final class MemeEditorView: UIView {
             bottomFieldTrailingConstraint.constant  = 0
             
             let correctHeight = (imageView.frame.width / imageView.image!.size.width) * imageView.image!.size.height
-
-            let newConstant = ((imageView.frame.height - correctHeight) / 2)
+            
+            var newConstant = ((imageView.frame.height - correctHeight) / 2)
+            newConstant = (newConstant > 0) ? newConstant : 0 // Negative number is bad, very bad...
+            
             topFieldTopConstraint.constant          = newConstant + 8
             bottomFieldBottomConstraint.constant    = newConstant + 52
         }
     }
     
     internal func getInfoForImageContext() -> (size: CGSize, x: CGFloat, y: CGFloat) {
-        
         let multiplier: CGFloat
         
         if UIDevice.currentDevice().orientation.isLandscape.boolValue {
@@ -385,11 +386,13 @@ final class MemeEditorView: UIView {
             multiplier = imageView.frame.width / imageView.image!.size.width
         }
         
-        let width = imageView.image!.size.width * multiplier
-        let height = imageView.image!.size.height * multiplier
+        var width = imageView.image!.size.width * multiplier
+        var height = imageView.image!.size.height * multiplier
+        
         
         let x: CGFloat
         if width >= imageView.frame.width {
+            width = imageView.frame.width
             x = 0
         } else {
             x = (imageView.frame.width - width) / 2
@@ -397,6 +400,7 @@ final class MemeEditorView: UIView {
         
         let y: CGFloat
         if height >= imageView.frame.height {
+            height = imageView.frame.height
             y = 0
         } else {
             y = (imageView.frame.height - height) / 2
