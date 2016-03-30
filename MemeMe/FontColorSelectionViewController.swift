@@ -30,14 +30,12 @@ class FontColorSelectionViewController: UIViewController {
             /** Save selection to NSUserDefaults */
             Constants.userDefaults.setObject(Constants.FontColorStringArray[index] as NSString, forKey: Constants.StorageKeys.fontColor)
         }
-        
         selectionView.configure(withSelectionClosure: colorSelectedClosure)
     }
 
-    //MARK: - Internal funk(s)
+    //MARK: - Configuration
     
     internal func configure(withViewModel viewModel: MemeEditorViewModel) {
         mainViewViewModel = viewModel
     }
-
 }

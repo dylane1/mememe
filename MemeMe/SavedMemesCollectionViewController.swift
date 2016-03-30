@@ -20,8 +20,7 @@ final class SavedMemesCollectionViewController: UICollectionViewController, Save
 
         title = LocalizedStrings.ViewControllerTitles.memeMe
         
-        collectionView!.backgroundColor = Constants.ColorScheme.lightGrey
-        collectionView!.delegate = self
+        configureCollectionView()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -37,6 +36,11 @@ final class SavedMemesCollectionViewController: UICollectionViewController, Save
         // Dispose of any resources that can be recreated.
     }
 
+    //MARK: - Configuration
+    private func configureCollectionView() {
+        collectionView!.backgroundColor = Constants.ColorScheme.darkGrey
+        collectionView!.delegate = self
+    }
     
     // MARK: - Navigation
 

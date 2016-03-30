@@ -17,7 +17,6 @@ protocol MemeEditorViewDataSource {
 }
 
 final class MemeEditorView: UIView {
-    typealias BarButtonClosure = () -> Void
     private var albumButtonClosure: BarButtonClosure?
     private var cameraButtonClosure: BarButtonClosure?
     
@@ -37,7 +36,6 @@ final class MemeEditorView: UIView {
     
     typealias MemeFontColorUpdated = (UIColor) -> Void
     private var memeFontColorUpdatedClosure: MemeFontColorUpdated?
-    
     
     private var image: UIImage? = nil {
         didSet {
@@ -161,8 +159,8 @@ final class MemeEditorView: UIView {
         memeImageUpdatedClosure: MemeImageUpdated,
         memeTextUpdatedClosure: MemeTextUpdated,
         memeFontUpdatedClosure: MemeFontUpdated,
-        memeFontColorUpdatedClosure: MemeFontColorUpdated)
-    {
+        memeFontColorUpdatedClosure: MemeFontColorUpdated) {
+        
         self.stateMachine                   = stateMachine
         self.dataSource                     = dataSource
         self.albumButtonClosure             = albumButtonClosure
@@ -313,7 +311,6 @@ final class MemeEditorView: UIView {
         bottomFieldBottomConstraint.constant    = 52
         bottomFieldTrailingConstraint.constant  = 0
         
-//        showPlaceholderText()
         configureTextFields()
     }
 

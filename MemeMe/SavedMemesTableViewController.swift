@@ -22,9 +22,7 @@ final class SavedMemesTableViewController: UITableViewController, SavedMemesNavi
         
         title = LocalizedStrings.ViewControllerTitles.memeMe
         
-        tableView.estimatedRowHeight = 100
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.delegate = self
+        configureTableView()
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -42,7 +40,16 @@ final class SavedMemesTableViewController: UITableViewController, SavedMemesNavi
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: - Navigation
+    //MARK: - Configuration
+    
+    private func configureTableView() {
+        tableView.estimatedRowHeight = 100
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.delegate = self
+        tableView.backgroundColor = Constants.ColorScheme.darkGrey
+    }
+    
+    //MARK: - Navigation
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         

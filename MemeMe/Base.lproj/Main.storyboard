@@ -426,11 +426,13 @@
             </objects>
             <point key="canvasLocation" x="949" y="1467"/>
         </scene>
-        <!--Item-->
+        <!--Saved Memes Navigation Controller-->
         <scene sceneID="cuz-15-Vf2">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="cIU-9P-sjY" customClass="SavedMemesNavigationController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="fYF-NZ-tHh"/>
+                    <tabBarItem key="tabBarItem" title="" image="Table" id="fYF-NZ-tHh">
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="20"/>
+                    </tabBarItem>
                     <toolbarItems/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="3UC-Cj-7a7">
@@ -439,6 +441,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
+                        <outlet property="tabBarItem" destination="fYF-NZ-tHh" id="SfT-Pn-wHJ"/>
                         <segue destination="qA9-ch-gw5" kind="relationship" relationship="rootViewController" id="QLL-Rk-fmd"/>
                     </connections>
                 </navigationController>
@@ -446,11 +449,13 @@
             </objects>
             <point key="canvasLocation" x="183" y="13"/>
         </scene>
-        <!--Item-->
+        <!--Saved Memes Navigation Controller-->
         <scene sceneID="xnc-pz-yoD">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="FCz-hD-sFO" customClass="SavedMemesNavigationController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="No3-tU-bCN"/>
+                    <tabBarItem key="tabBarItem" title="" image="Collection" id="No3-tU-bCN">
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="20"/>
+                    </tabBarItem>
                     <toolbarItems/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="aI0-MK-k9S">
@@ -469,7 +474,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="rlp-vF-KnN">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="P3N-HC-PvD" sceneMemberID="viewController">
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="P3N-HC-PvD" customClass="TabBarController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="BAg-5Q-U8O">
@@ -505,6 +510,10 @@
             <point key="canvasLocation" x="-401" y="1499"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Collection" width="30" height="30"/>
+        <image name="Table" width="30" height="30"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="nKj-u0-VbV"/>
     </inferredMetricsTieBreakers>

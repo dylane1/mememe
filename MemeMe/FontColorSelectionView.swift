@@ -12,9 +12,7 @@ class FontColorSelectionView: UIView {
 
     typealias ChangeColor = (index: Int) -> Void
     private var didSelectColor: ChangeColor?
-    
-    
-    
+
     @IBOutlet weak var button0: UIButton!
     @IBOutlet weak var button1: UIButton!
     @IBOutlet weak var button2: UIButton!
@@ -24,13 +22,10 @@ class FontColorSelectionView: UIView {
     @IBOutlet weak var button6: UIButton!
     @IBOutlet weak var button7: UIButton!
 
-    
     private var buttonArray:[UIButton]!
+    
     //MARK: - View Lifecycle
     
-    
-    // Only override drawRect: if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
     override func drawRect(rect: CGRect) {
         buttonArray = [button0, button1, button2, button3, button4, button5, button6, button7]
         for button in buttonArray {
@@ -39,19 +34,15 @@ class FontColorSelectionView: UIView {
     }
     
 
-    //MARK: - Internal funk(s)
+    //MARK: - Configuration
+    
     internal func configure(withSelectionClosure closure: ChangeColor) {
         didSelectColor = closure
     }
     
+    //MARK: - Actions
     
     @IBAction func buttonAction(sender: UIButton) {
         didSelectColor?(index: sender.tag)
     }
-    
-    
-    //MARK: - Private funk(s)
-    
-    
-    
 }

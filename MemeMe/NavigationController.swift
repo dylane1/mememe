@@ -23,12 +23,12 @@ class NavigationController: UINavigationController {
     
     private func setNavigationBarAttributes() {
         
-        navigationBar.barTintColor = Constants.ColorScheme.white
-        navigationBar.tintColor    = Constants.ColorScheme.darkBlue
+        navigationBar.barTintColor = Constants.ColorScheme.darkBlue
+        navigationBar.tintColor    = Constants.ColorScheme.white
         navigationBar.translucent  = true
         
         let titleLabelAttributes = [
-            NSForegroundColorAttributeName : Constants.ColorScheme.black,
+            NSForegroundColorAttributeName : Constants.ColorScheme.white,
             NSFontAttributeName: UIFont.systemFontOfSize(17, weight: UIFontWeightMedium)
         ]
         navigationBar.titleTextAttributes = titleLabelAttributes
