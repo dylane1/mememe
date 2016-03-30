@@ -172,11 +172,13 @@ final class MemeEditorView: UIView {
         self.memeFontUpdatedClosure         = memeFontUpdatedClosure
         self.memeFontColorUpdatedClosure    = memeFontColorUpdatedClosure
         
+        imageView.backgroundColor = Constants.ColorScheme.darkBlueGrey
         configureToolbarItems()
         configureTextFields()
     }
 
     private func configureToolbarItems() {
+        
         var toolbarItemArray = [UIBarButtonItem]()
         
         let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
@@ -227,8 +229,8 @@ final class MemeEditorView: UIView {
         
         toolbar.setItems(toolbarItemArray, animated: false)
         
-        toolbar.barTintColor = Constants.ColorScheme.white
-        toolbar.tintColor    = Constants.ColorScheme.darkBlue
+        toolbar.barTintColor = Constants.ColorScheme.darkBlue
+        toolbar.tintColor    = Constants.ColorScheme.white
         toolbar.translucent  = true
     }
     

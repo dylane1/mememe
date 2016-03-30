@@ -63,6 +63,8 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
     override func viewDidLoad() {
         super.viewDidLoad()
 //        magic("\(self.description).view is loaded   ---------------->")
+        let navController = navigationController! as! NavigationController
+        navController.setNavigationBarAttributes(isAppTitle: false)
         
         title = LocalizedStrings.ViewControllerTitles.newMeme
         

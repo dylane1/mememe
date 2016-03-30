@@ -56,4 +56,9 @@ struct LocalizedStrings {
         static let ok       = NSLocalizedString("buttonTitles.ok",      value: "OK",     comment: "")
         static let cancel   = NSLocalizedString("buttonTitles.cancel",  value: "Cancel", comment: "")
     }
+    
+    struct EmptyDataSetVCLabels {
+        static let label0 = NSLocalizedString("emptyDataSetVC.label0", value: "Meme Like A Boss!",       comment: "")
+        static let label1 = NSLocalizedString("emptyDataSetVC.label1", value: "Tap Add to get started!", comment: "")
+    }
 }

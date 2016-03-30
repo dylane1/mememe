@@ -44,6 +44,9 @@ final class SavedMemeDetailViewController: UIViewController, ActivityViewControl
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let navController = navigationController! as! NavigationController
+        navController.setNavigationBarAttributes(isAppTitle: false)
+        
         savedMemeView = view as! SavedMemeDetailView
     }
 

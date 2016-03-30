@@ -19,15 +19,17 @@ final class SavedMemesCollectionViewController: UICollectionViewController, Save
         super.viewDidLoad()
 
         title = LocalizedStrings.ViewControllerTitles.memeMe
-        
-        configureCollectionView()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
         configureNavigationItems()
+        
         storedMemesProvider = MemesProvider()
+        
+        configureCollectionView()
+        
         collectionView!.reloadData()
     }
 
@@ -38,7 +40,12 @@ final class SavedMemesCollectionViewController: UICollectionViewController, Save
 
     //MARK: - Configuration
     private func configureCollectionView() {
-        collectionView!.backgroundColor = Constants.ColorScheme.darkGrey
+        if storedMemesProvider.memeArray.count == 0 {
+            let emptyDataSetVC = UIStoryboard(name: Constants.StoryBoardID.main, bundle: nil).instantiateViewControllerWithIdentifier(Constants.StoryBoardID.emptyDataSetVC) as! EmptyDataSetViewController
+            
+            collectionView!.backgroundView = emptyDataSetVC.view
+        }
+        collectionView!.backgroundColor = Constants.ColorScheme.darkBlueGrey
         collectionView!.delegate = self
     }
     

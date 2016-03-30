@@ -12,6 +12,7 @@
 		A3113AC11C9C73770032124F /* ActivityViewControllerPresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3113AC01C9C73770032124F /* ActivityViewControllerPresentable.swift */; };
 		A322E1841CAB1D250002BACC /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A322E1831CAB1D250002BACC /* TabBarController.swift */; };
 		A322E1881CAB55400002BACC /* cats.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A322E1871CAB55400002BACC /* cats.jpg */; };
+		A322E18A1CAB6C290002BACC /* EmptyDataSetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A322E1891CAB6C290002BACC /* EmptyDataSetViewController.swift */; };
 		A324810F1C65704200D10134 /* Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A324810E1C65704200D10134 /* Magic.swift */; };
 		A324A2321C877AC50037BA27 /* FontListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A324A2311C877AC50037BA27 /* FontListTableViewCell.swift */; };
 		A324A2351C8787500037BA27 /* FontListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A324A2341C8787500037BA27 /* FontListTableViewController.swift */; };
@@ -51,6 +52,7 @@
 		A3113AC01C9C73770032124F /* ActivityViewControllerPresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityViewControllerPresentable.swift; sourceTree = "<group>"; };
 		A322E1831CAB1D250002BACC /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		A322E1871CAB55400002BACC /* cats.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cats.jpg; sourceTree = "<group>"; };
+		A322E1891CAB6C290002BACC /* EmptyDataSetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyDataSetViewController.swift; sourceTree = "<group>"; };
 		A324810E1C65704200D10134 /* Magic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Magic.swift; path = Magic/Magic.swift; sourceTree = "<group>"; };
 		A324A2311C877AC50037BA27 /* FontListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontListTableViewCell.swift; sourceTree = "<group>"; };
 		A324A2341C8787500037BA27 /* FontListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontListTableViewController.swift; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 			isa = PBXGroup;
 			children = (
 				A3BDD4A31C8E6E3F0069AAFD /* SavedMemesNavigationController.swift */,
+				A322E1891CAB6C290002BACC /* EmptyDataSetViewController.swift */,
 				A3BDD4A91C8FBD7A0069AAFD /* SavedMemeCellDataSource.swift */,
 				A3BDD4AB1C8FBDF50069AAFD /* Table View */,
 				A3BDD4AC1C8FBE050069AAFD /* Collection View */,
@@ -359,6 +362,7 @@
 				A3BDD4A41C8E6E3F0069AAFD /* SavedMemesNavigationController.swift in Sources */,
 				A39FB07A1C8A2C6D007E0B95 /* FontColorSelectionView.swift in Sources */,
 				A383BF271C628C9900D80668 /* MemeEditorViewModel.swift in Sources */,
+				A322E18A1CAB6C290002BACC /* EmptyDataSetViewController.swift in Sources */,
 				A3BDD49B1C8E65A40069AAFD /* SavedMemesTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

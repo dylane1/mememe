@@ -22,7 +22,10 @@ final class SavedMemesTableViewController: UITableViewController, SavedMemesNavi
         
         title = LocalizedStrings.ViewControllerTitles.memeMe
         
-        configureTableView()
+//        let nav = navigationController as! SavedMemesNavigationController
+        
+//        nav.insertEmptyDataSetView()
+        
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -31,6 +34,8 @@ final class SavedMemesTableViewController: UITableViewController, SavedMemesNavi
         storedMemesProvider = MemesProvider()
         
         configureNavigationItems()
+        
+        configureTableView()
         
         tableView.reloadData()
     }
@@ -43,10 +48,16 @@ final class SavedMemesTableViewController: UITableViewController, SavedMemesNavi
     //MARK: - Configuration
     
     private func configureTableView() {
+        if storedMemesProvider.memeArray.count == 0 {
+            let emptyDataSetVC = UIStoryboard(name: Constants.StoryBoardID.main, bundle: nil).instantiateViewControllerWithIdentifier(Constants.StoryBoardID.emptyDataSetVC) as! EmptyDataSetViewController
+            
+            tableView.backgroundView = emptyDataSetVC.view
+        }
+
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.delegate = self
-        tableView.backgroundColor = Constants.ColorScheme.darkGrey
+        tableView.backgroundColor = Constants.ColorScheme.darkBlueGrey
     }
     
     //MARK: - Navigation

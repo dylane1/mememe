@@ -105,6 +105,71 @@
             </objects>
             <point key="canvasLocation" x="1128" y="340"/>
         </scene>
+        <!--Empty Data Set View Controller-->
+        <scene sceneID="5dO-wc-SCD">
+            <objects>
+                <viewController storyboardIdentifier="sb_emptyDataSetVC" id="jrw-tl-IDy" customClass="EmptyDataSetViewController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="tmd-ST-Leu"/>
+                        <viewControllerLayoutGuide type="bottom" id="L52-ZN-xPt"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="yTQ-Iz-Uvm">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hrk-1K-WJL">
+                                <rect key="frame" x="20" y="164" width="280" height="240"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Pig-Meme" translatesAutoresizingMaskIntoConstraints="NO" id="qP9-0a-FEG">
+                                        <rect key="frame" x="12" y="0.0" width="256" height="172"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="172" id="hqG-T5-O3j"/>
+                                            <constraint firstAttribute="width" constant="256" id="pbA-OD-Ij3"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zHQ-eb-qiv">
+                                        <rect key="frame" x="0.0" y="180" width="280" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9kj-XB-iIp">
+                                        <rect key="frame" x="0.0" y="203" width="280" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="zHQ-eb-qiv" firstAttribute="top" secondItem="qP9-0a-FEG" secondAttribute="bottom" constant="8" id="0iO-0V-LWL"/>
+                                    <constraint firstAttribute="height" constant="240" id="9EP-28-05u"/>
+                                    <constraint firstAttribute="trailing" secondItem="zHQ-eb-qiv" secondAttribute="trailing" id="BEt-fS-JXJ"/>
+                                    <constraint firstItem="9kj-XB-iIp" firstAttribute="leading" secondItem="hrk-1K-WJL" secondAttribute="leading" id="CPT-gL-eCa"/>
+                                    <constraint firstItem="zHQ-eb-qiv" firstAttribute="leading" secondItem="hrk-1K-WJL" secondAttribute="leading" id="DqG-Kf-hSb"/>
+                                    <constraint firstItem="9kj-XB-iIp" firstAttribute="top" secondItem="zHQ-eb-qiv" secondAttribute="bottom" constant="2" id="cz4-wh-1iG"/>
+                                    <constraint firstItem="qP9-0a-FEG" firstAttribute="centerX" secondItem="hrk-1K-WJL" secondAttribute="centerX" id="eXN-9O-MsL"/>
+                                    <constraint firstAttribute="width" constant="280" id="f4p-OH-HYX"/>
+                                    <constraint firstItem="qP9-0a-FEG" firstAttribute="top" secondItem="hrk-1K-WJL" secondAttribute="top" id="j9D-kD-2Pd"/>
+                                    <constraint firstAttribute="trailing" secondItem="9kj-XB-iIp" secondAttribute="trailing" id="wjs-nN-17y"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="hrk-1K-WJL" firstAttribute="centerX" secondItem="yTQ-Iz-Uvm" secondAttribute="centerX" id="HKY-gU-Wry"/>
+                            <constraint firstItem="hrk-1K-WJL" firstAttribute="centerY" secondItem="yTQ-Iz-Uvm" secondAttribute="centerY" id="hin-BC-Hdl"/>
+                        </constraints>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="imageView" destination="qP9-0a-FEG" id="E7b-cJ-Psu"/>
+                        <outlet property="label0" destination="zHQ-eb-qiv" id="Qi3-Ag-VTk"/>
+                        <outlet property="label1" destination="9kj-XB-iIp" id="dJa-Yl-ASq"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jBm-J8-YP0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1586" y="340"/>
+        </scene>
         <!--Saved Memes Collection View Controller-->
         <scene sceneID="aZK-vT-E9q">
             <objects>
@@ -512,6 +577,7 @@
     </scenes>
     <resources>
         <image name="Collection" width="30" height="30"/>
+        <image name="Pig-Meme" width="256" height="172"/>
         <image name="Table" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>

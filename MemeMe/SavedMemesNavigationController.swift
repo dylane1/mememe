@@ -10,12 +10,10 @@ import UIKit
 
 final class SavedMemesNavigationController: NavigationController {
 
-    /** Table & Collection Views */
     private var addClosure: BarButtonClosure?
     private var addButton: UIBarButtonItem?
-//    private var editClosure: BarButtonClosure?
-//    private var editButton: UIBarButtonItem?
     
+    private var emptyDataSetVC: EmptyDataSetViewController?
     
     //MARK: - View Lifecycle
     
@@ -44,4 +42,16 @@ final class SavedMemesNavigationController: NavigationController {
     internal func addButtonTapped() {
         addClosure?()
     }
+    
+//    internal func insertEmptyDataSetView() {
+//        emptyDataSetVC = UIStoryboard(name: Constants.StoryBoardID.main, bundle: nil).instantiateViewControllerWithIdentifier(Constants.StoryBoardID.emptyDataSetVC) as! EmptyDataSetViewController
+//        emptyDataSetVC!.view.bounds = view.bounds
+//        view.addSubview(emptyDataSetVC!.view)
+//    }
+    
+//    internal func removeEmptyDataSetView() {
+//        if emptyDataSetVC == nil { return }
+//        
+//        view.willRemoveSubview(<#T##subview: UIView##UIView#>)
+//    }
 }
