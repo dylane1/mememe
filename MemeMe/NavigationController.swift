@@ -18,8 +18,8 @@ class NavigationController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
 //        magic("\(self.description) has been loaded   ---------------->")
-        setNavigationBarAttributes(isAppTitle: true)
     }
+    
     
     internal func setNavigationBarAttributes(isAppTitle isTitle: Bool) {
         

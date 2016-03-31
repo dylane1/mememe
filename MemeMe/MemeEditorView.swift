@@ -172,7 +172,7 @@ final class MemeEditorView: UIView {
         self.memeFontUpdatedClosure         = memeFontUpdatedClosure
         self.memeFontColorUpdatedClosure    = memeFontColorUpdatedClosure
         
-        imageView.backgroundColor = Constants.ColorScheme.darkBlueGrey
+        imageView.backgroundColor = Constants.ColorScheme.darkGrey
         configureToolbarItems()
         configureTextFields()
     }

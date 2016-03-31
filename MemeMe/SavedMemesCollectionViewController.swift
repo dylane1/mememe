@@ -23,6 +23,10 @@ final class SavedMemesCollectionViewController: UICollectionViewController, Save
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
+        /** Set special font for the app title */
+        let navController = navigationController! as! NavigationController
+        navController.setNavigationBarAttributes(isAppTitle: true)
 
         configureNavigationItems()
         
@@ -44,7 +48,10 @@ final class SavedMemesCollectionViewController: UICollectionViewController, Save
             let emptyDataSetVC = UIStoryboard(name: Constants.StoryBoardID.main, bundle: nil).instantiateViewControllerWithIdentifier(Constants.StoryBoardID.emptyDataSetVC) as! EmptyDataSetViewController
             
             collectionView!.backgroundView = emptyDataSetVC.view
+        } else {
+            collectionView!.backgroundView = nil
         }
+        
         collectionView!.backgroundColor = Constants.ColorScheme.darkBlueGrey
         collectionView!.delegate = self
     }
@@ -78,7 +85,7 @@ extension SavedMemesCollectionViewController {
         
         let title = (storedMemesProvider.memeArray[indexPath.row].topText != "") ? storedMemesProvider.memeArray[indexPath.row].topText : storedMemesProvider.memeArray[indexPath.row].bottomText
         
-        let model = SavedMemeCellModel(title: title, image: storedMemesProvider.memeArray[indexPath.row].memedImage!)
+        let model = SavedMemeCellModel(title: title, image: storedMemesProvider.memeArray[indexPath.row].memedImage!, font: nil)
         
         cell.configure(withDataSource: model)
         
