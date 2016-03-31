@@ -14,7 +14,6 @@ final class SavedMemesTableViewCell: UITableViewCell {
     
     private var dataSource: SavedMemeCellDataSource!
     
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -27,13 +26,18 @@ final class SavedMemesTableViewCell: UITableViewCell {
     }
     
     private func configureImageView() {
-        memeImageView.backgroundColor = Constants.ColorScheme.lightGrey
+        memeImageView.backgroundColor = Constants.ColorScheme.darkGrey
         memeImageView.image = dataSource.image
     }
     
     private func configureLabel() {
-        let attributedString = NSMutableAttributedString(string: dataSource.title, attributes: dataSource.textAttributes)
+        memeLabel.adjustsFontSizeToFitWidth  = true
         
+        var attributes = dataSource.textAttributes
+        attributes[NSFontAttributeName] = dataSource.font!
+        
+        let attributedString = NSMutableAttributedString(string: dataSource.title, attributes: attributes)
+
         memeLabel.attributedText = attributedString
     }
 }

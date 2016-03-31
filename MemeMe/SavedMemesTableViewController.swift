@@ -20,16 +20,15 @@ final class SavedMemesTableViewController: UITableViewController, SavedMemesNavi
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = LocalizedStrings.ViewControllerTitles.memeMe
-        
-//        let nav = navigationController as! SavedMemesNavigationController
-        
-//        nav.insertEmptyDataSetView()
-        
+        title = LocalizedStrings.ViewControllerTitles.memeMe        
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
+        /** Set special font for the app title */
+        let navController = navigationController! as! NavigationController
+        navController.setNavigationBarAttributes(isAppTitle: true)
         
         storedMemesProvider = MemesProvider()
         
@@ -52,6 +51,8 @@ final class SavedMemesTableViewController: UITableViewController, SavedMemesNavi
             let emptyDataSetVC = UIStoryboard(name: Constants.StoryBoardID.main, bundle: nil).instantiateViewControllerWithIdentifier(Constants.StoryBoardID.emptyDataSetVC) as! EmptyDataSetViewController
             
             tableView.backgroundView = emptyDataSetVC.view
+        } else {
+            tableView.backgroundView = nil
         }
 
         tableView.estimatedRowHeight = 100
@@ -91,10 +92,10 @@ extension SavedMemesTableViewController {
         let bottomText = storedMemesProvider.memeArray[indexPath.row].bottomText
         
         var title = topText
-        if topText != "" && bottomText != "" { title += "\n" }
+        if topText != "" && bottomText != "" { title += "\n\n" }
         title += bottomText
         
-        let model = SavedMemeCellModel(title: title, image: storedMemesProvider.memeArray[indexPath.row].memedImage!)
+        let model = SavedMemeCellModel(title: title, image: storedMemesProvider.memeArray[indexPath.row].memedImage!, font: storedMemesProvider.memeArray[indexPath.row].font)
         cell.configure(withDataSource: model)
         
         return cell

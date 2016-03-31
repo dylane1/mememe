@@ -11,13 +11,16 @@ import UIKit
 protocol SavedMemeCellDataSource {
     var title: String { get }
     var image: UIImage { get }
+    var font:  UIFont? { get }
     var textAttributes: [String : AnyObject] { get }
 }
 
 extension SavedMemeCellDataSource {
     var textAttributes: [String : AnyObject] {
         return [
-            NSForegroundColorAttributeName: Constants.ColorScheme.black
+            NSForegroundColorAttributeName: Constants.ColorScheme.white,
+            NSStrokeColorAttributeName:     Constants.ColorScheme.black,
+            NSStrokeWidthAttributeName:     -3.0
         ]
     }
 }
@@ -25,4 +28,5 @@ extension SavedMemeCellDataSource {
 struct SavedMemeCellModel: SavedMemeCellDataSource {
     var title: String
     var image: UIImage
+    var font: UIFont?
 }
