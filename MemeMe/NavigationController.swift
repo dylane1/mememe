@@ -27,22 +27,18 @@ class NavigationController: UINavigationController {
         navigationBar.tintColor    = Constants.ColorScheme.white
         navigationBar.translucent  = true
         
-        let titleLabelAttributes: [String : AnyObject]
+        let shadow = NSShadow()
+        shadow.shadowColor = Constants.ColorScheme.veryDarkBlue
+        shadow.shadowOffset = CGSize(width: -1.0, height: -1.0)
+        
+        var titleLabelAttributes: [String : AnyObject] = [
+            NSShadowAttributeName: shadow,
+            NSForegroundColorAttributeName : Constants.ColorScheme.white]
+        
         if isTitle {
-            let shadow = NSShadow()
-            shadow.shadowColor = Constants.ColorScheme.veryDarkBlue
-            shadow.shadowOffset = CGSize(width: -1.0, height: -1.0)
-            
-            titleLabelAttributes = [
-                NSShadowAttributeName: shadow,
-                NSForegroundColorAttributeName : Constants.ColorScheme.white,
-                NSFontAttributeName: UIFont(name: Constants.FontName.markerFelt, size: 24)! //UIFont.systemFontOfSize(17, weight: UIFontWeightMedium)
-            ]
+            titleLabelAttributes[NSFontAttributeName] = UIFont(name: Constants.FontName.markerFelt, size: 24)!
         } else {
-            titleLabelAttributes = [
-                NSForegroundColorAttributeName : Constants.ColorScheme.white,
-                NSFontAttributeName: UIFont.systemFontOfSize(17, weight: UIFontWeightMedium)
-            ]
+            titleLabelAttributes[NSFontAttributeName] = UIFont.systemFontOfSize(20, weight: UIFontWeightMedium)
         }
         
         navigationBar.titleTextAttributes = titleLabelAttributes

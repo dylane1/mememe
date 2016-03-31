@@ -54,7 +54,7 @@ final class SavedMemesTableViewController: UITableViewController, SavedMemesNavi
         } else {
             tableView.backgroundView = nil
         }
-
+//        tableView.separatorInset = UIEdgeInsetsZero
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.delegate = self
@@ -88,14 +88,8 @@ extension SavedMemesTableViewController {
         
         let cell = tableView.dequeueReusableCellWithIdentifier(Constants.ReuseID.memeListTableCell, forIndexPath: indexPath) as! SavedMemesTableViewCell
         
-        let topText = storedMemesProvider.memeArray[indexPath.row].topText
-        let bottomText = storedMemesProvider.memeArray[indexPath.row].bottomText
+        let model = SavedMemeCellModel(meme: storedMemesProvider.memeArray[indexPath.row])
         
-        var title = topText
-        if topText != "" && bottomText != "" { title += "\n\n" }
-        title += bottomText
-        
-        let model = SavedMemeCellModel(title: title, image: storedMemesProvider.memeArray[indexPath.row].memedImage!, font: storedMemesProvider.memeArray[indexPath.row].font)
         cell.configure(withDataSource: model)
         
         return cell

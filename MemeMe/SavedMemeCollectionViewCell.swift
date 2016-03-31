@@ -25,6 +25,6 @@ final class SavedMemesCollectionViewCell: UICollectionViewCell {
     
     private func configureImageView() {
         memeImageView.backgroundColor = Constants.ColorScheme.darkGrey
-        memeImageView.image = dataSource.image
+        memeImageView.image = dataSource.meme.memedImage
     }
 }

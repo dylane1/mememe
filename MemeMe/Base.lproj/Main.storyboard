@@ -14,8 +14,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="ruid_memeListTableCell" rowHeight="101" id="5tB-OV-MdV" customClass="SavedMemesTableViewCell" customModule="MemeMe" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="ruid_memeListTableCell" rowHeight="101" id="5tB-OV-MdV" customClass="SavedMemesTableViewCell" customModule="MemeMe" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="92" width="320" height="101"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5tB-OV-MdV" id="t7T-CE-TYC">
@@ -46,6 +47,8 @@
                                         <constraint firstItem="e2l-Br-4zm" firstAttribute="leading" secondItem="I2R-Gi-kC0" secondAttribute="trailing" constant="8" id="kGS-vr-PqJ"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="8"/>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <connections>
                                     <outlet property="memeImageView" destination="I2R-Gi-kC0" id="yPy-51-1o3"/>
                                     <outlet property="memeLabel" destination="e2l-Br-4zm" id="QwT-I8-Wxj"/>

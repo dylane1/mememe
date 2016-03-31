@@ -9,9 +9,7 @@
 import UIKit
 
 protocol SavedMemeCellDataSource {
-    var title: String { get }
-    var image: UIImage { get }
-    var font:  UIFont? { get }
+    var meme: Meme { get }
     var textAttributes: [String : AnyObject] { get }
 }
 
@@ -26,7 +24,5 @@ extension SavedMemeCellDataSource {
 }
 
 struct SavedMemeCellModel: SavedMemeCellDataSource {
-    var title: String
-    var image: UIImage
-    var font: UIFont?
+    var meme: Meme
 }

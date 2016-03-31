@@ -83,9 +83,7 @@ extension SavedMemesCollectionViewController {
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(Constants.ReuseID.memeListCollectionCell, forIndexPath: indexPath) as! SavedMemesCollectionViewCell
         
-        let title = (storedMemesProvider.memeArray[indexPath.row].topText != "") ? storedMemesProvider.memeArray[indexPath.row].topText : storedMemesProvider.memeArray[indexPath.row].bottomText
-        
-        let model = SavedMemeCellModel(title: title, image: storedMemesProvider.memeArray[indexPath.row].memedImage!, font: nil)
+        let model = SavedMemeCellModel(meme: storedMemesProvider.memeArray[indexPath.row])
         
         cell.configure(withDataSource: model)
         

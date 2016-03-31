@@ -85,6 +85,7 @@ final class MemeEditorView: UIView {
     
     private var font: UIFont = Constants.Font.impact {
         didSet {
+            magic("font: \(font); closure: \(memeFontUpdatedClosure)")
             memeFontUpdatedClosure?(font)
             
             /** Update text field fonts */
@@ -248,11 +249,6 @@ final class MemeEditorView: UIView {
         bottomField.returnKeyType               = .Done
         bottomField.autocapitalizationType      = .AllCharacters
         bottomField.adjustsFontSizeToFitWidth   = true
-        
-        //TODO: may not need now?
-        /** For resetting when 'Cancel' is tapped */
-//        topField.attributedText     = nil
-//        bottomField.attributedText  = nil
         
         configureTextFieldAttributes()
         showPlaceholderText()
@@ -470,7 +466,7 @@ extension MemeEditorView: UITextFieldDelegate {
             
             UIView.animateWithDuration(0.5) {
                 var frame       = self.frame
-                frame.origin.y  = -(keyboardSize?.height)!
+                frame.origin.y  = -(keyboardSize?.height)! + self.toolbar!.frame.height
                 self.frame      = frame
             }
         }
