@@ -303,6 +303,7 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
         popoverController.barButtonItem = button
         popoverController.permittedArrowDirections = .Any
         popoverController.delegate = self
+        popoverController.backgroundColor = Constants.ColorScheme.whiteAlpha50
         
         if presentedViewController == nil {
             presentViewController(vc, animated: true, completion: nil)
