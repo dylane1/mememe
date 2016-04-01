@@ -30,7 +30,7 @@ class FontColorSelectionViewController: UIViewController {
             /** Save selection to NSUserDefaults */
             Constants.userDefaults.setObject(Constants.FontColorStringArray[index] as NSString, forKey: Constants.StorageKeys.fontColor)
         }
-        selectionView.configure(withSelectionClosure: colorSelectedClosure)
+        selectionView.configure(withCurrentColor: mainViewViewModel.fontColor.value, selectionClosure: colorSelectedClosure)
     }
 
     //MARK: - Configuration

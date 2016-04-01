@@ -42,16 +42,4 @@ final class SavedMemesNavigationController: NavigationController {
     internal func addButtonTapped() {
         addClosure?()
     }
-    
-//    internal func insertEmptyDataSetView() {
-//        emptyDataSetVC = UIStoryboard(name: Constants.StoryBoardID.main, bundle: nil).instantiateViewControllerWithIdentifier(Constants.StoryBoardID.emptyDataSetVC) as! EmptyDataSetViewController
-//        emptyDataSetVC!.view.bounds = view.bounds
-//        view.addSubview(emptyDataSetVC!.view)
-//    }
-    
-//    internal func removeEmptyDataSetView() {
-//        if emptyDataSetVC == nil { return }
-//        
-//        view.willRemoveSubview(<#T##subview: UIView##UIView#>)
-//    }
 }

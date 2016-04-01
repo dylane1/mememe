@@ -33,8 +33,6 @@ extension SavedMemesNavigationProtocol where Self: UIViewController, Self: MemeE
             
             let savedMemeVC = segue.destinationViewController as! SavedMemeDetailViewController
             
-            savedMemeVC.title = (meme.topText != "") ? meme.topText : meme.bottomText
-            
             savedMemeVC.configure(withSelectedIndex: selectedIndex, deletionClosure: deletionClosure)
         }
     }

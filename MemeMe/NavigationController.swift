@@ -38,7 +38,7 @@ class NavigationController: UINavigationController {
         if isTitle {
             titleLabelAttributes[NSFontAttributeName] = UIFont(name: Constants.FontName.markerFelt, size: 24)!
         } else {
-            titleLabelAttributes[NSFontAttributeName] = UIFont.systemFontOfSize(20, weight: UIFontWeightMedium)
+            titleLabelAttributes[NSFontAttributeName] = UIFont.systemFontOfSize(14, weight: UIFontWeightMedium)
         }
         
         navigationBar.titleTextAttributes = titleLabelAttributes

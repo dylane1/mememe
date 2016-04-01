@@ -45,9 +45,7 @@ final class SavedMemeDetailViewController: UIViewController, ActivityViewControl
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        /** Set default system font for the title */
-        let navController = navigationController! as! NavigationController
-        navController.setNavigationBarAttributes(isAppTitle: false)
+        title = ""
         
         savedMemeView = view as! SavedMemeDetailView
     }

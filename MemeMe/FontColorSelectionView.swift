@@ -23,26 +23,43 @@ class FontColorSelectionView: UIView {
     @IBOutlet weak var button7: UIButton!
 
     private var buttonArray:[UIButton]!
+    private var selectedColor: UIColor!
     
     //MARK: - View Lifecycle
     
-    override func drawRect(rect: CGRect) {
-        buttonArray = [button0, button1, button2, button3, button4, button5, button6, button7]
-        for button in buttonArray {
-            button.backgroundColor = Constants.FontColorArray[button.tag]
-        }
-    }
+//    override func drawRect(rect: CGRect) {
+//        
+//    }
     
 
     //MARK: - Configuration
     
-    internal func configure(withSelectionClosure closure: ChangeColor) {
+    internal func configure(withCurrentColor color: UIColor, selectionClosure closure: ChangeColor) {
         didSelectColor = closure
+        selectedColor = color
+        configureButtons()
     }
     
     //MARK: - Actions
     
     @IBAction func buttonAction(sender: UIButton) {
         didSelectColor?(index: sender.tag)
+        selectedColor = Constants.FontColorArray[sender.tag]
+        configureButtons()
+    }
+    
+    private func configureButtons() {
+        buttonArray = [button0, button1, button2, button3, button4, button5, button6, button7]
+        for button in buttonArray {
+            button.backgroundColor = Constants.FontColorArray[button.tag]
+            button.layer.cornerRadius = 8;
+            button.layer.borderWidth = 4;
+            
+            if button.backgroundColor == selectedColor {
+                button.layer.borderColor = Constants.ColorScheme.darkGrey.CGColor
+            } else {
+                button.layer.borderColor = button.backgroundColor?.CGColor
+            }
+        }
     }
 }
