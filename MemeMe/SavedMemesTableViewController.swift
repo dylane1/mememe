@@ -103,6 +103,9 @@ extension SavedMemesTableViewController {
         if editingStyle == .Delete {
             storedMemesProvider.removeMemeFromStorage(atIndex: indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            
+            /** Reset the empty data set background, if needed */
+            configureTableView()
         }
     }
 }
@@ -122,9 +125,9 @@ extension SavedMemesTableViewController {
     }
     
     override func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let footerView = UIView()
-        footerView.frame = CGRectMake(0, 0, view.bounds.size.width, 2.0)
-        footerView.backgroundColor = UIColor.clearColor()
+        let footerView              = UIView()
+        footerView.frame            = CGRectMake(0, 0, view.bounds.size.width, 2.0)
+        footerView.backgroundColor  = UIColor.clearColor()
         return footerView
     }
 }
