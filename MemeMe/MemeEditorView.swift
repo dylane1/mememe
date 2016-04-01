@@ -146,7 +146,6 @@ final class MemeEditorView: UIView {
     @IBOutlet weak var bottomFieldLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var bottomFieldTrailingConstraint: NSLayoutConstraint!
     
-//    deinit { magic("\(self.description) is being deinitialized   <----------------") }
     
     //MARK: - Configuration
     
@@ -333,7 +332,6 @@ final class MemeEditorView: UIView {
     
     
     internal func updateTextFieldContstraints(withNewOrientation orientation: DestinationOrientation) {
-        //FIXME: Find a better solution to text field location on rotation issue: http://smnh.me/synchronizing-rotation-animation-between-the-keyboard-and-the-attached-view-part-2/
         /** Close keyboard on rotation */
         if bottomField.isFirstResponder() {
             bottomField.resignFirstResponder()
@@ -407,7 +405,6 @@ final class MemeEditorView: UIView {
 
 
 //MARK: - UITextFieldDelegate
-
 extension MemeEditorView: UITextFieldDelegate {
     
     internal func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
@@ -432,14 +429,7 @@ extension MemeEditorView: UITextFieldDelegate {
             selector: #selector(keyboardWillHide(_:)),
             name: UIKeyboardWillHideNotification,
             object: nil)
-        
-        //FIXME: Get rotation working correctly
-//        NSNotificationCenter.defaultCenter().addObserver(
-//            self,
-//            selector: Selector("keyboardWillChangeFrame:"),
-//            name: UIKeyboardWillChangeFrameNotification,
-//            object: nil)
-        
+
         return true
     }
     
@@ -475,9 +465,7 @@ extension MemeEditorView: UITextFieldDelegate {
     internal func keyboardWillHide(notification: NSNotification) {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
-        //FIXME: Get rotation working correctly
-//        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillChangeFrameNotification, object: nil)
-        
+
         /** Animate view back down if done editing the bottom text field */
         if bottomField.editing {
             UIView.animateWithDuration(0.5) {
@@ -487,21 +475,4 @@ extension MemeEditorView: UITextFieldDelegate {
             }
         }
     }
-    //FIXME: Get rotation working correctly
-    //See: http://smnh.me/synchronizing-rotation-animation-between-the-keyboard-and-the-attached-view-part-2/
-//    internal func keyboardWillChangeFrame(notification: NSNotification) {
-//        magic("")
-//        if bottomField.editing {
-//            let keyboardSize = notification.userInfo?[UIKeyboardFrameBeginUserInfoKey]?.CGRectValue.size
-//            
-//            UIView.animateWithDuration(0.5) {
-//                var frame       = self.frame
-//                frame.origin.y  = -(keyboardSize?.height)!
-//                self.frame      = frame
-//            }
-//        }
-//    }
 }
-
-
-

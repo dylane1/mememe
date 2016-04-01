@@ -24,13 +24,6 @@ class FontColorSelectionView: UIView {
 
     private var buttonArray:[UIButton]!
     private var selectedColor: UIColor!
-    
-    //MARK: - View Lifecycle
-    
-//    override func drawRect(rect: CGRect) {
-//        
-//    }
-    
 
     //MARK: - Configuration
     

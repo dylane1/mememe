@@ -11,19 +11,17 @@ import UIKit
 import MobileCoreServices
 
 final class MemeEditorViewController: UIViewController, ActivityViewControllerPresentable {
-    //TODO: make private & passed in configure
-    /** Passed by presenting view controller */
+    
+    /** Set in MemeEditorPresentable protocol extension */
     var vcShouldBeDismissed: BarButtonClosure!
     
     private var meme = Meme()
-    
     
     /** View */
     private var mainView: MemeEditorView!
     private var mainViewViewModel: MemeEditorViewModel!
     
     /** Navigation */
-//    private var navController: MemeEditorNavigationController!
     @IBOutlet weak var navItem: MemeEditorNavigationItem!
     
     /** For keeping track of app state and enabling/disabling navbar buttons */
@@ -47,22 +45,10 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
     private var storedIndex: Int?
     private var memeToUpdate: Meme?
     
-    /** 
-     * For keeping track of errors that occur when the imagePickerController is 
-     * open, then popping an error alert after imagePickerController has been
-     * dismissed
-     */
-     //TODO: Remove errorQueue (not saving image to photo library)
-    private var errorQueue = [[String]]()
-    
-    
     //MARK: - View Lifecycle
-    
-//    deinit { magic("\(self.description) is being deinitialized   <----------------") }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        magic("\(self.description).view is loaded   ---------------->")
         
         /** Set default system font for the title */
         let navController = navigationController! as! NavigationController
@@ -99,8 +85,8 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
     //MARK: - Configuration
     
     /** 
-        If coming from Table or Collection view, meme will be nil. If coming
-        from Meme Detail VC, we need to prepopulate the image & text fields
+     * If coming from Meme Detail VC, we need to pre-populate
+     * the image & text fields.
     */
     internal func configure(withMeme meme: Meme, atIndex index: Int) {
         memeToUpdate    = meme
@@ -163,7 +149,6 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
         }
         
         let clearButtonClosure = { [unowned self] in
-            //TODO: Probably should pop a warning alert if an image has been selected & text has been entered
             self.mainViewViewModel.image.value = nil
             self.mainView.resetTextFields()
         }
@@ -249,7 +234,6 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
     }
     
     //MARK: - Actions
-    
     
     /** Toolbar Actions */
     private func cameraButtonTapped() {

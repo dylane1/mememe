@@ -14,18 +14,13 @@ class EmptyDataSetViewController: UIViewController {
     @IBOutlet weak var label0: UILabel!
     @IBOutlet weak var label1: UILabel!
     
+    //MARK: - View Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureLabels()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
 
     //MARK: - Configuration
     

@@ -15,6 +15,8 @@ final class SavedMemesCollectionViewController: UICollectionViewController, Save
     
     internal var memeEditorNavController: NavigationController?
     
+    //MARK: - View Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -37,12 +39,8 @@ final class SavedMemesCollectionViewController: UICollectionViewController, Save
         collectionView!.reloadData()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     //MARK: - Configuration
+    
     private func configureCollectionView() {
         if storedMemesProvider.memeArray.count == 0 {
             let emptyDataSetVC = UIStoryboard(name: Constants.StoryBoardID.main, bundle: nil).instantiateViewControllerWithIdentifier(Constants.StoryBoardID.emptyDataSetVC) as! EmptyDataSetViewController
@@ -75,7 +73,6 @@ extension SavedMemesCollectionViewController {
         return 1
     }
     
-    
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return storedMemesProvider.memeArray.count
     }
@@ -98,35 +95,6 @@ extension SavedMemesCollectionViewController {
         selectedIndexPath = indexPath
         performSegueWithIdentifier(Constants.SegueID.memeDetail, sender: self)
     }
-    
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(collectionView: UICollectionView, shouldHighlightItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-    return true
-    }
-    */
-    
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-    return true
-    }
-    */
-    
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(collectionView: UICollectionView, shouldShowMenuForItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-    return false
-    }
-    
-    override func collectionView(collectionView: UICollectionView, canPerformAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) -> Bool {
-    return false
-    }
-    
-    override func collectionView(collectionView: UICollectionView, performAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) {
-    
-    }
-    */
 }
 
 //MARK: - UICollectionViewDelegateFlowLayout
