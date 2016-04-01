@@ -496,7 +496,7 @@
         <scene sceneID="cuz-15-Vf2">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="cIU-9P-sjY" customClass="SavedMemesNavigationController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="" image="Table" id="fYF-NZ-tHh">
+                    <tabBarItem key="tabBarItem" title="" image="List" selectedImage="List-Selected" id="fYF-NZ-tHh">
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="20"/>
                     </tabBarItem>
                     <toolbarItems/>
@@ -519,7 +519,7 @@
         <scene sceneID="xnc-pz-yoD">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="FCz-hD-sFO" customClass="SavedMemesNavigationController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="" image="Collection" id="No3-tU-bCN">
+                    <tabBarItem key="tabBarItem" title="" image="Grid" selectedImage="Grid-Selected" id="No3-tU-bCN">
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="20"/>
                     </tabBarItem>
                     <toolbarItems/>
@@ -577,9 +577,11 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Collection" width="32" height="32"/>
+        <image name="Grid" width="28" height="28"/>
+        <image name="Grid-Selected" width="28" height="28"/>
+        <image name="List" width="28" height="28"/>
+        <image name="List-Selected" width="28" height="28"/>
         <image name="Pig-Meme" width="256" height="172"/>
-        <image name="Table" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="nKj-u0-VbV"/>
