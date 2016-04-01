@@ -29,9 +29,7 @@ final class MemeEditorStateMachine {
     
     init() {
         state = Dynamic(.NoImageNoText)
-//        magic("MemeEditorStateMachine is initialized   ---------------->")
     }
-//    deinit { magic("MemeEditorStateMachine is being deinitialized   <----------------") }
     
     internal func changeState(withImage img: UIImage?, topText: String?, bottomText: String?) {
         let image = (img == nil)                            ? false : true

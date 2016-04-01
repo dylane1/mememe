@@ -14,12 +14,6 @@ final class SavedMemesNavigationController: NavigationController {
     private var addButton: UIBarButtonItem?
     
     private var emptyDataSetVC: EmptyDataSetViewController?
-    
-    //MARK: - View Lifecycle
-    
-    internal override func viewDidLoad() {
-        super.viewDidLoad()
-    }
 
     //MARK: - Configuration
     

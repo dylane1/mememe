@@ -13,10 +13,14 @@ final class SavedMemesCollectionViewCell: UICollectionViewCell {
     
     private var dataSource: SavedMemeCellDataSource!
     
+    //MARK: - View Lifecycle
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         contentView.backgroundColor = Constants.ColorScheme.whiteAlpha70
     }
+    
+    //MARK: - Configuration
     
     internal func configure(withDataSource dataSource: SavedMemeCellDataSource) {
         self.dataSource = dataSource

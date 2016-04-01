@@ -14,9 +14,13 @@ final class SavedMemesTableViewCell: UITableViewCell {
     
     private var dataSource: SavedMemeCellDataSource!
     
+    //MARK: - View Lifecycle
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
+    
+    //MARK: - Configuration
 
     internal func configure(withDataSource dataSource: SavedMemeCellDataSource) {
         self.dataSource = dataSource

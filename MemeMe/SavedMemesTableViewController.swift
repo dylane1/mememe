@@ -38,11 +38,6 @@ final class SavedMemesTableViewController: UITableViewController, SavedMemesNavi
         
         tableView.reloadData()
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
 
     //MARK: - Configuration
     
@@ -54,7 +49,7 @@ final class SavedMemesTableViewController: UITableViewController, SavedMemesNavi
         } else {
             tableView.backgroundView = nil
         }
-//        tableView.separatorInset = UIEdgeInsetsZero
+        
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.delegate = self

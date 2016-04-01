@@ -13,14 +13,6 @@ class NavigationController: UINavigationController {
     /** Set by presenting view controller */
     internal var vcShouldBeDismissed: (() -> Void)?
     
-//    deinit { magic("\(self.description) is being deinitialized   <----------------") }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-//        magic("\(self.description) has been loaded   ---------------->")
-    }
-    
-    
     internal func setNavigationBarAttributes(isAppTitle isTitle: Bool) {
         
         navigationBar.barTintColor = Constants.ColorScheme.darkBlue

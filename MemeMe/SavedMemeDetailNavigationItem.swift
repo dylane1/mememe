@@ -55,8 +55,6 @@ final class SavedMemeDetailNavigationItem: UINavigationItem {
         rightBarButtonItems = rightItemArray
     }
     
-
-    
     //MARK: - Actions
     
     internal func shareButtonTapped() {

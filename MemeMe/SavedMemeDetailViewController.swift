@@ -18,8 +18,7 @@ final class SavedMemeDetailViewController: UIViewController, ActivityViewControl
     private var shareButtonClosure: BarButtonClosure!
     private var deleteButtonClosure: BarButtonClosure!
     private var editMemeButtonClosure: BarButtonClosure!
-    
-    //TODO: Comment where everything is being sent from in all the files! 
+
     /** 
       Sent from TableVC or CollectionVC via SavedMemesNavigationProtocol
       extension to reset the table or collection view
@@ -60,12 +59,7 @@ final class SavedMemeDetailViewController: UIViewController, ActivityViewControl
         
         savedMemeView.configure(withImage: meme.memedImage!)
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
+
     //MARK: - Configuration
 
     internal func configure(withSelectedIndex index: Int, deletionClosure delete: BarButtonClosure) {

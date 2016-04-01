@@ -17,7 +17,6 @@ final class SavedMemeDetailView: UIView {
         }
     }
     
-    
     @IBOutlet weak var imageView: UIImageView!
 
 
