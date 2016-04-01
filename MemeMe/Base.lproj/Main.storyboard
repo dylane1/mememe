@@ -201,7 +201,6 @@
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="Tmt-oD-JPw" secondAttribute="bottom" constant="4" id="0WW-Vv-JTF"/>
                                     <constraint firstItem="Tmt-oD-JPw" firstAttribute="top" secondItem="DCu-dI-rGq" secondAttribute="top" constant="4" id="96W-DK-3oi"/>
@@ -584,6 +583,6 @@
         <image name="Pig-Meme" width="256" height="172"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="nKj-u0-VbV"/>
+        <segue reference="wTT-PI-JkK"/>
     </inferredMetricsTieBreakers>
 </document>
