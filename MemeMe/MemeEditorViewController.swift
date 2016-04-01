@@ -64,6 +64,10 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
         super.viewDidLoad()
 //        magic("\(self.description).view is loaded   ---------------->")
         
+        /** Set default system font for the title */
+        let navController = navigationController! as! NavigationController
+        navController.setNavigationBarAttributes(isAppTitle: false)
+        
         title = LocalizedStrings.ViewControllerTitles.newMeme
         
         mainView = view as! MemeEditorView
@@ -224,12 +228,10 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
         }
         
         let memeFontUpdatedClosure = { [unowned self] (newFont: UIFont) -> Void in
-            /** Update image */
             self.meme.font = newFont
         }
         
         let memeFontColorUpdatedClosure = { [unowned self] (newColor: UIColor) -> Void in
-            /** Update image */
             self.meme.fontColor = newColor
         }
         
@@ -301,6 +303,7 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
         popoverController.barButtonItem = button
         popoverController.permittedArrowDirections = .Any
         popoverController.delegate = self
+        popoverController.backgroundColor = Constants.ColorScheme.whiteAlpha50
         
         if presentedViewController == nil {
             presentViewController(vc, animated: true, completion: nil)
@@ -317,6 +320,12 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
             for name in Constants.FontFamilyNameArray {
                 if name == fontName {
                     mainViewViewModel.font.value = Constants.FontArray[i]
+                    
+                    /**
+                     * Need to set in meme because the closure hasn't been
+                     * configured in view yet
+                     */
+                    meme.font = Constants.FontArray[i]
                 }
                 i += 1
             }
@@ -330,6 +339,12 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
             for color in Constants.FontColorStringArray {
                 if color == fontColor {
                     mainViewViewModel.fontColor.value = Constants.FontColorArray[i]
+                    
+                    /** 
+                     * Need to set in meme because the closure hasn't been 
+                     * configured in view yet 
+                     */
+                    meme.fontColor = Constants.FontColorArray[i]
                 }
                 i += 1
             }

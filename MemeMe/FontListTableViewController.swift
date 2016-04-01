@@ -15,10 +15,12 @@ class FontListTableViewController: UITableViewController {
     private var selectedFont = Constants.Font.impact
     private var selectedIndexPath = NSIndexPath(forRow: 0, inSection: 0)
     
+    //MARK: - View Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor        = Constants.ColorScheme.lightGrey
-        tableView.separatorColor    = Constants.ColorScheme.darkGrey
+        view.backgroundColor        = UIColor.clearColor()
+        tableView.separatorColor    = Constants.ColorScheme.mediumGrey
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -42,16 +44,25 @@ class FontListTableViewController: UITableViewController {
         */
         tableView.scrollToRowAtIndexPath(selectedIndexPath, atScrollPosition: .Top, animated: false)
     }
-    // MARK: - Table view data source
 
+    //MARK: - Configuration
+    
+    internal func configure(withViewModel viewModel: MemeEditorViewModel) {
+        self.viewModel = viewModel
+    }
+
+}
+
+//MARK: - UITableViewDataSource
+extension FontListTableViewController {
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
-
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return Constants.FontFamilyNameArray.count
     }
-
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(Constants.ReuseID.fontListTableCell, forIndexPath: indexPath) as! FontListTableViewCell
         
@@ -66,14 +77,9 @@ class FontListTableViewController: UITableViewController {
         } else {
             cell.accessoryType = UITableViewCellAccessoryType.None
         }
-
+        
         return cell
     }
-    
-    internal func configure(withViewModel viewModel: MemeEditorViewModel) {
-        self.viewModel = viewModel
-    }
-
 }
 
 //MARK: - UITableViewDelegate

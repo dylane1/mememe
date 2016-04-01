@@ -19,16 +19,21 @@ final class SavedMemesCollectionViewController: UICollectionViewController, Save
         super.viewDidLoad()
 
         title = LocalizedStrings.ViewControllerTitles.memeMe
-        
-        collectionView!.backgroundColor = Constants.ColorScheme.lightGrey
-        collectionView!.delegate = self
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
+        /** Set special font for the app title */
+        let navController = navigationController! as! NavigationController
+        navController.setNavigationBarAttributes(isAppTitle: true)
 
         configureNavigationItems()
+        
         storedMemesProvider = MemesProvider()
+        
+        configureCollectionView()
+        
         collectionView!.reloadData()
     }
 
@@ -37,6 +42,19 @@ final class SavedMemesCollectionViewController: UICollectionViewController, Save
         // Dispose of any resources that can be recreated.
     }
 
+    //MARK: - Configuration
+    private func configureCollectionView() {
+        if storedMemesProvider.memeArray.count == 0 {
+            let emptyDataSetVC = UIStoryboard(name: Constants.StoryBoardID.main, bundle: nil).instantiateViewControllerWithIdentifier(Constants.StoryBoardID.emptyDataSetVC) as! EmptyDataSetViewController
+            
+            collectionView!.backgroundView = emptyDataSetVC.view
+        } else {
+            collectionView!.backgroundView = nil
+        }
+        
+        collectionView!.backgroundColor = Constants.ColorScheme.darkBlueGrey
+        collectionView!.delegate = self
+    }
     
     // MARK: - Navigation
 
@@ -65,9 +83,7 @@ extension SavedMemesCollectionViewController {
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(Constants.ReuseID.memeListCollectionCell, forIndexPath: indexPath) as! SavedMemesCollectionViewCell
         
-        let title = (storedMemesProvider.memeArray[indexPath.row].topText != "") ? storedMemesProvider.memeArray[indexPath.row].topText : storedMemesProvider.memeArray[indexPath.row].bottomText
-        
-        let model = SavedMemeCellModel(title: title, image: storedMemesProvider.memeArray[indexPath.row].memedImage!)
+        let model = SavedMemeCellModel(meme: storedMemesProvider.memeArray[indexPath.row])
         
         cell.configure(withDataSource: model)
         

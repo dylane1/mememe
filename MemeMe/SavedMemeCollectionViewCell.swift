@@ -15,7 +15,7 @@ final class SavedMemesCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        contentView.backgroundColor = Constants.ColorScheme.white
+        contentView.backgroundColor = Constants.ColorScheme.whiteAlpha70
     }
     
     internal func configure(withDataSource dataSource: SavedMemeCellDataSource) {
@@ -25,6 +25,6 @@ final class SavedMemesCollectionViewCell: UICollectionViewCell {
     
     private func configureImageView() {
         memeImageView.backgroundColor = Constants.ColorScheme.darkGrey
-        memeImageView.image = dataSource.image
+        memeImageView.image = dataSource.meme.memedImage
     }
 }

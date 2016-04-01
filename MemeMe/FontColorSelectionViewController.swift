@@ -19,7 +19,7 @@ class FontColorSelectionViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = Constants.ColorScheme.lightGrey
+        view.backgroundColor = UIColor.clearColor()
         
         selectionView = view as! FontColorSelectionView
         
@@ -30,14 +30,12 @@ class FontColorSelectionViewController: UIViewController {
             /** Save selection to NSUserDefaults */
             Constants.userDefaults.setObject(Constants.FontColorStringArray[index] as NSString, forKey: Constants.StorageKeys.fontColor)
         }
-        
-        selectionView.configure(withSelectionClosure: colorSelectedClosure)
+        selectionView.configure(withCurrentColor: mainViewViewModel.fontColor.value, selectionClosure: colorSelectedClosure)
     }
 
-    //MARK: - Internal funk(s)
+    //MARK: - Configuration
     
     internal func configure(withViewModel viewModel: MemeEditorViewModel) {
         mainViewViewModel = viewModel
     }
-
 }

@@ -44,6 +44,9 @@ final class SavedMemeDetailViewController: UIViewController, ActivityViewControl
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        title = ""
+        
         savedMemeView = view as! SavedMemeDetailView
     }
 

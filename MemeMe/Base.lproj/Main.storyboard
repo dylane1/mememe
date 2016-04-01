@@ -14,8 +14,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ruid_memeListTableCell" rowHeight="101" id="5tB-OV-MdV" customClass="SavedMemesTableViewCell" customModule="MemeMe" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="ruid_memeListTableCell" rowHeight="101" id="5tB-OV-MdV" customClass="SavedMemesTableViewCell" customModule="MemeMe" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="92" width="320" height="101"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5tB-OV-MdV" id="t7T-CE-TYC">
@@ -29,7 +30,7 @@
                                                 <constraint firstAttribute="height" constant="100" id="Nsn-ta-iJG"/>
                                             </constraints>
                                         </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e2l-Br-4zm">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e2l-Br-4zm">
                                             <rect key="frame" x="141" y="8" width="171" height="84"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -46,6 +47,8 @@
                                         <constraint firstItem="e2l-Br-4zm" firstAttribute="leading" secondItem="I2R-Gi-kC0" secondAttribute="trailing" constant="8" id="kGS-vr-PqJ"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="8" right="8"/>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <connections>
                                     <outlet property="memeImageView" destination="I2R-Gi-kC0" id="yPy-51-1o3"/>
                                     <outlet property="memeLabel" destination="e2l-Br-4zm" id="QwT-I8-Wxj"/>
@@ -105,6 +108,71 @@
             </objects>
             <point key="canvasLocation" x="1128" y="340"/>
         </scene>
+        <!--Empty Data Set View Controller-->
+        <scene sceneID="5dO-wc-SCD">
+            <objects>
+                <viewController storyboardIdentifier="sb_emptyDataSetVC" id="jrw-tl-IDy" customClass="EmptyDataSetViewController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="tmd-ST-Leu"/>
+                        <viewControllerLayoutGuide type="bottom" id="L52-ZN-xPt"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="yTQ-Iz-Uvm">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hrk-1K-WJL">
+                                <rect key="frame" x="20" y="164" width="280" height="240"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Pig-Meme" translatesAutoresizingMaskIntoConstraints="NO" id="qP9-0a-FEG">
+                                        <rect key="frame" x="12" y="0.0" width="256" height="172"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="172" id="hqG-T5-O3j"/>
+                                            <constraint firstAttribute="width" constant="256" id="pbA-OD-Ij3"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zHQ-eb-qiv">
+                                        <rect key="frame" x="0.0" y="180" width="280" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9kj-XB-iIp">
+                                        <rect key="frame" x="0.0" y="203" width="280" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="zHQ-eb-qiv" firstAttribute="top" secondItem="qP9-0a-FEG" secondAttribute="bottom" constant="8" id="0iO-0V-LWL"/>
+                                    <constraint firstAttribute="height" constant="240" id="9EP-28-05u"/>
+                                    <constraint firstAttribute="trailing" secondItem="zHQ-eb-qiv" secondAttribute="trailing" id="BEt-fS-JXJ"/>
+                                    <constraint firstItem="9kj-XB-iIp" firstAttribute="leading" secondItem="hrk-1K-WJL" secondAttribute="leading" id="CPT-gL-eCa"/>
+                                    <constraint firstItem="zHQ-eb-qiv" firstAttribute="leading" secondItem="hrk-1K-WJL" secondAttribute="leading" id="DqG-Kf-hSb"/>
+                                    <constraint firstItem="9kj-XB-iIp" firstAttribute="top" secondItem="zHQ-eb-qiv" secondAttribute="bottom" constant="2" id="cz4-wh-1iG"/>
+                                    <constraint firstItem="qP9-0a-FEG" firstAttribute="centerX" secondItem="hrk-1K-WJL" secondAttribute="centerX" id="eXN-9O-MsL"/>
+                                    <constraint firstAttribute="width" constant="280" id="f4p-OH-HYX"/>
+                                    <constraint firstItem="qP9-0a-FEG" firstAttribute="top" secondItem="hrk-1K-WJL" secondAttribute="top" id="j9D-kD-2Pd"/>
+                                    <constraint firstAttribute="trailing" secondItem="9kj-XB-iIp" secondAttribute="trailing" id="wjs-nN-17y"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="hrk-1K-WJL" firstAttribute="centerX" secondItem="yTQ-Iz-Uvm" secondAttribute="centerX" id="HKY-gU-Wry"/>
+                            <constraint firstItem="hrk-1K-WJL" firstAttribute="centerY" secondItem="yTQ-Iz-Uvm" secondAttribute="centerY" id="hin-BC-Hdl"/>
+                        </constraints>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="imageView" destination="qP9-0a-FEG" id="E7b-cJ-Psu"/>
+                        <outlet property="label0" destination="zHQ-eb-qiv" id="Qi3-Ag-VTk"/>
+                        <outlet property="label1" destination="9kj-XB-iIp" id="dJa-Yl-ASq"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jBm-J8-YP0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1586" y="340"/>
+        </scene>
         <!--Saved Memes Collection View Controller-->
         <scene sceneID="aZK-vT-E9q">
             <objects>
@@ -133,7 +201,6 @@
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="Tmt-oD-JPw" secondAttribute="bottom" constant="4" id="0WW-Vv-JTF"/>
                                     <constraint firstItem="Tmt-oD-JPw" firstAttribute="top" secondItem="DCu-dI-rGq" secondAttribute="top" constant="4" id="96W-DK-3oi"/>
@@ -243,7 +310,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="300" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="sectionIndexBackgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="checkmark" indentationWidth="10" reuseIdentifier="ruid_fontListTableCell" id="a2P-Ln-NDn" userLabel="Text With Checkmark Table View Cell" customClass="FontListTableViewCell" customModule="MemeMe" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="300" height="44"/>
@@ -266,7 +332,6 @@
                                         <constraint firstAttribute="trailingMargin" secondItem="tBg-RJ-tPR" secondAttribute="trailing" id="stj-Dv-pTk"/>
                                     </constraints>
                                 </tableViewCellContentView>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="tintColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
                                     <outlet property="label" destination="tBg-RJ-tPR" id="sSJ-jh-G4Y"/>
@@ -426,11 +491,13 @@
             </objects>
             <point key="canvasLocation" x="949" y="1467"/>
         </scene>
-        <!--Item-->
+        <!--Saved Memes Navigation Controller-->
         <scene sceneID="cuz-15-Vf2">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="cIU-9P-sjY" customClass="SavedMemesNavigationController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="fYF-NZ-tHh"/>
+                    <tabBarItem key="tabBarItem" title="" image="List" selectedImage="List-Selected" id="fYF-NZ-tHh">
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="20"/>
+                    </tabBarItem>
                     <toolbarItems/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="3UC-Cj-7a7">
@@ -439,6 +506,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
+                        <outlet property="tabBarItem" destination="fYF-NZ-tHh" id="SfT-Pn-wHJ"/>
                         <segue destination="qA9-ch-gw5" kind="relationship" relationship="rootViewController" id="QLL-Rk-fmd"/>
                     </connections>
                 </navigationController>
@@ -446,11 +514,13 @@
             </objects>
             <point key="canvasLocation" x="183" y="13"/>
         </scene>
-        <!--Item-->
+        <!--Saved Memes Navigation Controller-->
         <scene sceneID="xnc-pz-yoD">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="FCz-hD-sFO" customClass="SavedMemesNavigationController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="No3-tU-bCN"/>
+                    <tabBarItem key="tabBarItem" title="" image="Grid" selectedImage="Grid-Selected" id="No3-tU-bCN">
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="20"/>
+                    </tabBarItem>
                     <toolbarItems/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="aI0-MK-k9S">
@@ -469,7 +539,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="rlp-vF-KnN">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="P3N-HC-PvD" sceneMemberID="viewController">
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="P3N-HC-PvD" customClass="TabBarController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="BAg-5Q-U8O">
@@ -505,7 +575,14 @@
             <point key="canvasLocation" x="-401" y="1499"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Grid" width="28" height="28"/>
+        <image name="Grid-Selected" width="28" height="28"/>
+        <image name="List" width="28" height="28"/>
+        <image name="List-Selected" width="28" height="28"/>
+        <image name="Pig-Meme" width="256" height="172"/>
+    </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="nKj-u0-VbV"/>
+        <segue reference="wTT-PI-JkK"/>
     </inferredMetricsTieBreakers>
 </document>

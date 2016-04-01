@@ -62,7 +62,7 @@ struct MemesProvider {
         loadMemesFromStorage()
     }
     
-    mutating internal func addNewMemeToStorage(meme: Meme, completion: (() -> Void)?) {
+    mutating internal func addNewMemeToStorage(meme: Meme, completion: (() -> Void)?) {        
         _memeArray.append(meme)
         
         let storedMeme = createStoredMeme(fromMeme: meme) // StoredMeme()

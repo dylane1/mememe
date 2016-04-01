@@ -14,26 +14,41 @@ final class SavedMemesTableViewCell: UITableViewCell {
     
     private var dataSource: SavedMemeCellDataSource!
     
-    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     internal func configure(withDataSource dataSource: SavedMemeCellDataSource) {
         self.dataSource = dataSource
         configureImageView()
         configureLabel()
+        configureCell()
     }
     
     private func configureImageView() {
-        memeImageView.backgroundColor = Constants.ColorScheme.lightGrey
-        memeImageView.image = dataSource.image
+        memeImageView.backgroundColor = Constants.ColorScheme.darkGrey
+        memeImageView.image = dataSource.meme.memedImage
     }
     
     private func configureLabel() {
-        let attributedString = NSMutableAttributedString(string: dataSource.title, attributes: dataSource.textAttributes)
+        memeLabel.adjustsFontSizeToFitWidth  = true
         
+        var attributes = dataSource.textAttributes
+        attributes[NSFontAttributeName] = dataSource.meme.font
+        
+        let topText = dataSource.meme.topText
+        let bottomText = dataSource.meme.bottomText
+        
+        var title = topText
+        if topText != "" && bottomText != "" { title += "\n\n" }
+        title += bottomText
+        
+        let attributedString = NSMutableAttributedString(string: title, attributes: attributes)
+
         memeLabel.attributedText = attributedString
+    }
+    
+    private func configureCell() {
+        backgroundColor = Constants.ColorScheme.whiteAlpha50
     }
 }

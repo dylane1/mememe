@@ -18,19 +18,29 @@ class NavigationController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
 //        magic("\(self.description) has been loaded   ---------------->")
-        setNavigationBarAttributes()
     }
     
-    private func setNavigationBarAttributes() {
+    
+    internal func setNavigationBarAttributes(isAppTitle isTitle: Bool) {
         
-        navigationBar.barTintColor = Constants.ColorScheme.white
-        navigationBar.tintColor    = Constants.ColorScheme.darkBlue
+        navigationBar.barTintColor = Constants.ColorScheme.darkBlue
+        navigationBar.tintColor    = Constants.ColorScheme.white
         navigationBar.translucent  = true
         
-        let titleLabelAttributes = [
-            NSForegroundColorAttributeName : Constants.ColorScheme.black,
-            NSFontAttributeName: UIFont.systemFontOfSize(17, weight: UIFontWeightMedium)
-        ]
+        let shadow = NSShadow()
+        shadow.shadowColor = Constants.ColorScheme.veryDarkBlue
+        shadow.shadowOffset = CGSize(width: -1.0, height: -1.0)
+        
+        var titleLabelAttributes: [String : AnyObject] = [
+            NSShadowAttributeName: shadow,
+            NSForegroundColorAttributeName : Constants.ColorScheme.white]
+        
+        if isTitle {
+            titleLabelAttributes[NSFontAttributeName] = UIFont(name: Constants.FontName.markerFelt, size: 24)!
+        } else {
+            titleLabelAttributes[NSFontAttributeName] = UIFont.systemFontOfSize(14, weight: UIFontWeightMedium)
+        }
+        
         navigationBar.titleTextAttributes = titleLabelAttributes
     }
 }

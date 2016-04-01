@@ -20,19 +20,21 @@ final class SavedMemesTableViewController: UITableViewController, SavedMemesNavi
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = LocalizedStrings.ViewControllerTitles.memeMe
-        
-        tableView.estimatedRowHeight = 100
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.delegate = self
+        title = LocalizedStrings.ViewControllerTitles.memeMe        
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        /** Set special font for the app title */
+        let navController = navigationController! as! NavigationController
+        navController.setNavigationBarAttributes(isAppTitle: true)
+        
         storedMemesProvider = MemesProvider()
         
         configureNavigationItems()
+        
+        configureTableView()
         
         tableView.reloadData()
     }
@@ -42,7 +44,24 @@ final class SavedMemesTableViewController: UITableViewController, SavedMemesNavi
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: - Navigation
+    //MARK: - Configuration
+    
+    private func configureTableView() {
+        if storedMemesProvider.memeArray.count == 0 {
+            let emptyDataSetVC = UIStoryboard(name: Constants.StoryBoardID.main, bundle: nil).instantiateViewControllerWithIdentifier(Constants.StoryBoardID.emptyDataSetVC) as! EmptyDataSetViewController
+            
+            tableView.backgroundView = emptyDataSetVC.view
+        } else {
+            tableView.backgroundView = nil
+        }
+//        tableView.separatorInset = UIEdgeInsetsZero
+        tableView.estimatedRowHeight = 100
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.delegate = self
+        tableView.backgroundColor = Constants.ColorScheme.darkBlueGrey
+    }
+    
+    //MARK: - Navigation
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
@@ -69,14 +88,8 @@ extension SavedMemesTableViewController {
         
         let cell = tableView.dequeueReusableCellWithIdentifier(Constants.ReuseID.memeListTableCell, forIndexPath: indexPath) as! SavedMemesTableViewCell
         
-        let topText = storedMemesProvider.memeArray[indexPath.row].topText
-        let bottomText = storedMemesProvider.memeArray[indexPath.row].bottomText
+        let model = SavedMemeCellModel(meme: storedMemesProvider.memeArray[indexPath.row])
         
-        var title = topText
-        if topText != "" && bottomText != "" { title += "\n" }
-        title += bottomText
-        
-        let model = SavedMemeCellModel(title: title, image: storedMemesProvider.memeArray[indexPath.row].memedImage!)
         cell.configure(withDataSource: model)
         
         return cell
@@ -90,6 +103,9 @@ extension SavedMemesTableViewController {
         if editingStyle == .Delete {
             storedMemesProvider.removeMemeFromStorage(atIndex: indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            
+            /** Reset the empty data set background, if needed */
+            configureTableView()
         }
     }
 }
@@ -109,9 +125,9 @@ extension SavedMemesTableViewController {
     }
     
     override func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let footerView = UIView()
-        footerView.frame = CGRectMake(0, 0, view.bounds.size.width, 2.0)
-        footerView.backgroundColor = UIColor.clearColor()
+        let footerView              = UIView()
+        footerView.frame            = CGRectMake(0, 0, view.bounds.size.width, 2.0)
+        footerView.backgroundColor  = UIColor.clearColor()
         return footerView
     }
 }

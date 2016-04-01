@@ -17,7 +17,6 @@ protocol MemeEditorViewDataSource {
 }
 
 final class MemeEditorView: UIView {
-    typealias BarButtonClosure = () -> Void
     private var albumButtonClosure: BarButtonClosure?
     private var cameraButtonClosure: BarButtonClosure?
     
@@ -37,7 +36,6 @@ final class MemeEditorView: UIView {
     
     typealias MemeFontColorUpdated = (UIColor) -> Void
     private var memeFontColorUpdatedClosure: MemeFontColorUpdated?
-    
     
     private var image: UIImage? = nil {
         didSet {
@@ -87,6 +85,7 @@ final class MemeEditorView: UIView {
     
     private var font: UIFont = Constants.Font.impact {
         didSet {
+            magic("font: \(font); closure: \(memeFontUpdatedClosure)")
             memeFontUpdatedClosure?(font)
             
             /** Update text field fonts */
@@ -161,8 +160,8 @@ final class MemeEditorView: UIView {
         memeImageUpdatedClosure: MemeImageUpdated,
         memeTextUpdatedClosure: MemeTextUpdated,
         memeFontUpdatedClosure: MemeFontUpdated,
-        memeFontColorUpdatedClosure: MemeFontColorUpdated)
-    {
+        memeFontColorUpdatedClosure: MemeFontColorUpdated) {
+        
         self.stateMachine                   = stateMachine
         self.dataSource                     = dataSource
         self.albumButtonClosure             = albumButtonClosure
@@ -174,11 +173,13 @@ final class MemeEditorView: UIView {
         self.memeFontUpdatedClosure         = memeFontUpdatedClosure
         self.memeFontColorUpdatedClosure    = memeFontColorUpdatedClosure
         
+        imageView.backgroundColor = Constants.ColorScheme.darkGrey
         configureToolbarItems()
         configureTextFields()
     }
 
     private func configureToolbarItems() {
+        
         var toolbarItemArray = [UIBarButtonItem]()
         
         let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
@@ -229,8 +230,8 @@ final class MemeEditorView: UIView {
         
         toolbar.setItems(toolbarItemArray, animated: false)
         
-        toolbar.barTintColor = Constants.ColorScheme.white
-        toolbar.tintColor    = Constants.ColorScheme.darkBlue
+        toolbar.barTintColor = Constants.ColorScheme.darkBlue
+        toolbar.tintColor    = Constants.ColorScheme.white
         toolbar.translucent  = true
     }
     
@@ -248,11 +249,6 @@ final class MemeEditorView: UIView {
         bottomField.returnKeyType               = .Done
         bottomField.autocapitalizationType      = .AllCharacters
         bottomField.adjustsFontSizeToFitWidth   = true
-        
-        //TODO: may not need now?
-        /** For resetting when 'Cancel' is tapped */
-//        topField.attributedText     = nil
-//        bottomField.attributedText  = nil
         
         configureTextFieldAttributes()
         showPlaceholderText()
@@ -313,7 +309,6 @@ final class MemeEditorView: UIView {
         bottomFieldBottomConstraint.constant    = 52
         bottomFieldTrailingConstraint.constant  = 0
         
-//        showPlaceholderText()
         configureTextFields()
     }
 
@@ -471,7 +466,7 @@ extension MemeEditorView: UITextFieldDelegate {
             
             UIView.animateWithDuration(0.5) {
                 var frame       = self.frame
-                frame.origin.y  = -(keyboardSize?.height)!
+                frame.origin.y  = -(keyboardSize?.height)! + self.toolbar!.frame.height
                 self.frame      = frame
             }
         }
