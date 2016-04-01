@@ -18,8 +18,8 @@ extension FontListTableViewCellDataSource {
     var textAttributes: [String : AnyObject] {
         return [
             NSForegroundColorAttributeName: Constants.ColorScheme.white,
-            NSStrokeColorAttributeName:     Constants.ColorScheme.black,
-            NSStrokeWidthAttributeName:     -3.0,
+            NSStrokeColorAttributeName:     Constants.ColorScheme.darkGrey,
+            NSStrokeWidthAttributeName:     -3.0
         ]
     }
 }
@@ -37,6 +37,7 @@ class FontListTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        backgroundColor = UIColor.clearColor() //Constants.ColorScheme.lightGrey
     }
     
     internal func configure(withDataSource dataSource: FontListTableViewCellDataSource) {

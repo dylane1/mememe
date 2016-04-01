@@ -9,8 +9,17 @@
 import UIKit
 
 struct Meme {
-    var topText: String?
-    var bottomText: String?
-    var image: UIImage!
+    var image: UIImage?
+    var topText: String
+    var bottomText: String
+    var font: UIFont
+    var fontColor: UIColor
     var memedImage: UIImage?
+    
+    init() {
+        topText     = ""
+        bottomText  = ""
+        font        = Constants.Font.impact
+        fontColor   = Constants.ColorScheme.white
+    }
 }

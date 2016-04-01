@@ -8,26 +8,34 @@
 
 import UIKit
 
-protocol MainViewDataSource {
+protocol MemeEditorViewDataSource {
     var image: Dynamic<UIImage?> { get }
+    var topText: Dynamic<String> { get }
+    var bottomText: Dynamic<String> { get }
+    var font: Dynamic<UIFont> { get }
+    var fontColor: Dynamic<UIColor> { get }
 }
 
-class MainView: UIView {
-    typealias BarButtonClosure = () -> Void
+final class MemeEditorView: UIView {
     private var albumButtonClosure: BarButtonClosure?
     private var cameraButtonClosure: BarButtonClosure?
     
-    typealias FontButtonClosure = (UIBarButtonItem) -> Void
-    private var fontButtonClosure: FontButtonClosure?
+    private var fontButtonClosure: BarButtonClosureReturningButtonSource?
     private var fontButton: UIBarButtonItem!
+    private var fontColorButtonClosure: BarButtonClosureReturningButtonSource?
+    private var fontColorButton: UIBarButtonItem!
     
-    typealias MemeTextUpdated = (Meme) -> Void
+    typealias MemeTextUpdated = (String, String) -> Void
     private var memeTextUpdatedClosure: MemeTextUpdated?
     
-    typealias MemeImageUpdated = (Meme, UIImage?) -> Meme
+    typealias MemeImageUpdated = (UIImage?) -> Void
     private var memeImageUpdatedClosure: MemeImageUpdated?
     
-    private var meme = Meme()
+    typealias MemeFontUpdated = (UIFont) -> Void
+    private var memeFontUpdatedClosure: MemeFontUpdated?
+    
+    typealias MemeFontColorUpdated = (UIColor) -> Void
+    private var memeFontColorUpdatedClosure: MemeFontColorUpdated?
     
     private var image: UIImage? = nil {
         didSet {
@@ -45,57 +53,85 @@ class MainView: UIView {
             }
             updateTextFieldContstraints(withNewOrientation: orientation)
             
-            meme = memeImageUpdatedClosure!(meme, image)
-            
-            stateMachine.changeState(withImage: image, topText: topText, bottomText: bottomText)
-        }
-    }
-    /** 
-      * Setting this to String? to be consistent with UITextField.text, even
-      * though the documentation says that it's set to @"" by default. Not
-      * sure why anyone would want to set UITextField.text to nil, but I suppose
-      * there's a reason.
-     */
-    private var topText: String? = "" {
-        didSet {
-            meme.topText = topText
-            memeTextUpdatedClosure?(meme)
-            stateMachine.changeState(withImage: image, topText: topText, bottomText: bottomText)
-        }
-    }
-    private var bottomText: String? = "" {
-        didSet {
-            meme.bottomText = bottomText
-            memeTextUpdatedClosure?(meme)
+            memeImageUpdatedClosure?(image)
             stateMachine.changeState(withImage: image, topText: topText, bottomText: bottomText)
         }
     }
     
-    private var font: UIFont = Constants.Fonts.impact {
+    private var topText = "" {
         didSet {
+            if topText != "" {
+                prepareTextFieldForAttributedText(topField)
+            }
+            
+            topField.text = topText
+            
+            memeTextUpdatedClosure?(topText, bottomText)
+            stateMachine.changeState(withImage: image, topText: topText, bottomText: bottomText)
+        }
+    }
+    private var bottomText = "" {
+        didSet {
+            if bottomText != "" {
+                prepareTextFieldForAttributedText(bottomField)
+            }
+            
+            bottomField.text = bottomText
+            
+            memeTextUpdatedClosure?(topText, bottomText)
+            stateMachine.changeState(withImage: image, topText: topText, bottomText: bottomText)
+        }
+    }
+    
+    private var font: UIFont = Constants.Font.impact {
+        didSet {
+            magic("font: \(font); closure: \(memeFontUpdatedClosure)")
+            memeFontUpdatedClosure?(font)
+            
+            /** Update text field fonts */
+            configureTextFieldAttributes()
+        }
+    }
+    
+    private var fontColor: UIColor = Constants.ColorScheme.white {
+        didSet {
+            memeFontColorUpdatedClosure?(fontColor)
+            
             /** Update text field fonts */
             configureTextFieldAttributes()
         }
     }
     
     private var textFieldAttributes = [
-        NSForegroundColorAttributeName: Constants.ColorScheme.white,
         NSStrokeColorAttributeName:     Constants.ColorScheme.black,
         NSStrokeWidthAttributeName:     -5.0
     ]
     
-    private var dataSource: MainViewViewModel! {
+    private var dataSource: MemeEditorViewModel! {
         didSet {
             dataSource.image.bind { [unowned self] in
                 self.image = $0
             }
-            dataSource.font.bind { [unowned self] in
+            dataSource.topText.bind { [unowned self] in
+                self.topText = $0
+            }
+            dataSource.bottomText.bind { [unowned self] in
+                self.bottomText = $0
+            }
+            /** 
+             * Using bindAndFire for these because the font & fontColor are
+             * loaded from NSUserDefaults and passed when view is configured.
+             */
+            dataSource.font.bindAndFire { [unowned self] in
                 self.font = $0
+            }
+            dataSource.fontColor.bindAndFire { [unowned self] in
+                self.fontColor = $0
             }
         }
     }
     
-    private var stateMachine: StateMachine!
+    private var stateMachine: MemeEditorStateMachine!
     
     @IBOutlet weak var topField: UITextField!
     @IBOutlet weak var bottomField: UITextField!
@@ -111,76 +147,38 @@ class MainView: UIView {
     @IBOutlet weak var bottomFieldTrailingConstraint: NSLayoutConstraint!
     
     
-    //MARK: - Internal funk(s)
+    //MARK: - Configuration
     
     internal func configure(
-        withDataSource dataSource: MainViewViewModel,
+        withStateMachine stateMachine: MemeEditorStateMachine,
+        dataSource: MemeEditorViewModel,
         albumButtonClosure: BarButtonClosure,
         cameraButtonClosure: BarButtonClosure? = nil,
-        fontButtonClosure: FontButtonClosure,
-        memeTextUpdatedClosure: MemeTextUpdated,
+        fontButtonClosure: BarButtonClosureReturningButtonSource,
+        fontColorButtonClosure: BarButtonClosureReturningButtonSource,
         memeImageUpdatedClosure: MemeImageUpdated,
-        stateMachine: StateMachine)
-    {
-        self.dataSource              = dataSource
-        self.albumButtonClosure      = albumButtonClosure
-        self.cameraButtonClosure     = cameraButtonClosure
-        self.fontButtonClosure       = fontButtonClosure
-        self.memeTextUpdatedClosure  = memeTextUpdatedClosure
-        self.memeImageUpdatedClosure = memeImageUpdatedClosure
-        self.stateMachine            = stateMachine
+        memeTextUpdatedClosure: MemeTextUpdated,
+        memeFontUpdatedClosure: MemeFontUpdated,
+        memeFontColorUpdatedClosure: MemeFontColorUpdated) {
         
+        self.stateMachine                   = stateMachine
+        self.dataSource                     = dataSource
+        self.albumButtonClosure             = albumButtonClosure
+        self.cameraButtonClosure            = cameraButtonClosure
+        self.fontButtonClosure              = fontButtonClosure
+        self.fontColorButtonClosure         = fontColorButtonClosure
+        self.memeImageUpdatedClosure        = memeImageUpdatedClosure
+        self.memeTextUpdatedClosure         = memeTextUpdatedClosure
+        self.memeFontUpdatedClosure         = memeFontUpdatedClosure
+        self.memeFontColorUpdatedClosure    = memeFontColorUpdatedClosure
+        
+        imageView.backgroundColor = Constants.ColorScheme.darkGrey
         configureToolbarItems()
         configureTextFields()
     }
 
-    internal func cameraButtonTapped() {
-        cameraButtonClosure?()
-    }
-    
-    internal func albumButtonTapped() {
-        albumButtonClosure?()
-    }
-    
-    internal func fontButtonTapped() {
-        fontButtonClosure?(fontButton)
-    }
-    
-    internal func resetTextFields() {
-        topText     = nil
-        bottomText  = nil
-        
-        topField.endEditing(true)
-        bottomField.endEditing(true)
-
-        /** Reset constraints */
-        topFieldLeadingConstraint.constant  = 0
-        topFieldTopConstraint.constant      = 8
-        topFieldTrailingConstraint.constant = 0
-        
-        bottomFieldLeadingConstraint.constant   = 0
-        bottomFieldBottomConstraint.constant    = 52
-        bottomFieldTrailingConstraint.constant  = 0
-        
-        showPlaceholderText()
-        configureTextFields()
-    }
-
-    internal func hidePlaceholderText() {
-        /** Hide unedited field if taking snapshot of view to share */
-        topField.alpha      = (topText == "" || topText == nil) ? 0 : 1
-        bottomField.alpha   = (bottomText == "" || bottomText == nil) ? 0 : 1
-    }
-    
-    internal func showPlaceholderText() {
-        magic("")
-        topField.alpha      = 1
-        bottomField.alpha   = 1
-    }
-    
-    //MARK: - Private funk(s)
-
     private func configureToolbarItems() {
+        
         var toolbarItemArray = [UIBarButtonItem]()
         
         let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
@@ -188,25 +186,25 @@ class MainView: UIView {
         toolbarItemArray.append(flexSpace)
         
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil, action: nil)
-        fixedSpace.width = 44
+        fixedSpace.width = 20
         
         let cameraButton = UIBarButtonItem(
             barButtonSystemItem: .Camera,
             target: self,
-            action: "cameraButtonTapped")
+            action: #selector(cameraButtonTapped))
         
         cameraButton.enabled = false
-
+        
         toolbarItemArray.append(cameraButton)
         toolbarItemArray.append(fixedSpace)
-
+        
         if UIImagePickerController.isSourceTypeAvailable(.Camera) { cameraButton.enabled = true }
         
         let albumButton = UIBarButtonItem(
             title: LocalizedStrings.ToolbarButtons.album,
             style: .Plain,
             target: self,
-            action: "albumButtonTapped")
+            action: #selector(albumButtonTapped))
         
         toolbarItemArray.append(albumButton)
         toolbarItemArray.append(fixedSpace)
@@ -215,15 +213,24 @@ class MainView: UIView {
             title: LocalizedStrings.ToolbarButtons.font,
             style: .Plain,
             target: self,
-            action: "fontButtonTapped")
+            action: #selector(fontButtonTapped))
         
         toolbarItemArray.append(fontButton)
+        toolbarItemArray.append(fixedSpace)
+        
+        fontColorButton = UIBarButtonItem(
+            title: LocalizedStrings.ToolbarButtons.color,
+            style: .Plain,
+            target: self,
+            action: #selector(fontColorButtonTapped))
+        
+        toolbarItemArray.append(fontColorButton)
         toolbarItemArray.append(flexSpace)
         
         toolbar.setItems(toolbarItemArray, animated: false)
         
-        toolbar.barTintColor = Constants.ColorScheme.white
-        toolbar.tintColor    = Constants.ColorScheme.darkBlue
+        toolbar.barTintColor = Constants.ColorScheme.darkBlue
+        toolbar.tintColor    = Constants.ColorScheme.white
         toolbar.translucent  = true
     }
     
@@ -242,19 +249,17 @@ class MainView: UIView {
         bottomField.autocapitalizationType      = .AllCharacters
         bottomField.adjustsFontSizeToFitWidth   = true
         
-        /** For resetting when 'Cancel' is tapped */
-        topField.attributedText     = nil
-        bottomField.attributedText  = nil
-        
         configureTextFieldAttributes()
+        showPlaceholderText()
     }
     
     internal func configureTextFieldAttributes() {
-
+        
         textFieldAttributes[NSFontAttributeName] = font
+        textFieldAttributes[NSForegroundColorAttributeName] = fontColor
         
         let placeholderAttributes = [
-            NSForegroundColorAttributeName: Constants.ColorScheme.whiteAlpha50,
+            NSForegroundColorAttributeName: fontColor,
             NSFontAttributeName:            font
         ]
         
@@ -267,8 +272,66 @@ class MainView: UIView {
         bottomField.textAlignment           = .Center
     }
     
+    
+    //MARK: - Actions
+    
+    internal func cameraButtonTapped() {
+        cameraButtonClosure?()
+    }
+    
+    internal func albumButtonTapped() {
+        albumButtonClosure?()
+    }
+    
+    internal func fontButtonTapped() {
+        fontButtonClosure?(fontButton)
+    }
+    
+    internal func fontColorButtonTapped() {
+        fontColorButtonClosure?(fontColorButton)
+    }
+    
+    
+    internal func resetTextFields() {
+        topText     = ""
+        bottomText  = ""
+        
+        topField.endEditing(true)
+        bottomField.endEditing(true)
+
+        /** Reset constraints */
+        topFieldLeadingConstraint.constant  = 0
+        topFieldTopConstraint.constant      = 8
+        topFieldTrailingConstraint.constant = 0
+        
+        bottomFieldLeadingConstraint.constant   = 0
+        bottomFieldBottomConstraint.constant    = 52
+        bottomFieldTrailingConstraint.constant  = 0
+        
+        configureTextFields()
+    }
+
+    internal func hidePlaceholderText() {
+        /** Hide unedited field if taking snapshot of view to share */
+        topField.alpha      = (topText == "") ? 0 : 1
+        bottomField.alpha   = (bottomText == "") ? 0 : 1
+    }
+    
+    internal func showPlaceholderText() {
+        topField.alpha      = (topText == "") ? 0.5 : 1
+        bottomField.alpha   = (bottomText == "") ? 0.5 : 1
+    }
+    
+
+    private func prepareTextFieldForAttributedText(textField: UITextField) {
+        textField.defaultTextAttributes  = textFieldAttributes
+        textField.textAlignment          = .Center
+        textField.placeholder = nil
+        textField.alpha = 1.0
+    }
+    
+    
     internal func updateTextFieldContstraints(withNewOrientation orientation: DestinationOrientation) {
-        //FIXME: Find a better solution to text field location on rotation issue: http://smnh.me/synchronizing-rotation-animation-between-the-keyboard-and-the-attached-view-part-2/
         /** Close keyboard on rotation */
         if bottomField.isFirstResponder() {
             bottomField.resignFirstResponder()
@@ -296,15 +359,16 @@ class MainView: UIView {
             bottomFieldTrailingConstraint.constant  = 0
             
             let correctHeight = (imageView.frame.width / imageView.image!.size.width) * imageView.image!.size.height
-
-            let newConstant = ((imageView.frame.height - correctHeight) / 2)
+            
+            var newConstant = ((imageView.frame.height - correctHeight) / 2)
+            newConstant = (newConstant > 0) ? newConstant : 0 // Negative number is bad, very bad...
+            
             topFieldTopConstraint.constant          = newConstant + 8
             bottomFieldBottomConstraint.constant    = newConstant + 52
         }
     }
     
     internal func getInfoForImageContext() -> (size: CGSize, x: CGFloat, y: CGFloat) {
-        
         let multiplier: CGFloat
         
         if UIDevice.currentDevice().orientation.isLandscape.boolValue {
@@ -315,11 +379,13 @@ class MainView: UIView {
             multiplier = imageView.frame.width / imageView.image!.size.width
         }
         
-        let width = imageView.image!.size.width * multiplier
-        let height = imageView.image!.size.height * multiplier
+        var width = imageView.image!.size.width * multiplier
+        var height = imageView.image!.size.height * multiplier
+        
         
         let x: CGFloat
         if width >= imageView.frame.width {
+            width = imageView.frame.width
             x = 0
         } else {
             x = (imageView.frame.width - width) / 2
@@ -327,6 +393,7 @@ class MainView: UIView {
         
         let y: CGFloat
         if height >= imageView.frame.height {
+            height = imageView.frame.height
             y = 0
         } else {
             y = (imageView.frame.height - height) / 2
@@ -338,8 +405,7 @@ class MainView: UIView {
 
 
 //MARK: - UITextFieldDelegate
-
-extension MainView: UITextFieldDelegate {
+extension MemeEditorView: UITextFieldDelegate {
     
     internal func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
         stateMachine.state.value = .IsEditingText
@@ -349,32 +415,21 @@ extension MainView: UITextFieldDelegate {
          * the field, don't type anything, then tap 'Done' on the keyboard. This
          * fixes that scenario.
         */
-        textField.defaultTextAttributes  = textFieldAttributes
-        textField.textAlignment          = .Center
-        
-        /** Remove placeholder text */
-        textField.placeholder = nil
+        prepareTextFieldForAttributedText(textField)
         
         /** Set up observers */
         NSNotificationCenter.defaultCenter().addObserver(
             self,
-            selector: Selector("keyboardWillShow:"),
+            selector: #selector(keyboardWillShow(_:)),
             name: UIKeyboardWillShowNotification,
             object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(
             self,
-            selector: Selector("keyboardWillHide:"),
+            selector: #selector(keyboardWillHide(_:)),
             name: UIKeyboardWillHideNotification,
             object: nil)
-        
-        //FIXME: Get rotation working correctly
-//        NSNotificationCenter.defaultCenter().addObserver(
-//            self,
-//            selector: Selector("keyboardWillChangeFrame:"),
-//            name: UIKeyboardWillChangeFrameNotification,
-//            object: nil)
-        
+
         return true
     }
     
@@ -385,8 +440,8 @@ extension MainView: UITextFieldDelegate {
     }
     
     internal func textFieldDidEndEditing(textField: UITextField) {
-        topText     = topField.text as String?
-        bottomText  = bottomField.text as String?
+        topText     = topField.text as String! ?? ""
+        bottomText  = bottomField.text as String! ?? ""
     }
     
     internal func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -401,7 +456,7 @@ extension MainView: UITextFieldDelegate {
             
             UIView.animateWithDuration(0.5) {
                 var frame       = self.frame
-                frame.origin.y  = -(keyboardSize?.height)!
+                frame.origin.y  = -(keyboardSize?.height)! + self.toolbar!.frame.height
                 self.frame      = frame
             }
         }
@@ -410,9 +465,7 @@ extension MainView: UITextFieldDelegate {
     internal func keyboardWillHide(notification: NSNotification) {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
-        //FIXME: Get rotation working correctly
-//        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillChangeFrameNotification, object: nil)
-        
+
         /** Animate view back down if done editing the bottom text field */
         if bottomField.editing {
             UIView.animateWithDuration(0.5) {
@@ -422,21 +475,4 @@ extension MainView: UITextFieldDelegate {
             }
         }
     }
-    //FIXME: Get rotation working correctly
-    //See: http://smnh.me/synchronizing-rotation-animation-between-the-keyboard-and-the-attached-view-part-2/
-//    internal func keyboardWillChangeFrame(notification: NSNotification) {
-//        magic("")
-//        if bottomField.editing {
-//            let keyboardSize = notification.userInfo?[UIKeyboardFrameBeginUserInfoKey]?.CGRectValue.size
-//            
-//            UIView.animateWithDuration(0.5) {
-//                var frame       = self.frame
-//                frame.origin.y  = -(keyboardSize?.height)!
-//                self.frame      = frame
-//            }
-//        }
-//    }
 }
-
-
-

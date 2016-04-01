@@ -10,14 +10,17 @@ import UIKit
 
 class FontListTableViewController: UITableViewController {
 
-    private var viewModel: MainViewViewModel!
+    private var viewModel: MemeEditorViewModel!
     
-    private var selectedFont = Constants.Fonts.impact
+    private var selectedFont = Constants.Font.impact
     private var selectedIndexPath = NSIndexPath(forRow: 0, inSection: 0)
+    
+    //MARK: - View Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = Constants.ColorScheme.lightGrey
+        view.backgroundColor        = UIColor.clearColor()
+        tableView.separatorColor    = Constants.ColorScheme.mediumGrey
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -25,7 +28,6 @@ class FontListTableViewController: UITableViewController {
             if viewModel.font.value == Constants.FontArray[i] {
                 selectedFont = viewModel.font.value
                 selectedIndexPath = NSIndexPath(forItem: i, inSection: 0)
-                magic("selectedIndexPath: \(selectedIndexPath)")
                 break
             }
         }
@@ -42,18 +44,27 @@ class FontListTableViewController: UITableViewController {
         */
         tableView.scrollToRowAtIndexPath(selectedIndexPath, atScrollPosition: .Top, animated: false)
     }
-    // MARK: - Table view data source
 
+    //MARK: - Configuration
+    
+    internal func configure(withViewModel viewModel: MemeEditorViewModel) {
+        self.viewModel = viewModel
+    }
+
+}
+
+//MARK: - UITableViewDataSource
+extension FontListTableViewController {
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
-
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return Constants.FontFamilyNameArray.count
     }
-
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(Constants.ReuseIDs.fontListTableCell, forIndexPath: indexPath) as! FontListTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(Constants.ReuseID.fontListTableCell, forIndexPath: indexPath) as! FontListTableViewCell
         
         let model = FontListTableViewCellModel(
             title: Constants.FontFamilyNameArray[indexPath.row],
@@ -66,20 +77,18 @@ class FontListTableViewController: UITableViewController {
         } else {
             cell.accessoryType = UITableViewCellAccessoryType.None
         }
-
+        
         return cell
     }
-    
-    internal func configure(withViewModel viewModel: MainViewViewModel) {
-        self.viewModel = viewModel
-    }
-
 }
 
 //MARK: - UITableViewDelegate
 extension FontListTableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        /** Save selection to NSUserDefaults */
+        Constants.userDefaults.setObject(Constants.FontFamilyNameArray[indexPath.row] as NSString, forKey: Constants.StorageKeys.fontName)
+        
         /** Need to update MainViewViewModel & reloadData to set checkmark */
         viewModel.font.value = Constants.FontArray[indexPath.row]
         selectedFont = viewModel.font.value
