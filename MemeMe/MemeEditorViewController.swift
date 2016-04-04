@@ -345,18 +345,16 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
         let info = mainView.getInfoForImageContext()
         
         /** Correct for height of navigationBar */
+        
         var correctedY = info.y + CGFloat(navigationController!.navigationBar.frame.size.height)
         
-        /** 
-         * If portrait, also correct for status bar
-         *
-         * Note: using !isLandscape because isPortrait is nil if the device
-         * hasn't been rotated yet.
+        /**
+         * If status bar is visible, also correct for it
          */
-        if !UIDevice.currentDevice().orientation.isLandscape.boolValue {
+        if !UIApplication.sharedApplication().statusBarHidden {
             correctedY += UIApplication.sharedApplication().statusBarFrame.size.height
         }
-
+        
         UIGraphicsBeginImageContextWithOptions(info.size, false, 0.0)
         let context = UIGraphicsGetCurrentContext()!
         CGContextTranslateCTM(context, -info.x, -correctedY)
@@ -400,7 +398,6 @@ enum DestinationOrientation {
 extension MemeEditorViewController {
     /** Tell view to update constraints on text fields upon rotation */    
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        
         let newOrientation: DestinationOrientation = (size.width > size.height) ? .Landscape : .Portrait
 
         coordinator.animateAlongsideTransition({ [unowned self] (context: UIViewControllerTransitionCoordinatorContext!) in
