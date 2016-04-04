@@ -85,7 +85,6 @@ final class MemeEditorView: UIView {
     
     private var font: UIFont = Constants.Font.impact {
         didSet {
-            magic("font: \(font); closure: \(memeFontUpdatedClosure)")
             memeFontUpdatedClosure?(font)
             
             /** Update text field fonts */

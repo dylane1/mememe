@@ -19,7 +19,6 @@ final class SavedMemesTableViewController: UITableViewController, SavedMemesNavi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         title = LocalizedStrings.ViewControllerTitles.memeMe        
     }
 
@@ -55,6 +54,7 @@ final class SavedMemesTableViewController: UITableViewController, SavedMemesNavi
         tableView.delegate = self
         tableView.backgroundColor = Constants.ColorScheme.darkBlueGrey
     }
+    
     
     //MARK: - Navigation
 
