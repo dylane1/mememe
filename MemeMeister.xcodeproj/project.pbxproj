@@ -131,7 +131,7 @@
 		A383BEF91C627AB500D80668 = {
 			isa = PBXGroup;
 			children = (
-				A383BF041C627AB500D80668 /* MemeMe */,
+				A383BF041C627AB500D80668 /* MemeMeister */,
 				A383BF031C627AB500D80668 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -144,7 +144,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		A383BF041C627AB500D80668 /* MemeMe */ = {
+		A383BF041C627AB500D80668 /* MemeMeister */ = {
 			isa = PBXGroup;
 			children = (
 				A383BF201C627D3500D80668 /* Utilities */,
@@ -169,6 +169,7 @@
 				A383BF111C627AB500D80668 /* Info.plist */,
 				A37A2BC01C8126F200D243A8 /* Resources */,
 			);
+			name = MemeMeister;
 			path = MemeMe;
 			sourceTree = "<group>";
 		};
