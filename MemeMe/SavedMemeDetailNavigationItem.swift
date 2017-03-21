@@ -9,16 +9,16 @@
 import UIKit
 
 final class SavedMemeDetailNavigationItem: UINavigationItem {
-    private var shareClosure: BarButtonClosure!
-    private var deleteClosure: BarButtonClosure!
-    private var editMemeClosure: BarButtonClosure!
+    fileprivate var shareClosure: BarButtonClosure!
+    fileprivate var deleteClosure: BarButtonClosure!
+    fileprivate var editMemeClosure: BarButtonClosure!
     
     //MARK: - Configuration
     
     internal func configure(
-        withShareClosure share: BarButtonClosure,
-        deleteClosure delete: BarButtonClosure,
-        editMemeClosure edit: BarButtonClosure) {
+        withShareClosure share: @escaping BarButtonClosure,
+        deleteClosure delete: @escaping BarButtonClosure,
+        editMemeClosure edit: @escaping BarButtonClosure) {
             shareClosure    = share
             deleteClosure   = delete
             editMemeClosure = edit
@@ -26,27 +26,27 @@ final class SavedMemeDetailNavigationItem: UINavigationItem {
             configureNavItems()
     }
     
-    private func configureNavItems() {
+    fileprivate func configureNavItems() {
         var rightItemArray  = [UIBarButtonItem]()
         
         leftItemsSupplementBackButton = true
         
         let shareButton = UIBarButtonItem(
-            barButtonSystemItem: .Action,
+            barButtonSystemItem: .action,
             target: self,
             action: #selector(shareButtonTapped))
         
         leftBarButtonItem = shareButton
         
         let deleteButton = UIBarButtonItem(
-            barButtonSystemItem: .Trash,
+            barButtonSystemItem: .trash,
             target: self,
             action: #selector(deleteButtonTapped))
         
         rightItemArray.append(deleteButton)
         
         let editMemeButton = UIBarButtonItem(
-            barButtonSystemItem: .Edit,
+            barButtonSystemItem: .edit,
             target: self,
             action: #selector(editButtonTapped))
         

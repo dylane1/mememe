@@ -18,7 +18,7 @@ extension SavedMemeCellDataSource {
         return [
             NSForegroundColorAttributeName: Constants.ColorScheme.white,
             NSStrokeColorAttributeName:     Constants.ColorScheme.black,
-            NSStrokeWidthAttributeName:     -3.0
+            NSStrokeWidthAttributeName:     -3.0 as AnyObject
         ]
     }
 }

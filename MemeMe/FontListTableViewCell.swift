@@ -19,7 +19,7 @@ extension FontListTableViewCellDataSource {
         return [
             NSForegroundColorAttributeName: Constants.ColorScheme.white,
             NSStrokeColorAttributeName:     Constants.ColorScheme.darkGrey,
-            NSStrokeWidthAttributeName:     -3.0
+            NSStrokeWidthAttributeName:     -3.0 as AnyObject
         ]
     }
 }
@@ -31,13 +31,13 @@ struct FontListTableViewCellModel: FontListTableViewCellDataSource {
 
 class FontListTableViewCell: UITableViewCell {
     
-    @IBOutlet private weak var label: UILabel!
+    @IBOutlet fileprivate weak var label: UILabel!
     
-    private var dataSource: FontListTableViewCellDataSource!
+    fileprivate var dataSource: FontListTableViewCellDataSource!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        backgroundColor = UIColor.clearColor() //Constants.ColorScheme.lightGrey
+        backgroundColor = UIColor.clear //Constants.ColorScheme.lightGrey
     }
     
     internal func configure(withDataSource dataSource: FontListTableViewCellDataSource) {
@@ -46,9 +46,9 @@ class FontListTableViewCell: UITableViewCell {
         configureLabel()
     }
     
-    private func configureLabel() {
-        let resizedFont = dataSource.font.fontWithSize(20)
-        let attributedString = NSMutableAttributedString(string: dataSource.title.uppercaseString, attributes: dataSource.textAttributes)
+    fileprivate func configureLabel() {
+        let resizedFont = dataSource.font.withSize(20)
+        let attributedString = NSMutableAttributedString(string: dataSource.title.uppercased(), attributes: dataSource.textAttributes)
         attributedString.addAttribute(NSFontAttributeName, value: resizedFont, range: NSRange(location: 0,length: dataSource.title.characters.count))
         
         label.attributedText = attributedString

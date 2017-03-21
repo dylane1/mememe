@@ -9,22 +9,22 @@
 import UIKit
 
 final class MemeEditorNavigationItem: UINavigationItem {
-    private var shareClosure: BarButtonClosure?
-    private var saveClosure: BarButtonClosure?
-    private var clearClosure: BarButtonClosure?
-    private var cancelClosure: BarButtonClosure?
+    fileprivate var shareClosure: BarButtonClosure?
+    fileprivate var saveClosure: BarButtonClosure?
+    fileprivate var clearClosure: BarButtonClosure?
+    fileprivate var cancelClosure: BarButtonClosure?
     
-    private var shareButton: UIBarButtonItem?
-    private var saveButton: UIBarButtonItem!
-    private var clearButton: UIBarButtonItem!
-    private var cancelButton: UIBarButtonItem!
+    fileprivate var shareButton: UIBarButtonItem?
+    fileprivate var saveButton: UIBarButtonItem!
+    fileprivate var clearButton: UIBarButtonItem!
+    fileprivate var cancelButton: UIBarButtonItem!
     
-    private var state: MemeEditorState = .NoImageNoText {
+    fileprivate var state: MemeEditorState = .noImageNoText {
         didSet {
             updateButtonsEnabled()
         }
     }
-    private var stateMachine: MemeEditorStateMachine! {
+    fileprivate var stateMachine: MemeEditorStateMachine! {
         didSet {
             stateMachine.state.bindAndFire { [unowned self] in
                 self.state = $0
@@ -36,9 +36,9 @@ final class MemeEditorNavigationItem: UINavigationItem {
     
     internal func configure(
         withShareButtonClosure share: BarButtonClosure?,
-        saveButtonClosure save: BarButtonClosure,
-        clearButtonClosure clear: BarButtonClosure,
-        cancelButtonClosure cancel: BarButtonClosure,
+        saveButtonClosure save: @escaping BarButtonClosure,
+        clearButtonClosure clear: @escaping BarButtonClosure,
+        cancelButtonClosure cancel: @escaping BarButtonClosure,
         stateMachine state: MemeEditorStateMachine) {
         
             shareClosure    = share
@@ -51,7 +51,7 @@ final class MemeEditorNavigationItem: UINavigationItem {
             stateMachine    = state
     }
     
-    private func configureNavigationItems() {
+    fileprivate func configureNavigationItems() {
         
         var leftItemArray   = [UIBarButtonItem]()
         var rightItemArray  = [UIBarButtonItem]()
@@ -62,7 +62,7 @@ final class MemeEditorNavigationItem: UINavigationItem {
          */
         if shareClosure != nil {
             shareButton = UIBarButtonItem(
-                barButtonSystemItem: .Action,
+                barButtonSystemItem: .action,
                 target: self,
                 action: #selector(shareButtonTapped))
             leftItemArray.append(shareButton!)
@@ -70,7 +70,7 @@ final class MemeEditorNavigationItem: UINavigationItem {
         
         saveButton = UIBarButtonItem(
             title: LocalizedStrings.NavigationControllerButtons.save,
-            style: .Plain,
+            style: .plain,
             target: self,
             action: #selector(saveButtonTapped))
         leftItemArray.append(saveButton)
@@ -79,14 +79,14 @@ final class MemeEditorNavigationItem: UINavigationItem {
         
         cancelButton = UIBarButtonItem(
             title: LocalizedStrings.NavigationControllerButtons.cancel,
-            style: .Plain,
+            style: .plain,
             target: self,
             action: #selector(cancelButtonTapped))
         rightItemArray.append(cancelButton)
         
         clearButton = UIBarButtonItem(
             title: LocalizedStrings.NavigationControllerButtons.clear,
-            style: .Plain,
+            style: .plain,
             target: self,
             action: #selector(clearButtonTapped))
         rightItemArray.append(clearButton)
@@ -112,20 +112,20 @@ final class MemeEditorNavigationItem: UINavigationItem {
         cancelClosure?()
     }
     
-    private func updateButtonsEnabled() {
+    fileprivate func updateButtonsEnabled() {
         switch state {
-        case .NoImageYesText, .YesImageNoText:
-            if shareButton != nil { shareButton!.enabled = false }
-            saveButton.enabled      = false
-            clearButton.enabled     = true
-        case .YesImageYesText:
-            if shareButton != nil { shareButton!.enabled = true }
-            saveButton.enabled      = true
-            clearButton.enabled     = true
+        case .noImageYesText, .yesImageNoText:
+            if shareButton != nil { shareButton!.isEnabled = false }
+            saveButton.isEnabled      = false
+            clearButton.isEnabled     = true
+        case .yesImageYesText:
+            if shareButton != nil { shareButton!.isEnabled = true }
+            saveButton.isEnabled      = true
+            clearButton.isEnabled     = true
         default:
-            if shareButton != nil { shareButton!.enabled = false }
-            saveButton.enabled      = false
-            clearButton.enabled     = false
+            if shareButton != nil { shareButton!.isEnabled = false }
+            saveButton.isEnabled      = false
+            clearButton.isEnabled     = false
         }
     }
 }

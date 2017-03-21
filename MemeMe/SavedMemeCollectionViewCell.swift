@@ -9,9 +9,9 @@
 import UIKit
 
 final class SavedMemesCollectionViewCell: UICollectionViewCell {
-    @IBOutlet private weak var memeImageView: UIImageView!
+    @IBOutlet fileprivate weak var memeImageView: UIImageView!
     
-    private var dataSource: SavedMemeCellDataSource!
+    fileprivate var dataSource: SavedMemeCellDataSource!
     
     //MARK: - View Lifecycle
     
@@ -27,7 +27,7 @@ final class SavedMemesCollectionViewCell: UICollectionViewCell {
         configureImageView()
     }
     
-    private func configureImageView() {
+    fileprivate func configureImageView() {
         memeImageView.backgroundColor = Constants.ColorScheme.darkGrey
         memeImageView.image = dataSource.meme.memedImage
     }

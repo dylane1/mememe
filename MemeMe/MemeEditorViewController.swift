@@ -15,35 +15,35 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
     /** Set in MemeEditorPresentable protocol extension */
     var vcShouldBeDismissed: BarButtonClosure!
     
-    private var meme = Meme()
+    fileprivate var meme = Meme()
     
     /** View */
-    private var mainView: MemeEditorView!
-    private var mainViewViewModel: MemeEditorViewModel!
+    fileprivate var mainView: MemeEditorView!
+    fileprivate var mainViewViewModel: MemeEditorViewModel!
     
     /** Navigation */
     @IBOutlet weak var navItem: MemeEditorNavigationItem!
     
     /** For keeping track of app state and enabling/disabling navbar buttons */
-    private var stateMachine = MemeEditorStateMachine()
+    fileprivate var stateMachine = MemeEditorStateMachine()
     
     /** Toolbar button closures (passed to mainView & its toolbar) */
-    private var cameraButtonClosure: BarButtonClosure?
-    private var albumButtonClosure: BarButtonClosure!
-    private var fontButtonClosure: BarButtonClosureWithButtonItemSource!
-    private var fontColorButtonClosure: BarButtonClosureWithButtonItemSource!
+    fileprivate var cameraButtonClosure: BarButtonClosure?
+    fileprivate var albumButtonClosure: BarButtonClosure!
+    fileprivate var fontButtonClosure: BarButtonClosureWithButtonItemSource!
+    fileprivate var fontColorButtonClosure: BarButtonClosureWithButtonItemSource!
     
     /** Picking an image */
-    private lazy var imagePickerController = UIImagePickerController()
+    fileprivate lazy var imagePickerController = UIImagePickerController()
     
     /** ActivityViewControllerPresentable -- For Sharing */
     internal var activityViewController: UIActivityViewController?
     internal var activitySuccessCompletion: (() -> Void)? = nil
     
     /** Saving to storage & editing */
-    private lazy var storedMemesProvider = MemesProvider()
-    private var storedIndex: Int?
-    private var memeToUpdate: Meme?
+    fileprivate lazy var storedMemesProvider = MemesProvider()
+    fileprivate var storedIndex: Int?
+    fileprivate var memeToUpdate: Meme?
     
     //MARK: - View Lifecycle
     
@@ -66,7 +66,7 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
         configureMemeEditorView()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         /** Will be set if coming from Detail VC */
         if memeToUpdate != nil {
@@ -93,7 +93,7 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
         storedIndex     = index
     }
     
-    private func configureNavigationItems() {
+    fileprivate func configureNavigationItems() {
         
         var shareButtonClosure: BarButtonClosure?
         
@@ -112,13 +112,13 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
                     self.storedMemesProvider.addNewMemeToStorage(self.meme, completion: nil)
 
                     /** close meme editor */
-                    self.dismissViewControllerAnimated(true, completion: nil)
+                    self.dismiss(animated: true, completion: nil)
                 }
                 
                 /** Open Activity View Controller */
                 self.activityViewController = self.getActivityViewController(withImage: image)
                 
-                self.presentViewController(self.activityViewController!, animated: true, completion: nil)
+                self.present(self.activityViewController!, animated: true, completion: nil)
             }
         }
         
@@ -136,14 +136,14 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
                 self.storedMemesProvider.addNewMemeToStorage(self.meme) {
                     
                     /** close meme editor when finished */
-                    self.dismissViewControllerAnimated(true, completion: nil)
+                    self.dismiss(animated: true, completion: nil)
                 }
             } else {
                 /** Ist's an update */
                 self.storedMemesProvider.updateMemeFromStorage(atIndex: self.storedIndex!, withMeme: self.meme) {
                     
                     /** close meme editor when finished */
-                    self.dismissViewControllerAnimated(true, completion: nil)
+                    self.dismiss(animated: true, completion: nil)
                 }
             }
         }
@@ -166,9 +166,9 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
             stateMachine: stateMachine)
     }
     
-    private func configureToolbarItems() {
+    fileprivate func configureToolbarItems() {
         
-        if UIImagePickerController.isSourceTypeAvailable(.Camera) {
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
             cameraButtonClosure = { [unowned self] in
                 self.cameraButtonTapped()
             }
@@ -187,12 +187,12 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
         }
     }
 
-    private func configureImagePicker() {
+    fileprivate func configureImagePicker() {
         imagePickerController.delegate = self
         imagePickerController.mediaTypes = [kUTTypeImage as String]
     }
     
-    private func configureMemeEditorView() {
+    fileprivate func configureMemeEditorView() {
         
         let memeImageUpdatedClosure = { [unowned self] (newImage: UIImage?) -> Void in
             /** Update image */
@@ -236,70 +236,70 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
     //MARK: - Actions
     
     /** Toolbar Actions */
-    private func cameraButtonTapped() {
+    fileprivate func cameraButtonTapped() {
         configureImagePicker()
-        imagePickerController.sourceType = .Camera
+        imagePickerController.sourceType = .camera
         presentImagePicker()
     }
     
-    private func albumButtonTapped() {
+    fileprivate func albumButtonTapped() {
         configureImagePicker()
-        imagePickerController.sourceType = .PhotoLibrary
+        imagePickerController.sourceType = .photoLibrary
         presentImagePicker()
     }
     
-    private func presentImagePicker() {
+    fileprivate func presentImagePicker() {
         if presentedViewController == nil {
-            presentViewController(imagePickerController, animated: true, completion: nil)
+            present(imagePickerController, animated: true, completion: nil)
         } else {
-            dismissViewControllerAnimated(true) {
-                self.presentViewController(self.imagePickerController, animated: true, completion: nil)
+            dismiss(animated: true) {
+                self.present(self.imagePickerController, animated: true, completion: nil)
             }
         }
     }
     
-    private func fontButtonTapped(button: UIBarButtonItem) {
+    fileprivate func fontButtonTapped(_ button: UIBarButtonItem) {
         /** Present a popover with available fonts */
         let storyboard = UIStoryboard(name: Constants.StoryBoardID.main, bundle: nil)
         
-        let fontListTableVC = storyboard.instantiateViewControllerWithIdentifier(Constants.StoryBoardID.fontListTableVC) as! FontListTableViewController
-        fontListTableVC.preferredContentSize = CGSizeMake(250, 300)
+        let fontListTableVC = storyboard.instantiateViewController(withIdentifier: Constants.StoryBoardID.fontListTableVC) as! FontListTableViewController
+        fontListTableVC.preferredContentSize = CGSize(width: 250, height: 300)
         fontListTableVC.configure(withViewModel: mainViewViewModel)
-        fontListTableVC.modalPresentationStyle = UIModalPresentationStyle.Popover
+        fontListTableVC.modalPresentationStyle = UIModalPresentationStyle.popover
         
         presentPopover(withViewController: fontListTableVC, fromButton: button)
     }
     
-    private func fontColorButtonTapped(button: UIBarButtonItem) {
+    fileprivate func fontColorButtonTapped(_ button: UIBarButtonItem) {
         /** Present a popover with available font colors */
         let storyboard = UIStoryboard(name: Constants.StoryBoardID.main, bundle: nil)
         
-        let fontColorsVC = storyboard.instantiateViewControllerWithIdentifier(Constants.StoryBoardID.fontColorSelectionVC) as! FontColorSelectionViewController
-        fontColorsVC.preferredContentSize = CGSizeMake(260, 116)
+        let fontColorsVC = storyboard.instantiateViewController(withIdentifier: Constants.StoryBoardID.fontColorSelectionVC) as! FontColorSelectionViewController
+        fontColorsVC.preferredContentSize = CGSize(width: 260, height: 116)
         fontColorsVC.configure(withViewModel: mainViewViewModel)
-        fontColorsVC.modalPresentationStyle = UIModalPresentationStyle.Popover
+        fontColorsVC.modalPresentationStyle = UIModalPresentationStyle.popover
         
         presentPopover(withViewController: fontColorsVC, fromButton: button)
     }
     
-    private func presentPopover(withViewController vc: UIViewController, fromButton button: UIBarButtonItem) {
+    fileprivate func presentPopover(withViewController vc: UIViewController, fromButton button: UIBarButtonItem) {
         let popoverController = vc.popoverPresentationController!
         popoverController.barButtonItem = button
-        popoverController.permittedArrowDirections = .Any
+        popoverController.permittedArrowDirections = .any
         popoverController.delegate = self
         popoverController.backgroundColor = Constants.ColorScheme.whiteAlpha50
         
         if presentedViewController == nil {
-            presentViewController(vc, animated: true, completion: nil)
+            present(vc, animated: true, completion: nil)
         } else {
-            dismissViewControllerAnimated(true) {
-                self.presentViewController(vc, animated: true, completion: nil)
+            dismiss(animated: true) {
+                self.present(vc, animated: true, completion: nil)
             }
         }
     }
     
-    private func getFontFromDefaults() {
-        if let fontName = Constants.userDefaults.stringForKey(Constants.StorageKeys.fontName) as String! {
+    fileprivate func getFontFromDefaults() {
+        if let fontName = Constants.userDefaults.string(forKey: Constants.StorageKeys.fontName) as String! {
             var i = 0
             for name in Constants.FontFamilyNameArray {
                 if name == fontName {
@@ -318,7 +318,7 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
             mainViewViewModel.font.value =  Constants.Font.impact
         }
         
-        if let fontColor = Constants.userDefaults.stringForKey(Constants.StorageKeys.fontColor) as String! {
+        if let fontColor = Constants.userDefaults.string(forKey: Constants.StorageKeys.fontColor) as String! {
             var i = 0
             for color in Constants.FontColorStringArray {
                 if color == fontColor {
@@ -338,7 +338,7 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
         }
     }
     
-    private func createImage() -> UIImage {
+    fileprivate func createImage() -> UIImage {
         /** Hide unedited field before taking snapshot */
         mainView.hidePlaceholderText()
         
@@ -351,34 +351,34 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
         /**
          * If status bar is visible, also correct for it
          */
-        if !UIApplication.sharedApplication().statusBarHidden {
-            correctedY += UIApplication.sharedApplication().statusBarFrame.size.height
+        if !UIApplication.shared.isStatusBarHidden {
+            correctedY += UIApplication.shared.statusBarFrame.size.height
         }
         
         UIGraphicsBeginImageContextWithOptions(info.size, false, 0.0)
         let context = UIGraphicsGetCurrentContext()!
-        CGContextTranslateCTM(context, -info.x, -correctedY)
-        view.layer.renderInContext(context)
+        context.translateBy(x: -info.x, y: -correctedY)
+        view.layer.render(in: context)
         let screenShot = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        return screenShot
+        return screenShot!
     }
 }
 
 //MARK: - UIImagePickerControllerDelegate
 extension MemeEditorViewController: UIImagePickerControllerDelegate {
-    internal func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+    internal func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
 
         /** Update viewModel so view can update itself */
         mainViewViewModel.image.value = image
         
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
-    internal func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+    internal func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
 }
 
@@ -391,16 +391,16 @@ extension MemeEditorViewController: UINavigationControllerDelegate {
 }
 
 enum DestinationOrientation {
-    case Landscape, Portrait
+    case landscape, portrait
 }
 
 //MARK: - UIContentContainer
 extension MemeEditorViewController {
     /** Tell view to update constraints on text fields upon rotation */    
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        let newOrientation: DestinationOrientation = (size.width > size.height) ? .Landscape : .Portrait
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        let newOrientation: DestinationOrientation = (size.width > size.height) ? .landscape : .portrait
 
-        coordinator.animateAlongsideTransition({ [unowned self] (context: UIViewControllerTransitionCoordinatorContext!) in
+        coordinator.animate(alongsideTransition: { [unowned self] (context: UIViewControllerTransitionCoordinatorContext!) in
             self.mainView.updateTextFieldContstraints(withNewOrientation: newOrientation)
             self.mainView.setNeedsLayout()
         }, completion: nil)
@@ -412,7 +412,7 @@ extension MemeEditorViewController: UIPopoverPresentationControllerDelegate {
      * Needed to show the font list in popover in compact
      * environments (phone), otherwise it's a full screen modal
      */
-    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
-        return .None
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
     }
 }

@@ -31,11 +31,11 @@ extension ActivityViewControllerPresentable where Self: UIViewController {
                 let alert = UIAlertController(
                     title: LocalizedStrings.Alerts.ShareError.title,
                     message: LocalizedStrings.Alerts.ShareError.message + activityError!.localizedDescription,
-                    preferredStyle: .Alert)
+                    preferredStyle: .alert)
                 
-                alert.addAction(UIAlertAction(title: LocalizedStrings.ButtonTitles.ok, style: .Default, handler: nil))
+                alert.addAction(UIAlertAction(title: LocalizedStrings.ButtonTitles.ok, style: .default, handler: nil))
                 
-                self!.presentViewController(alert, animated: true, completion: nil)
+                self!.present(alert, animated: true, completion: nil)
             } else {
                 /** Success! */
                 self!.activitySuccessCompletion?()

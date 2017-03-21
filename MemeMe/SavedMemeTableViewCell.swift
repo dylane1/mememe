@@ -9,10 +9,10 @@
 import UIKit
 
 final class SavedMemesTableViewCell: UITableViewCell {
-    @IBOutlet private weak var memeLabel: UILabel!
-    @IBOutlet private weak var memeImageView: UIImageView!
+    @IBOutlet fileprivate weak var memeLabel: UILabel!
+    @IBOutlet fileprivate weak var memeImageView: UIImageView!
     
-    private var dataSource: SavedMemeCellDataSource!
+    fileprivate var dataSource: SavedMemeCellDataSource!
     
     //MARK: - View Lifecycle
     
@@ -29,12 +29,12 @@ final class SavedMemesTableViewCell: UITableViewCell {
         configureCell()
     }
     
-    private func configureImageView() {
+    fileprivate func configureImageView() {
         memeImageView.backgroundColor = Constants.ColorScheme.darkGrey
         memeImageView.image = dataSource.meme.memedImage
     }
     
-    private func configureLabel() {
+    fileprivate func configureLabel() {
         memeLabel.adjustsFontSizeToFitWidth  = true
         
         var attributes = dataSource.textAttributes
@@ -52,7 +52,7 @@ final class SavedMemesTableViewCell: UITableViewCell {
         memeLabel.attributedText = attributedString
     }
     
-    private func configureCell() {
+    fileprivate func configureCell() {
         backgroundColor = Constants.ColorScheme.whiteAlpha50
     }
 }

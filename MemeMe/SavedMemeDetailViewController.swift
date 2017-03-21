@@ -10,28 +10,28 @@ import UIKit
 
 final class SavedMemeDetailViewController: UIViewController, ActivityViewControllerPresentable, MemeEditorPresentable {
     @IBOutlet weak var navItem: SavedMemeDetailNavigationItem!
-    private var savedMemeView: SavedMemeDetailView!
+    fileprivate var savedMemeView: SavedMemeDetailView!
     
-    private var storedMemesProvider: MemesProvider!
+    fileprivate var storedMemesProvider: MemesProvider!
     
     /** Closures passed to navItem */
-    private var shareButtonClosure: BarButtonClosure!
-    private var deleteButtonClosure: BarButtonClosure!
-    private var editMemeButtonClosure: BarButtonClosure!
+    fileprivate var shareButtonClosure: BarButtonClosure!
+    fileprivate var deleteButtonClosure: BarButtonClosure!
+    fileprivate var editMemeButtonClosure: BarButtonClosure!
 
     /** 
       Sent from TableVC or CollectionVC via SavedMemesNavigationProtocol
       extension to reset the table or collection view
     */
-    private var deleteClosure: (()->Void)?
+    fileprivate var deleteClosure: (()->Void)?
     
     /** ActivityViewControllerPresentable */
     internal var activityViewController: UIActivityViewController?
     internal var activitySuccessCompletion: (() -> Void)? = nil // No need to do anything after sharing
     
     /** Editing */
-    private var meme: Meme!
-    private var selectedIndex: Int!
+    fileprivate var meme: Meme!
+    fileprivate var selectedIndex: Int!
     internal var memeEditorNavController: NavigationController?
     
     //MARK: - View Lifecycle
@@ -49,7 +49,7 @@ final class SavedMemeDetailViewController: UIViewController, ActivityViewControl
         savedMemeView = view as! SavedMemeDetailView
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         /** Meme may have been changed in Editor, so load on viewWillAppear */
@@ -62,7 +62,7 @@ final class SavedMemeDetailViewController: UIViewController, ActivityViewControl
 
     //MARK: - Configuration
 
-    internal func configure(withSelectedIndex index: Int, deletionClosure delete: BarButtonClosure) {
+    internal func configure(withSelectedIndex index: Int, deletionClosure delete: @escaping BarButtonClosure) {
         selectedIndex  = index
         deleteClosure   = delete
         
@@ -74,12 +74,12 @@ final class SavedMemeDetailViewController: UIViewController, ActivityViewControl
             editMemeClosure: editMemeButtonClosure)
     }
 
-    private func configureClosures() {
+    fileprivate func configureClosures() {
         shareButtonClosure = { [unowned self] in
 
             self.activityViewController = self.getActivityViewController(withImage: self.meme.memedImage!)
             
-            self.presentViewController(self.activityViewController!, animated: true, completion: nil)
+            self.present(self.activityViewController!, animated: true, completion: nil)
         }
 
         deleteButtonClosure = { [unowned self] in
@@ -88,11 +88,11 @@ final class SavedMemeDetailViewController: UIViewController, ActivityViewControl
             let alert = UIAlertController(
                 title: LocalizedStrings.Alerts.DeleteMemeConfirm.title,
                 message: LocalizedStrings.Alerts.DeleteMemeConfirm.message,
-                preferredStyle: .Alert)
+                preferredStyle: .alert)
             
-            alert.addAction(UIAlertAction(title: LocalizedStrings.ButtonTitles.cancel, style: .Cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: LocalizedStrings.ButtonTitles.cancel, style: .cancel, handler: nil))
             
-            alert.addAction(UIAlertAction(title: LocalizedStrings.ButtonTitles.ok, style: .Destructive) { (alert: UIAlertAction!) in
+            alert.addAction(UIAlertAction(title: LocalizedStrings.ButtonTitles.ok, style: .destructive) { (alert: UIAlertAction!) in
                 /** Remove meme from storage & Table or Collection view */
                 self.deleteClosure?()
                 
@@ -100,10 +100,10 @@ final class SavedMemeDetailViewController: UIViewController, ActivityViewControl
                 self.savedMemeView.imageView.image = nil
                 
                 /** Close This View Controller */
-                self.navigationController?.popToRootViewControllerAnimated(true)
+                self.navigationController?.popToRootViewController(animated: true)
             })
 
-            self.presentViewController(alert, animated: true, completion: nil)
+            self.present(alert, animated: true, completion: nil)
         }
         
         editMemeButtonClosure = { [unowned self] in
@@ -114,7 +114,7 @@ final class SavedMemeDetailViewController: UIViewController, ActivityViewControl
             
             editorViewController.configure(withMeme: self.meme, atIndex: self.selectedIndex)
             
-            self.presentViewController(self.memeEditorNavController!, animated: true, completion: nil)
+            self.present(self.memeEditorNavController!, animated: true, completion: nil)
         }
     }
 }

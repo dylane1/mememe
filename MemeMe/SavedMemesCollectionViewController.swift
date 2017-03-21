@@ -9,9 +9,9 @@
 import UIKit
 
 final class SavedMemesCollectionViewController: UICollectionViewController, SavedMemesNavigationProtocol, MemeEditorPresentable {
-    private var selectedIndexPath = NSIndexPath(forRow: 0, inSection: 0)
+    fileprivate var selectedIndexPath = IndexPath(row: 0, section: 0)
 
-    private var storedMemesProvider: MemesProvider!
+    fileprivate var storedMemesProvider: MemesProvider!
     
     internal var memeEditorNavController: NavigationController?
     
@@ -23,7 +23,7 @@ final class SavedMemesCollectionViewController: UICollectionViewController, Save
         title = LocalizedStrings.ViewControllerTitles.memeMe
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         /** Set special font for the app title */
@@ -41,9 +41,9 @@ final class SavedMemesCollectionViewController: UICollectionViewController, Save
 
     //MARK: - Configuration
     
-    private func configureCollectionView() {
+    fileprivate func configureCollectionView() {
         if storedMemesProvider.memeArray.count == 0 {
-            let emptyDataSetVC = UIStoryboard(name: Constants.StoryBoardID.main, bundle: nil).instantiateViewControllerWithIdentifier(Constants.StoryBoardID.emptyDataSetVC) as! EmptyDataSetViewController
+            let emptyDataSetVC = UIStoryboard(name: Constants.StoryBoardID.main, bundle: nil).instantiateViewController(withIdentifier: Constants.StoryBoardID.emptyDataSetVC) as! EmptyDataSetViewController
             
             collectionView!.backgroundView = emptyDataSetVC.view
         } else {
@@ -56,10 +56,10 @@ final class SavedMemesCollectionViewController: UICollectionViewController, Save
     
     // MARK: - Navigation
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let deletionClosure = {
             self.storedMemesProvider.removeMemeFromStorage(atIndex: self.selectedIndexPath.row)
-            self.selectedIndexPath = NSIndexPath(forRow: 0, inSection: 0)
+            self.selectedIndexPath = IndexPath(row: 0, section: 0)
             self.collectionView!.reloadData()
         }
         configureDetailViewController(forMeme: storedMemesProvider.memeArray[selectedIndexPath.row], selectedIndex: selectedIndexPath.row, segue: segue, deletionClosure: deletionClosure)
@@ -69,16 +69,16 @@ final class SavedMemesCollectionViewController: UICollectionViewController, Save
 // MARK: - UICollectionViewDataSource
 extension SavedMemesCollectionViewController {
     
-    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return storedMemesProvider.memeArray.count
     }
     
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(Constants.ReuseID.memeListCollectionCell, forIndexPath: indexPath) as! SavedMemesCollectionViewCell
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.ReuseID.memeListCollectionCell, for: indexPath) as! SavedMemesCollectionViewCell
         
         let model = SavedMemeCellModel(meme: storedMemesProvider.memeArray[indexPath.row])
         
@@ -91,15 +91,15 @@ extension SavedMemesCollectionViewController {
 // MARK: - UICollectionViewDelegate
 extension SavedMemesCollectionViewController {
     
-    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectedIndexPath = indexPath
-        performSegueWithIdentifier(Constants.SegueID.memeDetail, sender: self)
+        performSegue(withIdentifier: Constants.SegueID.memeDetail, sender: self)
     }
 }
 
 //MARK: - UICollectionViewDelegateFlowLayout
 extension SavedMemesCollectionViewController {
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
         
         let width = (view.frame.width / 2) - 5
 
@@ -110,7 +110,7 @@ extension SavedMemesCollectionViewController {
 //MARK: - UIContentContainer
 extension SavedMemesCollectionViewController {
     /** Resize cells upon rotation */
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         collectionView?.reloadData()
     }
 }

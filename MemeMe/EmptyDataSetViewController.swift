@@ -24,7 +24,7 @@ class EmptyDataSetViewController: UIViewController {
 
     //MARK: - Configuration
     
-    private func configureLabels() {
+    fileprivate func configureLabels() {
         label0.adjustsFontSizeToFitWidth = true
         label1.adjustsFontSizeToFitWidth = true
         
@@ -33,11 +33,11 @@ class EmptyDataSetViewController: UIViewController {
             NSStrokeWidthAttributeName: -3.0,
             NSForegroundColorAttributeName : Constants.ColorScheme.whiteAlpha70,
             NSFontAttributeName: UIFont(name: Constants.FontName.markerFelt, size: 20)! //UIFont.systemFontOfSize(17, weight: UIFontWeightMedium)
-        ]
+        ] as [String : Any]
         
         let Label1Attributes = [
             NSForegroundColorAttributeName : Constants.ColorScheme.whiteAlpha70,
-            NSFontAttributeName: UIFont.systemFontOfSize(17, weight: UIFontWeightMedium)
+            NSFontAttributeName: UIFont.systemFont(ofSize: 17, weight: UIFontWeightMedium)
         ]
         
         label0.attributedText = NSAttributedString(string: LocalizedStrings.EmptyDataSetVCLabels.label0, attributes: Label0Attributes)

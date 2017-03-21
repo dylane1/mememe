@@ -272,6 +272,7 @@
 					A383BF011C627AB500D80668 = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = C6TW237FTY;
+						LastSwiftMigration = 0820;
 					};
 				};
 			};
@@ -471,6 +472,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.slingingpixels.mememeister;
 				PRODUCT_NAME = MemeMeister;
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -486,6 +488,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.slingingpixels.mememeister;
 				PRODUCT_NAME = MemeMeister;
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

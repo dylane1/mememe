@@ -16,10 +16,10 @@ extension MemeEditorPresentable where Self: UIViewController {
     
     internal func getMemeEditorNavigationController() -> NavigationController {
         
-        let editorNavController = UIStoryboard(name: Constants.StoryBoardID.main, bundle: nil).instantiateViewControllerWithIdentifier(Constants.StoryBoardID.memesEditorNavController) as! NavigationController
+        let editorNavController = UIStoryboard(name: Constants.StoryBoardID.main, bundle: nil).instantiateViewController(withIdentifier: Constants.StoryBoardID.memesEditorNavController) as! NavigationController
         
         editorNavController.vcShouldBeDismissed = { [weak self] in
-            self!.dismissViewControllerAnimated(true) {
+            self!.dismiss(animated: true) {
                 self!.memeEditorNavController = nil
             }
         }

@@ -22,7 +22,7 @@ extension SavedMemesNavigationProtocol where Self: UIViewController, Self: MemeE
         
         let addButtonClosure = { [weak self] in
             self!.memeEditorNavController = self!.getMemeEditorNavigationController()
-            self!.presentViewController(self!.memeEditorNavController!, animated: true, completion: nil)
+            self!.present(self!.memeEditorNavController!, animated: true, completion: nil)
         }
         savedMemesNavController.configure(withAddClosure: addButtonClosure)
     }
@@ -31,7 +31,7 @@ extension SavedMemesNavigationProtocol where Self: UIViewController, Self: MemeE
         
         if segue.identifier == Constants.SegueID.memeDetail {
             
-            let savedMemeVC = segue.destinationViewController as! SavedMemeDetailViewController
+            let savedMemeVC = segue.destination as! SavedMemeDetailViewController
             
             savedMemeVC.configure(withSelectedIndex: selectedIndex, deletionClosure: deletionClosure)
         }

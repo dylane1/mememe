@@ -10,7 +10,7 @@ import UIKit
 
 final class SavedMemeDetailView: UIView {
 
-    private var image: UIImage? = nil {
+    fileprivate var image: UIImage? = nil {
         didSet {
             /** Set image in imageView */
             imageView.image = image

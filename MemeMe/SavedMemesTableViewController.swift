@@ -9,9 +9,9 @@
 import UIKit
 
 final class SavedMemesTableViewController: UITableViewController, SavedMemesNavigationProtocol, MemeEditorPresentable {
-    private var selectedIndexPath = NSIndexPath(forRow: 0, inSection: 0)
+    fileprivate var selectedIndexPath = IndexPath(row: 0, section: 0)
     
-    private var storedMemesProvider: MemesProvider!
+    fileprivate var storedMemesProvider: MemesProvider!
     
     internal var memeEditorNavController: NavigationController?
     
@@ -22,7 +22,7 @@ final class SavedMemesTableViewController: UITableViewController, SavedMemesNavi
         title = LocalizedStrings.ViewControllerTitles.memeMe        
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         /** Set special font for the app title */
@@ -40,9 +40,9 @@ final class SavedMemesTableViewController: UITableViewController, SavedMemesNavi
 
     //MARK: - Configuration
     
-    private func configureTableView() {
+    fileprivate func configureTableView() {
         if storedMemesProvider.memeArray.count == 0 {
-            let emptyDataSetVC = UIStoryboard(name: Constants.StoryBoardID.main, bundle: nil).instantiateViewControllerWithIdentifier(Constants.StoryBoardID.emptyDataSetVC) as! EmptyDataSetViewController
+            let emptyDataSetVC = UIStoryboard(name: Constants.StoryBoardID.main, bundle: nil).instantiateViewController(withIdentifier: Constants.StoryBoardID.emptyDataSetVC) as! EmptyDataSetViewController
             
             tableView.backgroundView = emptyDataSetVC.view
         } else {
@@ -58,11 +58,11 @@ final class SavedMemesTableViewController: UITableViewController, SavedMemesNavi
     
     //MARK: - Navigation
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         let deletionClosure = { [unowned self] in
             self.storedMemesProvider.removeMemeFromStorage(atIndex: self.selectedIndexPath.row)
-            self.selectedIndexPath = NSIndexPath(forRow: 0, inSection: 0)
+            self.selectedIndexPath = IndexPath(row: 0, section: 0)
         }
         configureDetailViewController(forMeme: storedMemesProvider.memeArray[selectedIndexPath.row], selectedIndex: selectedIndexPath.row, segue: segue, deletionClosure: deletionClosure)
     }
@@ -71,17 +71,17 @@ final class SavedMemesTableViewController: UITableViewController, SavedMemesNavi
 
 //MARK: - Table View Data Source
 extension SavedMemesTableViewController {
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return storedMemesProvider.memeArray.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier(Constants.ReuseID.memeListTableCell, forIndexPath: indexPath) as! SavedMemesTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.ReuseID.memeListTableCell, for: indexPath) as! SavedMemesTableViewCell
         
         let model = SavedMemeCellModel(meme: storedMemesProvider.memeArray[indexPath.row])
         
@@ -90,14 +90,14 @@ extension SavedMemesTableViewController {
         return cell
     }
     
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
    
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
             storedMemesProvider.removeMemeFromStorage(atIndex: indexPath.row)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            tableView.deleteRows(at: [indexPath], with: .fade)
             
             /** Reset the empty data set background, if needed */
             configureTableView()
@@ -109,20 +109,20 @@ extension SavedMemesTableViewController {
 //MARK: - Table View Delegate
 extension SavedMemesTableViewController {
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedIndexPath = indexPath
-        performSegueWithIdentifier(Constants.SegueID.memeDetail, sender: self)
+        performSegue(withIdentifier: Constants.SegueID.memeDetail, sender: self)
     }
     
-    override func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         /** Allows the bottom cell to be fully visible when scrolled to end of list */
         return 2
     }
     
-    override func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerView              = UIView()
-        footerView.frame            = CGRectMake(0, 0, view.bounds.size.width, 2.0)
-        footerView.backgroundColor  = UIColor.clearColor()
+        footerView.frame            = CGRect(x: 0, y: 0, width: view.bounds.size.width, height: 2.0)
+        footerView.backgroundColor  = UIColor.clear
         return footerView
     }
 }
