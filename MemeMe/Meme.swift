@@ -1,6 +1,6 @@
 //
 //  Meme.swift
-//  MemeMe
+//  MemeMeister
 //
 //  Created by Dylan Edwards on 2/19/16.
 //  Copyright © 2016 Slinging Pixels Media. All rights reserved.

@@ -1,6 +1,6 @@
 //
 //  FontListTableViewController.swift
-//  MemeMe
+//  MemeMeister
 //
 //  Created by Dylan Edwards on 3/2/16.
 //  Copyright © 2016 Slinging Pixels Media. All rights reserved.

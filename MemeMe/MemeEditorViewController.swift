@@ -1,6 +1,6 @@
 //
 //  ViewController.swift
-//  MemeMe
+//  MemeMeister
 //
 //  Created by Dylan Edwards on 2/3/16.
 //  Copyright © 2016 Slinging Pixels Media. All rights reserved.
@@ -30,8 +30,8 @@ final class MemeEditorViewController: UIViewController, ActivityViewControllerPr
     /** Toolbar button closures (passed to mainView & its toolbar) */
     private var cameraButtonClosure: BarButtonClosure?
     private var albumButtonClosure: BarButtonClosure!
-    private var fontButtonClosure: BarButtonClosureReturningButtonSource!
-    private var fontColorButtonClosure: BarButtonClosureReturningButtonSource!
+    private var fontButtonClosure: BarButtonClosureWithButtonItemSource!
+    private var fontColorButtonClosure: BarButtonClosureWithButtonItemSource!
     
     /** Picking an image */
     private lazy var imagePickerController = UIImagePickerController()

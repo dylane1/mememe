@@ -1,6 +1,6 @@
 //
 //  MainView.swift
-//  MemeMe
+//  MemeMeister
 //
 //  Created by Dylan Edwards on 2/3/16.
 //  Copyright © 2016 Slinging Pixels Media. All rights reserved.
@@ -20,9 +20,9 @@ final class MemeEditorView: UIView {
     private var albumButtonClosure: BarButtonClosure?
     private var cameraButtonClosure: BarButtonClosure?
     
-    private var fontButtonClosure: BarButtonClosureReturningButtonSource?
+    private var fontButtonClosure: BarButtonClosureWithButtonItemSource?
     private var fontButton: UIBarButtonItem!
-    private var fontColorButtonClosure: BarButtonClosureReturningButtonSource?
+    private var fontColorButtonClosure: BarButtonClosureWithButtonItemSource?
     private var fontColorButton: UIBarButtonItem!
     
     typealias MemeTextUpdated = (String, String) -> Void
@@ -153,8 +153,8 @@ final class MemeEditorView: UIView {
         dataSource: MemeEditorViewModel,
         albumButtonClosure: BarButtonClosure,
         cameraButtonClosure: BarButtonClosure? = nil,
-        fontButtonClosure: BarButtonClosureReturningButtonSource,
-        fontColorButtonClosure: BarButtonClosureReturningButtonSource,
+        fontButtonClosure: BarButtonClosureWithButtonItemSource,
+        fontColorButtonClosure: BarButtonClosureWithButtonItemSource,
         memeImageUpdatedClosure: MemeImageUpdated,
         memeTextUpdatedClosure: MemeTextUpdated,
         memeFontUpdatedClosure: MemeFontUpdated,
@@ -447,7 +447,7 @@ extension MemeEditorView: UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
-    
+    //TODO: this isn't a delegate method
     internal func keyboardWillShow(notification: NSNotification) {
         /** Animate the view up so bottom text field is visible while editing */
         if bottomField.editing {
@@ -460,7 +460,7 @@ extension MemeEditorView: UITextFieldDelegate {
             }
         }
     }
-    
+    //TODO: this isn't a delegate method
     internal func keyboardWillHide(notification: NSNotification) {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
