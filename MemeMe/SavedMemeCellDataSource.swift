@@ -16,9 +16,9 @@ protocol SavedMemeCellDataSource {
 extension SavedMemeCellDataSource {
     var textAttributes: [String : AnyObject] {
         return [
-            NSForegroundColorAttributeName: Constants.ColorScheme.white,
-            NSStrokeColorAttributeName:     Constants.ColorScheme.black,
-            NSStrokeWidthAttributeName:     -3.0 as AnyObject
+            NSAttributedStringKey.foregroundColor.rawValue: Constants.ColorScheme.white,
+            NSAttributedStringKey.strokeColor.rawValue:     Constants.ColorScheme.black,
+            NSAttributedStringKey.strokeWidth.rawValue:     -3.0 as AnyObject
         ]
     }
 }

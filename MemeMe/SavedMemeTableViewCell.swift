@@ -38,7 +38,7 @@ final class SavedMemesTableViewCell: UITableViewCell {
         memeLabel.adjustsFontSizeToFitWidth  = true
         
         var attributes = dataSource.textAttributes
-        attributes[NSFontAttributeName] = dataSource.meme.font
+        attributes[NSAttributedStringKey.font] = dataSource.meme.font
         
         let topText = dataSource.meme.topText
         let bottomText = dataSource.meme.bottomText

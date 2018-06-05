@@ -17,9 +17,9 @@ protocol FontListTableViewCellDataSource {
 extension FontListTableViewCellDataSource {
     var textAttributes: [String : AnyObject] {
         return [
-            NSForegroundColorAttributeName: Constants.ColorScheme.white,
-            NSStrokeColorAttributeName:     Constants.ColorScheme.darkGrey,
-            NSStrokeWidthAttributeName:     -3.0 as AnyObject
+            NSAttributedStringKey.foregroundColor.rawValue: Constants.ColorScheme.white,
+            NSAttributedStringKey.strokeColor.rawValue:     Constants.ColorScheme.darkGrey,
+            NSAttributedStringKey.strokeWidth.rawValue:     -3.0 as AnyObject
         ]
     }
 }
@@ -49,7 +49,7 @@ class FontListTableViewCell: UITableViewCell {
     fileprivate func configureLabel() {
         let resizedFont = dataSource.font.withSize(20)
         let attributedString = NSMutableAttributedString(string: dataSource.title.uppercased(), attributes: dataSource.textAttributes)
-        attributedString.addAttribute(NSFontAttributeName, value: resizedFont, range: NSRange(location: 0,length: dataSource.title.characters.count))
+        attributedString.addAttribute(NSAttributedStringKey.font, value: resizedFont, range: NSRange(location: 0,length: dataSource.title.characters.count))
         
         label.attributedText = attributedString
     }

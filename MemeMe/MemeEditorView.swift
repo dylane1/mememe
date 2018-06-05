@@ -102,9 +102,9 @@ final class MemeEditorView: UIView {
     }
     
     fileprivate var textFieldAttributes = [
-        NSStrokeColorAttributeName:     Constants.ColorScheme.black,
-        NSStrokeWidthAttributeName:     -5.0
-    ] as [String : Any]
+        NSAttributedStringKey.strokeColor.rawValue:     Constants.ColorScheme.black,
+        NSAttributedStringKey.strokeWidth:     -5.0
+    ] as! [String : Any]
     
     fileprivate var dataSource: MemeEditorViewModel! {
         didSet {
@@ -254,13 +254,13 @@ final class MemeEditorView: UIView {
     
     internal func configureTextFieldAttributes() {
         
-        textFieldAttributes[NSFontAttributeName] = font
-        textFieldAttributes[NSForegroundColorAttributeName] = fontColor
+        textFieldAttributes[NSAttributedStringKey.font] = font
+        textFieldAttributes[NSAttributedStringKey.foregroundColor] = fontColor
         
         let placeholderAttributes = [
-            NSForegroundColorAttributeName: fontColor,
-            NSFontAttributeName:            font
-        ] as [String : Any]
+            NSAttributedStringKey.foregroundColor.rawValue: fontColor,
+            NSAttributedStringKey.font:            font
+        ] as! [String : Any]
         
         topField.defaultTextAttributes  = textFieldAttributes
         topField.attributedPlaceholder  = NSAttributedString(string: LocalizedStrings.PlaceholderText.MainView.top, attributes: placeholderAttributes)
@@ -274,19 +274,19 @@ final class MemeEditorView: UIView {
     
     //MARK: - Actions
     
-    internal func cameraButtonTapped() {
+    @objc internal func cameraButtonTapped() {
         cameraButtonClosure?()
     }
     
-    internal func albumButtonTapped() {
+    @objc internal func albumButtonTapped() {
         albumButtonClosure?()
     }
     
-    internal func fontButtonTapped() {
+    @objc internal func fontButtonTapped() {
         fontButtonClosure?(fontButton)
     }
     
-    internal func fontColorButtonTapped() {
+    @objc internal func fontColorButtonTapped() {
         fontColorButtonClosure?(fontColorButton)
     }
     
@@ -448,7 +448,7 @@ extension MemeEditorView: UITextFieldDelegate {
         return true
     }
     //TODO: this isn't a delegate method
-    internal func keyboardWillShow(_ notification: Notification) {
+    @objc internal func keyboardWillShow(_ notification: Notification) {
         /** Animate the view up so bottom text field is visible while editing */
         if bottomField.isEditing {
             let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as AnyObject).cgRectValue.size
@@ -461,7 +461,7 @@ extension MemeEditorView: UITextFieldDelegate {
         }
     }
     //TODO: this isn't a delegate method
-    internal func keyboardWillHide(_ notification: Notification) {
+    @objc internal func keyboardWillHide(_ notification: Notification) {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
 

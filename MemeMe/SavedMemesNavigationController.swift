@@ -33,7 +33,7 @@ final class SavedMemesNavigationController: NavigationController {
     
     //MARK: - Actions
     
-    internal func addButtonTapped() {
+    @objc internal func addButtonTapped() {
         addClosure?()
     }
 }
