@@ -10,15 +10,15 @@ import UIKit
 
 protocol SavedMemeCellDataSource {
     var meme: Meme { get }
-    var textAttributes: [String : AnyObject] { get }
+    var textAttributes: [NSAttributedStringKey : Any] { get }
 }
 
 extension SavedMemeCellDataSource {
-    var textAttributes: [String : AnyObject] {
+    var textAttributes: [NSAttributedStringKey : Any] {
         return [
-            NSAttributedStringKey.foregroundColor.rawValue: Constants.ColorScheme.white,
-            NSAttributedStringKey.strokeColor.rawValue:     Constants.ColorScheme.black,
-            NSAttributedStringKey.strokeWidth.rawValue:     -3.0 as AnyObject
+            NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): Constants.ColorScheme.white,
+            NSAttributedStringKey(rawValue: NSAttributedStringKey.strokeColor.rawValue):     Constants.ColorScheme.black,
+            NSAttributedStringKey(rawValue: NSAttributedStringKey.strokeWidth.rawValue):     -3.0 as AnyObject
         ]
     }
 }

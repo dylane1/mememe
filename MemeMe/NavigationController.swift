@@ -23,9 +23,9 @@ class NavigationController: UINavigationController {
         shadow.shadowColor = Constants.ColorScheme.veryDarkBlue
         shadow.shadowOffset = CGSize(width: -1.0, height: -1.0)
         
-        var titleLabelAttributes: [String : AnyObject] = [
-            NSAttributedStringKey.shadow.rawValue: shadow,
-            NSAttributedStringKey.foregroundColor.rawValue : Constants.ColorScheme.white]
+        var titleLabelAttributes: [NSAttributedStringKey: Any] = [
+            NSAttributedStringKey(rawValue: NSAttributedStringKey.shadow.rawValue): shadow,
+            NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue) : Constants.ColorScheme.white]
         
         if isTitle {
             titleLabelAttributes[NSAttributedStringKey.font] = UIFont(name: Constants.FontName.markerFelt, size: 24)!

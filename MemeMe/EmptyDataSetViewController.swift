@@ -33,7 +33,7 @@ class EmptyDataSetViewController: UIViewController {
             NSAttributedStringKey.strokeWidth: -3.0,
             NSAttributedStringKey.foregroundColor : Constants.ColorScheme.whiteAlpha70,
             NSAttributedStringKey.font: UIFont(name: Constants.FontName.markerFelt, size: 20)! //UIFont.systemFontOfSize(17, weight: UIFontWeightMedium)
-        ] as! [String : Any]
+        ] as! [NSAttributedStringKey : Any]
         
         let Label1Attributes = [
             NSAttributedStringKey.foregroundColor : Constants.ColorScheme.whiteAlpha70,

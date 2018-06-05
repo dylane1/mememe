@@ -101,10 +101,10 @@ final class MemeEditorView: UIView {
         }
     }
     
-    fileprivate var textFieldAttributes = [
-        NSAttributedStringKey.strokeColor.rawValue:     Constants.ColorScheme.black,
-        NSAttributedStringKey.strokeWidth:     -5.0
-    ] as! [String : Any]
+    fileprivate var textFieldAttributes: [NSAttributedStringKey : Any] = [
+        .strokeColor:     Constants.ColorScheme.black,
+        .strokeWidth:     -5.0
+    ]
     
     fileprivate var dataSource: MemeEditorViewModel! {
         didSet {
@@ -254,13 +254,13 @@ final class MemeEditorView: UIView {
     
     internal func configureTextFieldAttributes() {
         
-        textFieldAttributes[NSAttributedStringKey.font] = font
-        textFieldAttributes[NSAttributedStringKey.foregroundColor] = fontColor
+        textFieldAttributes[.font] = font
+        textFieldAttributes[.foregroundColor] = fontColor
         
-        let placeholderAttributes = [
-            NSAttributedStringKey.foregroundColor.rawValue: fontColor,
+        let placeholderAttributes: [NSAttributedStringKey : Any] = [
+            NSAttributedStringKey.foregroundColor: fontColor,
             NSAttributedStringKey.font:            font
-        ] as! [String : Any]
+        ]
         
         topField.defaultTextAttributes  = textFieldAttributes
         topField.attributedPlaceholder  = NSAttributedString(string: LocalizedStrings.PlaceholderText.MainView.top, attributes: placeholderAttributes)

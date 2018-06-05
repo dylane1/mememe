@@ -11,15 +11,15 @@ import UIKit
 protocol FontListTableViewCellDataSource {
     var title: String { get }
     var font: UIFont { get }
-    var textAttributes: [String : AnyObject] { get }
+    var textAttributes: [NSAttributedStringKey : Any] { get }
 }
 
 extension FontListTableViewCellDataSource {
-    var textAttributes: [String : AnyObject] {
+    var textAttributes: [NSAttributedStringKey : Any] {
         return [
-            NSAttributedStringKey.foregroundColor.rawValue: Constants.ColorScheme.white,
-            NSAttributedStringKey.strokeColor.rawValue:     Constants.ColorScheme.darkGrey,
-            NSAttributedStringKey.strokeWidth.rawValue:     -3.0 as AnyObject
+            NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): Constants.ColorScheme.white,
+            NSAttributedStringKey(rawValue: NSAttributedStringKey.strokeColor.rawValue):     Constants.ColorScheme.darkGrey,
+            NSAttributedStringKey(rawValue: NSAttributedStringKey.strokeWidth.rawValue):     -3.0 as AnyObject
         ]
     }
 }
