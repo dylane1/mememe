@@ -152,7 +152,7 @@ struct Constants {
     
     /** Storage */
     
-    static let userDefaults = NSUserDefaults.standardUserDefaults()
+    static let userDefaults = UserDefaults.standard
     
     struct StorageKeys {
         static let fontName  = "com.slingingPixels.mememe.storageKeys.fontName"
@@ -161,7 +161,7 @@ struct Constants {
 
     
     struct FileSystem {
-        static let applicationSupport = NSSearchPathForDirectoriesInDomains(.ApplicationSupportDirectory, .UserDomainMask, true)[0]
+        static let applicationSupport = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0]
     }
     
     struct ArchiveFile {

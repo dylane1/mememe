@@ -1,6 +1,6 @@
 //
 //  StateMachine.swift
-//  MemeMe
+//  MemeMeister
 //
 //  Created by Dylan Edwards on 2/17/16.
 //  Copyright © 2016 Slinging Pixels Media. All rights reserved.
@@ -9,11 +9,11 @@
 import UIKit
 
 enum MemeEditorState {
-    case NoImageNoText,
-         NoImageYesText,
-         YesImageNoText,
-         YesImageYesText,
-         IsEditingText
+    case noImageNoText,
+         noImageYesText,
+         yesImageNoText,
+         yesImageYesText,
+         isEditingText
 }
 
 /** 
@@ -28,7 +28,7 @@ final class MemeEditorStateMachine {
     internal var state: Dynamic<MemeEditorState>
     
     init() {
-        state = Dynamic(.NoImageNoText)
+        state = Dynamic(.noImageNoText)
     }
     
     internal func changeState(withImage img: UIImage?, topText: String?, bottomText: String?) {
@@ -39,13 +39,13 @@ final class MemeEditorStateMachine {
         let stateTuple = (image, tText, bText)
         switch stateTuple {
         case (true, false, false):
-            state.value = .YesImageNoText
+            state.value = .yesImageNoText
         case (false, true, false), (false, true, true), (false, false, true):
-            state.value = .NoImageYesText
+            state.value = .noImageYesText
         case (true, true, false), (true, true, true), (true, false, true):
-            state.value = .YesImageYesText
+            state.value = .yesImageYesText
         default: /** (false, false, false) */
-            state.value = .NoImageNoText
+            state.value = .noImageNoText
         }
     }
 }

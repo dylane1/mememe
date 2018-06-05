@@ -1,6 +1,6 @@
 //
 //  SavedMemesNavigationController.swift
-//  MemeMe
+//  MemeMeister
 //
 //  Created by Dylan Edwards on 3/7/16.
 //  Copyright © 2016 Slinging Pixels Media. All rights reserved.
@@ -10,22 +10,22 @@ import UIKit
 
 final class SavedMemesNavigationController: NavigationController {
 
-    private var addClosure: BarButtonClosure?
-    private var addButton: UIBarButtonItem?
+    fileprivate var addClosure: BarButtonClosure?
+    fileprivate var addButton: UIBarButtonItem?
     
-    private var emptyDataSetVC: EmptyDataSetViewController?
+    fileprivate var emptyDataSetVC: EmptyDataSetViewController?
 
     //MARK: - Configuration
     
-    internal func configure(withAddClosure add: BarButtonClosure) {
+    internal func configure(withAddClosure add: @escaping BarButtonClosure) {
         addClosure = add
         
         configureNavigationItems()
     }
     
-    private func configureNavigationItems() {
+    fileprivate func configureNavigationItems() {
         addButton = UIBarButtonItem(
-            barButtonSystemItem: .Add,
+            barButtonSystemItem: .add,
             target: self,
             action: #selector(addButtonTapped))
         navigationBar.topItem?.rightBarButtonItem = addButton

@@ -1,6 +1,6 @@
 //
 //  SavedMemeCellDataSource.swift
-//  MemeMe
+//  MemeMeister
 //
 //  Created by Dylan Edwards on 3/8/16.
 //  Copyright © 2016 Slinging Pixels Media. All rights reserved.
@@ -18,7 +18,7 @@ extension SavedMemeCellDataSource {
         return [
             NSForegroundColorAttributeName: Constants.ColorScheme.white,
             NSStrokeColorAttributeName:     Constants.ColorScheme.black,
-            NSStrokeWidthAttributeName:     -3.0
+            NSStrokeWidthAttributeName:     -3.0 as AnyObject
         ]
     }
 }

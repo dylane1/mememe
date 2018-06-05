@@ -9,7 +9,7 @@ import Foundation
 
 struct LocalizedStrings {
     struct ViewControllerTitles {
-        static let memeMe   = NSLocalizedString("vcTitles.memeMe",      value: "MemeMe",    comment: "")
+        static let memeMe   = NSLocalizedString("vcTitles.memeMe",      value: "MemeMeister",    comment: "")
         static let newMeme  = NSLocalizedString("vcTitles.newMeme",     value: "New Meme",  comment: "")
         static let editMeme = NSLocalizedString("vcTitles.editMeme",    value: "Edit Meme", comment: "")
     }
@@ -59,6 +59,6 @@ struct LocalizedStrings {
     
     struct EmptyDataSetVCLabels {
         static let label0 = NSLocalizedString("emptyDataSetVC.label0", value: "Meme Like A Boss!",       comment: "")
-        static let label1 = NSLocalizedString("emptyDataSetVC.label1", value: "Tap Add to get started!", comment: "")
+        static let label1 = NSLocalizedString("emptyDataSetVC.label1", value: "Tap '+' above to get started!", comment: "")
     }
 }

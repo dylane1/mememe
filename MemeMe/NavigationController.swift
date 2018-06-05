@@ -1,6 +1,6 @@
 //
 //  Extensions.swift
-//  MemeMe
+//  MemeMeister
 //
 //  Created by Dylan Edwards on 3/7/16.
 //  Copyright © 2016 Slinging Pixels Media. All rights reserved.
@@ -17,7 +17,7 @@ class NavigationController: UINavigationController {
         
         navigationBar.barTintColor = Constants.ColorScheme.darkBlue
         navigationBar.tintColor    = Constants.ColorScheme.white
-        navigationBar.translucent  = true
+        navigationBar.isTranslucent  = true
         
         let shadow = NSShadow()
         shadow.shadowColor = Constants.ColorScheme.veryDarkBlue
@@ -30,7 +30,7 @@ class NavigationController: UINavigationController {
         if isTitle {
             titleLabelAttributes[NSFontAttributeName] = UIFont(name: Constants.FontName.markerFelt, size: 24)!
         } else {
-            titleLabelAttributes[NSFontAttributeName] = UIFont.systemFontOfSize(14, weight: UIFontWeightMedium)
+            titleLabelAttributes[NSFontAttributeName] = UIFont.systemFont(ofSize: 14, weight: UIFontWeightMedium)
         }
         
         navigationBar.titleTextAttributes = titleLabelAttributes

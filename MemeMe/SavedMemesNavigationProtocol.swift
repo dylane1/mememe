@@ -1,6 +1,6 @@
 //
 //  SavedMemesNavigation.swift
-//  MemeMe
+//  MemeMeister
 //
 //  Created by Dylan Edwards on 3/11/16.
 //  Copyright © 2016 Slinging Pixels Media. All rights reserved.
@@ -22,16 +22,16 @@ extension SavedMemesNavigationProtocol where Self: UIViewController, Self: MemeE
         
         let addButtonClosure = { [weak self] in
             self!.memeEditorNavController = self!.getMemeEditorNavigationController()
-            self!.presentViewController(self!.memeEditorNavController!, animated: true, completion: nil)
+            self!.present(self!.memeEditorNavController!, animated: true, completion: nil)
         }
         savedMemesNavController.configure(withAddClosure: addButtonClosure)
     }
     
-    internal func configureDetailViewController(forMeme meme: Meme, selectedIndex: Int, segue: UIStoryboardSegue, deletionClosure: ()->Void) {
+    internal func configureDetailViewController(forMeme meme: Meme, selectedIndex: Int, segue: UIStoryboardSegue, deletionClosure: @escaping ()->Void) {
         
         if segue.identifier == Constants.SegueID.memeDetail {
             
-            let savedMemeVC = segue.destinationViewController as! SavedMemeDetailViewController
+            let savedMemeVC = segue.destination as! SavedMemeDetailViewController
             
             savedMemeVC.configure(withSelectedIndex: selectedIndex, deletionClosure: deletionClosure)
         }

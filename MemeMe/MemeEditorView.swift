@@ -1,6 +1,6 @@
 //
 //  MainView.swift
-//  MemeMe
+//  MemeMeister
 //
 //  Created by Dylan Edwards on 2/3/16.
 //  Copyright © 2016 Slinging Pixels Media. All rights reserved.
@@ -17,27 +17,27 @@ protocol MemeEditorViewDataSource {
 }
 
 final class MemeEditorView: UIView {
-    private var albumButtonClosure: BarButtonClosure?
-    private var cameraButtonClosure: BarButtonClosure?
+    fileprivate var albumButtonClosure: BarButtonClosure?
+    fileprivate var cameraButtonClosure: BarButtonClosure?
     
-    private var fontButtonClosure: BarButtonClosureReturningButtonSource?
-    private var fontButton: UIBarButtonItem!
-    private var fontColorButtonClosure: BarButtonClosureReturningButtonSource?
-    private var fontColorButton: UIBarButtonItem!
+    fileprivate var fontButtonClosure: BarButtonClosureWithButtonItemSource?
+    fileprivate var fontButton: UIBarButtonItem!
+    fileprivate var fontColorButtonClosure: BarButtonClosureWithButtonItemSource?
+    fileprivate var fontColorButton: UIBarButtonItem!
     
     typealias MemeTextUpdated = (String, String) -> Void
-    private var memeTextUpdatedClosure: MemeTextUpdated?
+    fileprivate var memeTextUpdatedClosure: MemeTextUpdated?
     
     typealias MemeImageUpdated = (UIImage?) -> Void
-    private var memeImageUpdatedClosure: MemeImageUpdated?
+    fileprivate var memeImageUpdatedClosure: MemeImageUpdated?
     
     typealias MemeFontUpdated = (UIFont) -> Void
-    private var memeFontUpdatedClosure: MemeFontUpdated?
+    fileprivate var memeFontUpdatedClosure: MemeFontUpdated?
     
     typealias MemeFontColorUpdated = (UIColor) -> Void
-    private var memeFontColorUpdatedClosure: MemeFontColorUpdated?
+    fileprivate var memeFontColorUpdatedClosure: MemeFontColorUpdated?
     
-    private var image: UIImage? = nil {
+    fileprivate var image: UIImage? = nil {
         didSet {
             /** Set image in imageView */
             imageView.image = image
@@ -46,10 +46,10 @@ final class MemeEditorView: UIView {
              Update text field constraints for new image at current orientation 
              */
             let orientation: DestinationOrientation
-            if UIDevice.currentDevice().orientation.isLandscape.boolValue {
-                orientation = .Landscape
+            if UIDevice.current.orientation.isLandscape {
+                orientation = .landscape
             } else {
-                orientation = .Portrait
+                orientation = .portrait
             }
             updateTextFieldContstraints(withNewOrientation: orientation)
             
@@ -58,7 +58,7 @@ final class MemeEditorView: UIView {
         }
     }
     
-    private var topText = "" {
+    fileprivate var topText = "" {
         didSet {
             if topText != "" {
                 prepareTextFieldForAttributedText(topField)
@@ -70,7 +70,7 @@ final class MemeEditorView: UIView {
             stateMachine.changeState(withImage: image, topText: topText, bottomText: bottomText)
         }
     }
-    private var bottomText = "" {
+    fileprivate var bottomText = "" {
         didSet {
             if bottomText != "" {
                 prepareTextFieldForAttributedText(bottomField)
@@ -83,7 +83,7 @@ final class MemeEditorView: UIView {
         }
     }
     
-    private var font: UIFont = Constants.Font.impact {
+    fileprivate var font: UIFont = Constants.Font.impact {
         didSet {
             memeFontUpdatedClosure?(font)
             
@@ -92,7 +92,7 @@ final class MemeEditorView: UIView {
         }
     }
     
-    private var fontColor: UIColor = Constants.ColorScheme.white {
+    fileprivate var fontColor: UIColor = Constants.ColorScheme.white {
         didSet {
             memeFontColorUpdatedClosure?(fontColor)
             
@@ -101,12 +101,12 @@ final class MemeEditorView: UIView {
         }
     }
     
-    private var textFieldAttributes = [
+    fileprivate var textFieldAttributes = [
         NSStrokeColorAttributeName:     Constants.ColorScheme.black,
         NSStrokeWidthAttributeName:     -5.0
-    ]
+    ] as [String : Any]
     
-    private var dataSource: MemeEditorViewModel! {
+    fileprivate var dataSource: MemeEditorViewModel! {
         didSet {
             dataSource.image.bind { [unowned self] in
                 self.image = $0
@@ -130,7 +130,7 @@ final class MemeEditorView: UIView {
         }
     }
     
-    private var stateMachine: MemeEditorStateMachine!
+    fileprivate var stateMachine: MemeEditorStateMachine!
     
     @IBOutlet weak var topField: UITextField!
     @IBOutlet weak var bottomField: UITextField!
@@ -151,14 +151,14 @@ final class MemeEditorView: UIView {
     internal func configure(
         withStateMachine stateMachine: MemeEditorStateMachine,
         dataSource: MemeEditorViewModel,
-        albumButtonClosure: BarButtonClosure,
+        albumButtonClosure: @escaping BarButtonClosure,
         cameraButtonClosure: BarButtonClosure? = nil,
-        fontButtonClosure: BarButtonClosureReturningButtonSource,
-        fontColorButtonClosure: BarButtonClosureReturningButtonSource,
-        memeImageUpdatedClosure: MemeImageUpdated,
-        memeTextUpdatedClosure: MemeTextUpdated,
-        memeFontUpdatedClosure: MemeFontUpdated,
-        memeFontColorUpdatedClosure: MemeFontColorUpdated) {
+        fontButtonClosure: @escaping BarButtonClosureWithButtonItemSource,
+        fontColorButtonClosure: @escaping BarButtonClosureWithButtonItemSource,
+        memeImageUpdatedClosure: @escaping MemeImageUpdated,
+        memeTextUpdatedClosure: @escaping MemeTextUpdated,
+        memeFontUpdatedClosure: @escaping MemeFontUpdated,
+        memeFontColorUpdatedClosure: @escaping MemeFontColorUpdated) {
         
         self.stateMachine                   = stateMachine
         self.dataSource                     = dataSource
@@ -176,32 +176,32 @@ final class MemeEditorView: UIView {
         configureTextFields()
     }
 
-    private func configureToolbarItems() {
+    fileprivate func configureToolbarItems() {
         
         var toolbarItemArray = [UIBarButtonItem]()
         
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
         
         toolbarItemArray.append(flexSpace)
         
-        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil, action: nil)
+        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         fixedSpace.width = 20
         
         let cameraButton = UIBarButtonItem(
-            barButtonSystemItem: .Camera,
+            barButtonSystemItem: .camera,
             target: self,
             action: #selector(cameraButtonTapped))
         
-        cameraButton.enabled = false
+        cameraButton.isEnabled = false
         
         toolbarItemArray.append(cameraButton)
         toolbarItemArray.append(fixedSpace)
         
-        if UIImagePickerController.isSourceTypeAvailable(.Camera) { cameraButton.enabled = true }
+        if UIImagePickerController.isSourceTypeAvailable(.camera) { cameraButton.isEnabled = true }
         
         let albumButton = UIBarButtonItem(
             title: LocalizedStrings.ToolbarButtons.album,
-            style: .Plain,
+            style: .plain,
             target: self,
             action: #selector(albumButtonTapped))
         
@@ -210,7 +210,7 @@ final class MemeEditorView: UIView {
         
         fontButton = UIBarButtonItem(
             title: LocalizedStrings.ToolbarButtons.font,
-            style: .Plain,
+            style: .plain,
             target: self,
             action: #selector(fontButtonTapped))
         
@@ -219,7 +219,7 @@ final class MemeEditorView: UIView {
         
         fontColorButton = UIBarButtonItem(
             title: LocalizedStrings.ToolbarButtons.color,
-            style: .Plain,
+            style: .plain,
             target: self,
             action: #selector(fontColorButtonTapped))
         
@@ -230,22 +230,22 @@ final class MemeEditorView: UIView {
         
         toolbar.barTintColor = Constants.ColorScheme.darkBlue
         toolbar.tintColor    = Constants.ColorScheme.white
-        toolbar.translucent  = true
+        toolbar.isTranslucent  = true
     }
     
-    private func configureTextFields() {
+    fileprivate func configureTextFields() {
         topField.delegate                   = self
-        topField.borderStyle                = .None
-        topField.backgroundColor            = UIColor.clearColor()
-        topField.returnKeyType              = .Done
-        topField.autocapitalizationType     = .AllCharacters
+        topField.borderStyle                = .none
+        topField.backgroundColor            = UIColor.clear
+        topField.returnKeyType              = .done
+        topField.autocapitalizationType     = .allCharacters
         topField.adjustsFontSizeToFitWidth  = true
         
         bottomField.delegate                    = self
-        bottomField.borderStyle                 = .None
-        bottomField.backgroundColor             = UIColor.clearColor()
-        bottomField.returnKeyType               = .Done
-        bottomField.autocapitalizationType      = .AllCharacters
+        bottomField.borderStyle                 = .none
+        bottomField.backgroundColor             = UIColor.clear
+        bottomField.returnKeyType               = .done
+        bottomField.autocapitalizationType      = .allCharacters
         bottomField.adjustsFontSizeToFitWidth   = true
         
         configureTextFieldAttributes()
@@ -260,15 +260,15 @@ final class MemeEditorView: UIView {
         let placeholderAttributes = [
             NSForegroundColorAttributeName: fontColor,
             NSFontAttributeName:            font
-        ]
+        ] as [String : Any]
         
         topField.defaultTextAttributes  = textFieldAttributes
         topField.attributedPlaceholder  = NSAttributedString(string: LocalizedStrings.PlaceholderText.MainView.top, attributes: placeholderAttributes)
-        topField.textAlignment          = .Center //Must be set after the string is set in order to work...
+        topField.textAlignment          = .center //Must be set after the string is set in order to work...
         
         bottomField.defaultTextAttributes   = textFieldAttributes
         bottomField.attributedPlaceholder   = NSAttributedString(string: LocalizedStrings.PlaceholderText.MainView.bottom, attributes: placeholderAttributes)
-        bottomField.textAlignment           = .Center
+        bottomField.textAlignment           = .center
     }
     
     
@@ -322,9 +322,9 @@ final class MemeEditorView: UIView {
     }
     
 
-    private func prepareTextFieldForAttributedText(textField: UITextField) {
+    fileprivate func prepareTextFieldForAttributedText(_ textField: UITextField) {
         textField.defaultTextAttributes  = textFieldAttributes
-        textField.textAlignment          = .Center
+        textField.textAlignment          = .center
         textField.placeholder = nil
         textField.alpha = 1.0
     }
@@ -332,13 +332,13 @@ final class MemeEditorView: UIView {
     
     internal func updateTextFieldContstraints(withNewOrientation orientation: DestinationOrientation) {
         /** Close keyboard on rotation */
-        if bottomField.isFirstResponder() {
+        if bottomField.isFirstResponder {
             bottomField.resignFirstResponder()
         }
 
         if imageView.image == nil { return }
 
-        if orientation == .Landscape {
+        if orientation == .landscape {
             /** Landscape */
             topFieldTopConstraint.constant          = 8
             bottomFieldBottomConstraint.constant    = 52
@@ -370,7 +370,7 @@ final class MemeEditorView: UIView {
     internal func getInfoForImageContext() -> (size: CGSize, x: CGFloat, y: CGFloat) {
         let multiplier: CGFloat
         
-        if UIDevice.currentDevice().orientation.isLandscape.boolValue {
+        if UIDevice.current.orientation.isLandscape {
             /** Landscape: height is constricted */
             multiplier = imageView.frame.height / imageView.image!.size.height
         } else {
@@ -398,7 +398,7 @@ final class MemeEditorView: UIView {
             y = (imageView.frame.height - height) / 2
         }
         
-        return (size: CGSizeMake(width, height), x: x, y: y)
+        return (size: CGSize(width: width, height: height), x: x, y: y)
     }
 }
 
@@ -406,8 +406,8 @@ final class MemeEditorView: UIView {
 //MARK: - UITextFieldDelegate
 extension MemeEditorView: UITextFieldDelegate {
     
-    internal func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
-        stateMachine.state.value = .IsEditingText
+    internal func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        stateMachine.state.value = .isEditingText
         
         /** 
          * For some reason defaultTextAttributes get changed if you tap into
@@ -417,61 +417,61 @@ extension MemeEditorView: UITextFieldDelegate {
         prepareTextFieldForAttributedText(textField)
         
         /** Set up observers */
-        NSNotificationCenter.defaultCenter().addObserver(
+        NotificationCenter.default.addObserver(
             self,
             selector: #selector(keyboardWillShow(_:)),
-            name: UIKeyboardWillShowNotification,
+            name: NSNotification.Name.UIKeyboardWillShow,
             object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(
+        NotificationCenter.default.addObserver(
             self,
             selector: #selector(keyboardWillHide(_:)),
-            name: UIKeyboardWillHideNotification,
+            name: NSNotification.Name.UIKeyboardWillHide,
             object: nil)
 
         return true
     }
     
-    internal func textFieldShouldEndEditing(textField: UITextField) -> Bool {
+    internal func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         textField.endEditing(true)
         
         return true
     }
     
-    internal func textFieldDidEndEditing(textField: UITextField) {
+    internal func textFieldDidEndEditing(_ textField: UITextField) {
         topText     = topField.text as String! ?? ""
         bottomText  = bottomField.text as String! ?? ""
     }
     
-    internal func textFieldShouldReturn(textField: UITextField) -> Bool {
+    internal func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
-    
-    internal func keyboardWillShow(notification: NSNotification) {
+    //TODO: this isn't a delegate method
+    internal func keyboardWillShow(_ notification: Notification) {
         /** Animate the view up so bottom text field is visible while editing */
-        if bottomField.editing {
-            let keyboardSize = notification.userInfo?[UIKeyboardFrameBeginUserInfoKey]?.CGRectValue.size
+        if bottomField.isEditing {
+            let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as AnyObject).cgRectValue.size
             
-            UIView.animateWithDuration(0.5) {
+            UIView.animate(withDuration: 0.5, animations: {
                 var frame       = self.frame
-                frame.origin.y  = -(keyboardSize?.height)! + self.toolbar!.frame.height
+                frame.origin.y  = -(keyboardSize.height) + self.toolbar!.frame.height
                 self.frame      = frame
-            }
+            }) 
         }
     }
-    
-    internal func keyboardWillHide(notification: NSNotification) {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+    //TODO: this isn't a delegate method
+    internal func keyboardWillHide(_ notification: Notification) {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
 
         /** Animate view back down if done editing the bottom text field */
-        if bottomField.editing {
-            UIView.animateWithDuration(0.5) {
+        if bottomField.isEditing {
+            UIView.animate(withDuration: 0.5, animations: {
                 var frame       = self.frame
                 frame.origin.y  = 0.0
                 self.frame      = frame
-            }
+            }) 
         }
     }
 }

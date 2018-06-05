@@ -1,6 +1,6 @@
 //
 //  MemeStorage.swift
-//  MemeMe
+//  MemeMeister
 //
 //  Created by Dylan Edwards on 2/25/16.
 //  Copyright © 2016 Slinging Pixels Media. All rights reserved.
@@ -49,9 +49,9 @@ struct StoredMeme {
  */
 struct MemesProvider {
 
-    private var storedMemeArray: [StoredMeme]
+    fileprivate var storedMemeArray: [StoredMeme]
     
-    private var _memeArray = [Meme]()
+    fileprivate var _memeArray = [Meme]()
     internal var memeArray: [Meme] {
         return _memeArray
     }
@@ -62,7 +62,7 @@ struct MemesProvider {
         loadMemesFromStorage()
     }
     
-    mutating internal func addNewMemeToStorage(meme: Meme, completion: (() -> Void)?) {        
+    mutating internal func addNewMemeToStorage(_ meme: Meme, completion: (() -> Void)?) {        
         _memeArray.append(meme)
         
         let storedMeme = createStoredMeme(fromMeme: meme) // StoredMeme()
@@ -74,8 +74,8 @@ struct MemesProvider {
     }
     
     mutating internal func removeMemeFromStorage(atIndex index: Int) {
-        _memeArray.removeAtIndex(index)
-        storedMemeArray.removeAtIndex(index)
+        _memeArray.remove(at: index)
+        storedMemeArray.remove(at: index)
         
         /** Write storedMemesArray to archive file */
         createJSONDataAndSave(withArray: storedMemeArray, completion: nil)
@@ -92,7 +92,7 @@ struct MemesProvider {
         createJSONDataAndSave(withArray: storedMemeArray, completion: completion)
     }
     
-    private func createStoredMeme(fromMeme meme: Meme) -> StoredMeme {
+    fileprivate func createStoredMeme(fromMeme meme: Meme) -> StoredMeme {
         var storedMeme = StoredMeme()
         
         storedMeme.imageName        = saveImageAndGetName(meme.image!)
@@ -105,18 +105,18 @@ struct MemesProvider {
         return storedMeme
     }
     
-    private func saveImageAndGetName(image: UIImage) -> String {
-        let imageName = NSUUID().UUIDString + ".jpeg"
-        let filename = getDocumentsDirectory().stringByAppendingPathComponent(imageName)
+    fileprivate func saveImageAndGetName(_ image: UIImage) -> String {
+        let imageName = UUID().uuidString + ".jpeg"
+        let filename = getDocumentsDirectory().appendingPathComponent(imageName)
         
         if let imageData = UIImageJPEGRepresentation(image, 1.0) {
-            imageData.writeToFile(filename, atomically: true)
+            try? imageData.write(to: URL(fileURLWithPath: filename), options: [.atomic])
         }
         
         return imageName
     }
     
-    private func getFontName(font: UIFont) -> String {
+    fileprivate func getFontName(_ font: UIFont) -> String {
         for i in 0..<Constants.FontArray.count {
             if font == Constants.FontArray[i] {
                 return Constants.FontFamilyNameArray[i]
@@ -125,7 +125,7 @@ struct MemesProvider {
         return Constants.FontName.impact
     }
     
-    private func getFontFromFontName(name: String) -> UIFont {
+    fileprivate func getFontFromFontName(_ name: String) -> UIFont {
         for i in 0..<Constants.FontFamilyNameArray.count {
             if name == Constants.FontFamilyNameArray[i] {
                 return Constants.FontArray[i]
@@ -134,7 +134,7 @@ struct MemesProvider {
         return Constants.Font.impact
     }
     
-    private func getFontColorName(color: UIColor) -> String {
+    fileprivate func getFontColorName(_ color: UIColor) -> String {
         for i in 0..<Constants.FontColorArray.count {
             if color == Constants.FontColorArray[i] {
                 return Constants.FontColorStringArray[i]
@@ -143,7 +143,7 @@ struct MemesProvider {
         return Constants.FontColorStringArray[0]
     }
     
-    private func getColorFromColorName(name: String) -> UIColor {
+    fileprivate func getColorFromColorName(_ name: String) -> UIColor {
         for i in 0..<Constants.FontColorStringArray.count {
             if name == Constants.FontColorStringArray[i] {
                 return Constants.FontColorArray[i]
@@ -152,31 +152,31 @@ struct MemesProvider {
         return Constants.FontColorArray[0]
     }
     
-    private func getDocumentsDirectory() -> NSString {
-        let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
+    fileprivate func getDocumentsDirectory() -> NSString {
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentsDirectory = paths[0]
         
-        return documentsDirectory
+        return documentsDirectory as NSString
     }
     
-    private func createJSONDataAndSave(withArray array: [StoredMeme], completion: (()->Void)?) {
+    fileprivate func createJSONDataAndSave(withArray array: [StoredMeme], completion: (()->Void)?) {
         var jsonArray = [[String: String]]()
         
         for item in array {
             jsonArray.append(item.jsonDictionary)
         }
 
-        var jsonData: NSData!
+        var jsonData: Data!
         do {
-            jsonData = try NSJSONSerialization.dataWithJSONObject(jsonArray, options: NSJSONWritingOptions.PrettyPrinted)
+            jsonData = try JSONSerialization.data(withJSONObject: jsonArray, options: JSONSerialization.WritingOptions.prettyPrinted)
         } catch let error as NSError {
             magic("Array to JSON conversion failed: \(error.localizedDescription)")
         }
         
         /** Write (or overrite existing) json file */
-        let fileManager = NSFileManager.defaultManager()
+        let fileManager = FileManager.default
         
-        if !fileManager.createFileAtPath(Constants.ArchiveFile.storedMemes, contents: jsonData, attributes: nil) {
+        if !fileManager.createFile(atPath: Constants.ArchiveFile.storedMemes, contents: jsonData, attributes: nil) {
             magic("Error creating archive json file! Error code: \(errno); message: \(strerror(errno))")
         } else {
             /** Success */
@@ -184,13 +184,13 @@ struct MemesProvider {
         }
     }
     
-    mutating private func loadMemesFromStorage() {
+    mutating fileprivate func loadMemesFromStorage() {
         
-        guard let jsonData = NSData(contentsOfFile: Constants.ArchiveFile.storedMemes) as NSData! else { return }
+        guard let jsonData = (try? Data(contentsOf: URL(fileURLWithPath: Constants.ArchiveFile.storedMemes))) as Data! else { return }
         
         var jsonArray: [[String:String]]!
         do {
-            jsonArray = try NSJSONSerialization.JSONObjectWithData(jsonData, options: []) as! [[String:String]]
+            jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as! [[String:String]]
             
         } catch let error as NSError {
             magic("Error creating jsonArray: \(error.localizedDescription)")
@@ -203,12 +203,12 @@ struct MemesProvider {
         for item in jsonArray {
             var meme = Meme()
             
-            meme.image      = UIImage(contentsOfFile: getDocumentsDirectory().stringByAppendingPathComponent(item["imageName"]!))
+            meme.image      = UIImage(contentsOfFile: getDocumentsDirectory().appendingPathComponent(item["imageName"]!))
             meme.topText    = item["topText"]!
             meme.bottomText = item["bottomText"]!
             meme.font       = getFontFromFontName(item["fontName"]!)
             meme.fontColor  = getColorFromColorName(item["fontColorName"]!)
-            meme.memedImage = UIImage(contentsOfFile: getDocumentsDirectory().stringByAppendingPathComponent(item["memedImageName"]!))
+            meme.memedImage = UIImage(contentsOfFile: getDocumentsDirectory().appendingPathComponent(item["memedImageName"]!))
             
             memes.append(meme)
             
