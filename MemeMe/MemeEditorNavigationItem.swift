@@ -96,19 +96,19 @@ final class MemeEditorNavigationItem: UINavigationItem {
     
     //MARK: - Actions
     
-    internal func shareButtonTapped() {
+    @objc internal func shareButtonTapped() {
         shareClosure?()
     }
     
-    internal func saveButtonTapped() {
+    @objc internal func saveButtonTapped() {
         saveClosure?()
     }
     
-    internal func clearButtonTapped() {
+    @objc internal func clearButtonTapped() {
         clearClosure?()
     }
     
-    internal func cancelButtonTapped() {
+    @objc internal func cancelButtonTapped() {
         cancelClosure?()
     }
     

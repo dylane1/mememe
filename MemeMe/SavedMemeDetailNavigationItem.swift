@@ -57,13 +57,13 @@ final class SavedMemeDetailNavigationItem: UINavigationItem {
     
     //MARK: - Actions
     
-    internal func shareButtonTapped() {
+    @objc internal func shareButtonTapped() {
         shareClosure?()
     }
-    internal func deleteButtonTapped() {
+    @objc internal func deleteButtonTapped() {
         deleteClosure?()
     }
-    internal func editButtonTapped() {
+    @objc internal func editButtonTapped() {
         editMemeClosure?()
     }
 }
