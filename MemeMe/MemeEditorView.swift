@@ -101,9 +101,10 @@ final class MemeEditorView: UIView {
         }
     }
     
-    fileprivate var textFieldAttributes: [NSAttributedStringKey : Any] = [
-        .strokeColor:     Constants.ColorScheme.black,
-        .strokeWidth:     -5.0
+//    fileprivate var textFieldAttributes: [NSAttributedStringKey : Any] = [
+    fileprivate var textFieldAttributes: [String : Any] = [
+        NSAttributedStringKey.strokeColor.rawValue:     Constants.ColorScheme.black,
+        NSAttributedStringKey.strokeWidth.rawValue:     -5.0
     ]
     
     fileprivate var dataSource: MemeEditorViewModel! {
@@ -254,12 +255,15 @@ final class MemeEditorView: UIView {
     
     internal func configureTextFieldAttributes() {
         
-        textFieldAttributes[.font] = font
-        textFieldAttributes[.foregroundColor] = fontColor
+        textFieldAttributes[NSAttributedStringKey.font.rawValue] = font
+        textFieldAttributes[NSAttributedStringKey.foregroundColor.rawValue] = fontColor
         
         let placeholderAttributes: [NSAttributedStringKey : Any] = [
+//        let placeholderAttributes: [String : Any] = [
             NSAttributedStringKey.foregroundColor: fontColor,
             NSAttributedStringKey.font:            font
+//            NSAttributedStringKey.foregroundColor.rawValue: fontColor,
+//            NSAttributedStringKey.font.rawValue:            font
         ]
         
         topField.defaultTextAttributes  = textFieldAttributes
@@ -439,8 +443,8 @@ extension MemeEditorView: UITextFieldDelegate {
     }
     
     internal func textFieldDidEndEditing(_ textField: UITextField) {
-        topText     = topField.text as String! ?? ""
-        bottomText  = bottomField.text as String! ?? ""
+        topText     = topField.text as String? ?? ""
+        bottomText  = bottomField.text as String? ?? ""
     }
     
     internal func textFieldShouldReturn(_ textField: UITextField) -> Bool {
